@@ -1,0 +1,225 @@
+import React from 'react';
+import { View, Text, StyleSheet, Alert } from 'react-native';
+import { useForm, Controller } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { Mail, Lock, User, Phone } from 'lucide-react-native';
+import { registerSchema, RegisterFormData } from '@/lib/validations';
+import { useAuth } from '@/lib/hooks/useAuth';
+import Button from '../atoms/Button';
+import Input from '../atoms/Input';
+
+interface RegisterFormProps {
+  onSuccess: () => void;
+  onSwitchToLogin: () => void;
+}
+
+export default function RegisterForm({ onSuccess, onSwitchToLogin }: RegisterFormProps) {
+  const { register, isRegisterLoading } = useAuth();
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors, isValid },
+    reset,
+    watch,
+  } = useForm<RegisterFormData>({
+    resolver: zodResolver(registerSchema),
+    mode: 'onChange',
+    defaultValues: {
+      email: '',
+      password: '',
+      firstName: '',
+      lastName: '',
+      phone: '',
+    },
+  });
+
+  const password = watch('password');
+
+  const onSubmit = async (data: RegisterFormData) => {
+    try {
+      await register(data);
+      reset();
+      onSuccess();
+    } catch (error: any) {
+      Alert.alert('Erreur d\'inscription', error.message || 'Une erreur est survenue');
+    }
+  };
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.nameRow}>
+        <Controller
+          control={control}
+          name="firstName"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              label="Prénom"
+              placeholder="Prénom"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              icon={<User size={20} color="#9CA3AF" />}
+              error={errors.firstName?.message}
+              containerStyle={styles.halfInput}
+            />
+          )}
+        />
+
+        <Controller
+          control={control}
+          name="lastName"
+          render={({ field: { onChange, onBlur, value } }) => (
+            <Input
+              label="Nom"
+              placeholder="Nom"
+              value={value}
+              onChangeText={onChange}
+              onBlur={onBlur}
+              icon={<User size={20} color="#9CA3AF" />}
+              error={errors.lastName?.message}
+              containerStyle={styles.halfInput}
+            />
+          )}
+        />
+      </View>
+
+      <Controller
+        control={control}
+        name="email"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            label="Adresse email"
+            placeholder="votre@email.com"
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            keyboardType="email-address"
+            autoCapitalize="none"
+            icon={<Mail size={20} color="#9CA3AF" />}
+            error={errors.email?.message}
+          />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="phone"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            label="Téléphone (optionnel)"
+            placeholder="+33 6 12 34 56 78"
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            keyboardType="phone-pad"
+            icon={<Phone size={20} color="#9CA3AF" />}
+            error={errors.phone?.message}
+          />
+        )}
+      />
+
+      <Controller
+        control={control}
+        name="password"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <Input
+            label="Mot de passe"
+            placeholder="Minimum 8 caractères"
+            value={value}
+            onChangeText={onChange}
+            onBlur={onBlur}
+            secureTextEntry
+            icon={<Lock size={20} color="#9CA3AF" />}
+            error={errors.password?.message}
+          />
+        )}
+      />
+
+      {password && password.length > 0 && (
+        <View style={styles.passwordRequirements}>
+          <PasswordStrengthIndicator password={password} />
+        </View>
+      )}
+
+      <Button
+        title={isRegisterLoading ? 'Création...' : 'Créer le compte'}
+        onPress={handleSubmit(onSubmit)}
+        disabled={!isValid || isRegisterLoading}
+        style={styles.submitButton}
+      />
+
+      <Button
+        title="Déjà un compte ? Se connecter"
+        onPress={onSwitchToLogin}
+        variant="secondary"
+        style={styles.linkButton}
+      />
+    </View>
+  );
+}
+
+const PasswordStrengthIndicator = ({ password }: { password: string }) => {
+  const requirements = [
+    { label: 'Au moins 8 caractères', met: password.length >= 8 },
+    { label: 'Une majuscule', met: /[A-Z]/.test(password) },
+    { label: 'Une minuscule', met: /[a-z]/.test(password) },
+    { label: 'Un chiffre', met: /\d/.test(password) },
+  ];
+
+  return (
+    <View style={styles.requirements}>
+      {requirements.map((req, index) => (
+        <View key={index} style={styles.requirement}>
+          <View style={[styles.requirementDot, { backgroundColor: req.met ? '#059669' : '#DC2626' }]} />
+          <Text style={[styles.requirementText, { color: req.met ? '#059669' : '#DC2626' }]}>
+            {req.label}
+          </Text>
+        </View>
+      ))}
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  container: {
+    width: '100%',
+  },
+  nameRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  halfInput: {
+    flex: 1,
+  },
+  passwordRequirements: {
+    marginBottom: 16,
+  },
+  requirements: {
+    backgroundColor: '#F9FAFB',
+    borderRadius: 8,
+    padding: 12,
+    gap: 6,
+  },
+  requirement: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+  },
+  requirementDot: {
+    width: 6,
+    height: 6,
+    borderRadius: 3,
+  },
+  requirementText: {
+    fontSize: 12,
+    fontWeight: '500',
+  },
+  submitButton: {
+    marginTop: 8,
+    marginBottom: 16,
+  },
+  linkButton: {
+    paddingVertical: 8,
+  },
+});
