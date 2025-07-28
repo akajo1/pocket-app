@@ -1,6 +1,6 @@
+import { Bell, CreditCard, Mail, Shield, Smartphone, TrendingUp, Users, Vibrate, Volume2 } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, SafeAreaView, Switch } from 'react-native';
-import { Bell, Mail, Smartphone, CreditCard, Users, TrendingUp, Shield, Volume2, Vibrate } from 'lucide-react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Switch, Text, View } from 'react-native';
 
 export default function NotificationsScreen() {
   const [emailNotifications, setEmailNotifications] = useState(true);
@@ -253,10 +253,10 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   statusHeader: {
@@ -291,10 +291,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     marginHorizontal: 20,
     borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   settingItem: {
@@ -336,10 +336,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     marginHorizontal: 20,
     borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   scheduleItem: {
@@ -369,10 +369,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   historyItem: {
@@ -412,10 +412,10 @@ const styles = StyleSheet.create({
     marginHorizontal: 20,
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   dndDescription: {

@@ -1,9 +1,9 @@
-import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { User, Bell, Shield, CreditCard, Users, CircleHelp as HelpCircle, Settings, LogOut, ChevronRight, Smartphone, Mail, Phone, CreditCard as Edit } from 'lucide-react-native';
-import { useRouter } from 'expo-router';
 import { useAuthContext } from '@/components/contexts/AuthContext';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useRouter } from 'expo-router';
+import { Bell, ChevronRight, CreditCard, CreditCard as Edit, CircleHelp as HelpCircle, LogOut, Mail, Phone, Settings, Shield, Smartphone, User, Users } from 'lucide-react-native';
+import React from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function ProfileScreen() {
   const router = useRouter();
@@ -229,10 +229,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     paddingVertical: 20,
     marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   statItem: {
@@ -262,10 +262,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     marginHorizontal: 20,
     borderRadius: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   menuItem: {

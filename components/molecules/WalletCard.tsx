@@ -1,7 +1,7 @@
-import React from 'react';
-import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Eye, EyeOff } from 'lucide-react-native';
+import React from 'react';
+import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import IconButton from '../atoms/IconButton';
 
 interface WalletCardProps {
@@ -66,10 +66,10 @@ const styles = StyleSheet.create({
   card: {
     padding: 24,
     borderRadius: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 8 },
+    // shadowOpacity: 0.3,
+    // shadowRadius: 12,
     elevation: 8,
   },
   header: {

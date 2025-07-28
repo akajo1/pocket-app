@@ -1,6 +1,6 @@
+import { Archive, Bell, CheckCheck, CreditCard, Gift, Settings, X } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, ScrollView } from 'react-native';
-import { Bell, X, Check, Trash2, Settings, CreditCard, Users, TrendingUp, Gift, CheckCheck, Archive } from 'lucide-react-native';
+import { Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 interface Notification {
   id: number;
@@ -239,10 +239,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 16,
     backgroundColor: '#FFFFFF',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.05,
-    shadowRadius: 8,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.05,
+    // shadowRadius: 8,
     elevation: 4,
   },
   headerWithUnread: {
@@ -301,10 +301,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F9FAFB',
     justifyContent: 'center',
     alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 1 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 2,
     elevation: 2,
   },
   actionButtons: {
@@ -320,10 +320,10 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     alignSelf: 'flex-start',
-    shadowColor: '#059669',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    // shadowColor: '#059669',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 4,
     elevation: 3,
   },
   markAllText: {
@@ -351,10 +351,10 @@ const styles = StyleSheet.create({
   activeTab: {
     backgroundColor: '#8B5CF6',
     borderColor: '#8B5CF6',
-    shadowColor: '#8B5CF6',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    shadowRadius: 4,
+    // shadowColor: '#8B5CF6',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 4,
     elevation: 3,
   },
   tabText: {
@@ -391,10 +391,10 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     padding: 20,
     marginVertical: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.08,
-    shadowRadius: 12,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 4 },
+    // shadowOpacity: 0.08,
+    // shadowRadius: 12,
     elevation: 3,
     borderWidth: 1,
     borderColor: '#F3F4F6',
@@ -413,15 +413,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginRight: 16,
     position: 'relative',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 2,
   },
   unreadIcon: {
-    shadowColor: '#8B5CF6',
-    shadowOpacity: 0.3,
+    // shadowColor: '#8B5CF6',
+    // shadowOpacity: 0.3,
   },
   notificationContent: {
     flex: 1,
@@ -491,10 +491,10 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     marginLeft: 12,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 1 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 2,
     elevation: 1,
   },
   emptyState: {

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ActivityIndicator } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, View } from 'react-native';
 import { useAuthContext } from '../contexts/AuthContext';
 import AuthModal from '../modals/AuthModal';
 
@@ -19,7 +19,7 @@ export default function AuthGuard({ children, fallback }: AuthGuardProps) {
       </View>
     );
   }
-
+console.log("--icij",isAuthenticated)
   if (!isAuthenticated) {
     return <AuthModal onAuthSuccess={() => {}} />;
   }

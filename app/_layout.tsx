@@ -1,9 +1,8 @@
-import { useEffect } from 'react';
+import { AuthProvider } from '@/components/contexts/AuthContext';
+import { useFrameworkReady } from '@/hooks/useFrameworkReady';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { useFrameworkReady } from '@/hooks/useFrameworkReady';
-import { AuthProvider } from '@/components/contexts/AuthContext';
 
 const queryClient = new QueryClient();
 

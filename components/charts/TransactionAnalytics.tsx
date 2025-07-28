@@ -1,6 +1,6 @@
+import { Calendar, ChartPie as PieChartIcon, TrendingDown, TrendingUp } from 'lucide-react-native';
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, ScrollView } from 'react-native';
-import { Calendar, TrendingUp, TrendingDown, ChartPie as PieChartIcon } from 'lucide-react-native';
+import { ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import SpendingChart from './SpendingChart';
 
 interface Transaction {
@@ -262,10 +262,10 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     marginHorizontal: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   statLabel: {

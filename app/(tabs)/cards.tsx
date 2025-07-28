@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Plus, MoveHorizontal as MoreHorizontal, Eye, EyeOff, Lock, Clock as Unlock } from 'lucide-react-native';
-import TransactionDetailModal from '@/components/modals/TransactionDetailModal';
 import TransactionAnalytics from '@/components/charts/TransactionAnalytics';
+import TransactionDetailModal from '@/components/modals/TransactionDetailModal';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Eye, Lock, MoveHorizontal as MoreHorizontal, Plus, Clock as Unlock } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 export default function CardsScreen() {
   const [selectedCard, setSelectedCard] = useState(0);
@@ -310,10 +310,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   cardsContainer: {
@@ -328,10 +328,10 @@ const styles = StyleSheet.create({
     height: 200,
     borderRadius: 20,
     padding: 24,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 8 },
+    // shadowOpacity: 0.3,
+    // shadowRadius: 12,
     elevation: 8,
   },
   cardHeader: {
@@ -400,10 +400,10 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   sectionTitle: {
@@ -440,10 +440,10 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   actionItem: {
@@ -487,10 +487,10 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   transactionItem: {

@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, StyleSheet, Modal, TouchableOpacity, Alert, Dimensions } from 'react-native';
-import { CameraView, Camera, useCameraPermissions, BarcodeScanningResult } from 'expo-camera';
-import { Scan, X, Flashlight, FlashlightOff, RotateCcw, CircleCheck as CheckCircle } from 'lucide-react-native';
+import { BarcodeScanningResult, CameraView, useCameraPermissions } from 'expo-camera';
+import { CircleCheck as CheckCircle, Flashlight, FlashlightOff, RotateCcw, Scan, X } from 'lucide-react-native';
+import React, { useEffect, useState } from 'react';
+import { Alert, Dimensions, Modal, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 
 const { width, height } = Dimensions.get('window');
 
@@ -206,10 +206,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 24,
     padding: 32,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 8 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 8 },
+    // shadowOpacity: 0.3,
+    // shadowRadius: 12,
     elevation: 8,
   },
   permissionTitle: {
@@ -353,10 +353,10 @@ const styles = StyleSheet.create({
     right: 0,
     height: 2,
     backgroundColor: '#4F46E5',
-    shadowColor: '#4F46E5',
-    shadowOffset: { width: 0, height: 0 },
-    shadowOpacity: 0.8,
-    shadowRadius: 4,
+    // shadowColor: '#4F46E5',
+    // shadowOffset: { width: 0, height: 0 },
+    // shadowOpacity: 0.8,
+    // shadowRadius: 4,
   },
   successOverlay: {
     ...StyleSheet.absoluteFillObject,

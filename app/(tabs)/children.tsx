@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, SafeAreaView, TextInput, Modal } from 'react-native';
+import TransactionAnalytics from '@/components/charts/TransactionAnalytics';
+import { useNFC } from '@/components/hooks/useNFC';
+import NFCLinkingModal from '@/components/modals/NFCLinkingModal';
+import RewardModal from '@/components/modals/RewardModal';
+import SendMoneyModal from '@/components/modals/SendMoneyModal';
+import TransactionDetailModal from '@/components/modals/TransactionDetailModal';
+import NFCDeviceCard from '@/components/molecules/NFCDeviceCard';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useLocalSearchParams } from 'expo-router';
-import { Plus, Settings, Eye, EyeOff, Send, Gift, ShoppingCart, Users, Calendar, TrendingUp, TrendingDown, Lock, Clock as Unlock, CreditCard as Edit3, Trash2, Wifi, Zap } from 'lucide-react-native';
-import NFCLinkingModal from '@/components/modals/NFCLinkingModal';
-import NFCDeviceCard from '@/components/molecules/NFCDeviceCard';
-import { useNFC } from '@/components/hooks/useNFC';
-import SendMoneyModal from '@/components/modals/SendMoneyModal';
-import RewardModal from '@/components/modals/RewardModal';
-import TransactionDetailModal from '@/components/modals/TransactionDetailModal';
-import TransactionAnalytics from '@/components/charts/TransactionAnalytics';
+import { Gift, Lock, Plus, Send, Settings, ShoppingCart, TrendingDown, TrendingUp, Clock as Unlock, Wifi } from 'lucide-react-native';
+import React, { useState } from 'react';
+import { Modal, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
 
 export default function ChildrenWalletsScreen() {
   const { selectedChildId } = useLocalSearchParams();
@@ -1011,10 +1011,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
     padding: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   summaryStats: {
@@ -1030,10 +1030,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flex: 1,
     marginHorizontal: 4,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   statValue: {
@@ -1073,10 +1073,10 @@ const styles = StyleSheet.create({
   childCardGradient: {
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 8,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 4 },
+    // shadowOpacity: 0.2,
+    // shadowRadius: 8,
     elevation: 6,
   },
   carouselIndicators: {
@@ -1153,10 +1153,10 @@ const styles = StyleSheet.create({
     marginVertical: 16,
     borderRadius: 16,
     padding: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
+    // shadowColor: '#000',
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
     elevation: 3,
   },
   detailsHeader: {
