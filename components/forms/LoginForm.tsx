@@ -1,12 +1,12 @@
-import React from 'react';
-import { View, StyleSheet, Alert } from 'react-native';
-import { useForm, Controller } from 'react-hook-form';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Mail, Lock } from 'lucide-react-native';
-import { loginSchema, LoginFormData } from '@/lib/validations';
-import { useAuth } from '@/lib/hooks/useAuth';
-import Button from '../atoms/Button';
-import Input from '../atoms/Input';
+import { useAuth } from "@/lib/hooks/useAuth";
+import { LoginFormData, loginSchema } from "@/lib/validations";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Lock, Mail } from "lucide-react-native";
+import React from "react";
+import { Controller, useForm } from "react-hook-form";
+import { Alert, StyleSheet, View } from "react-native";
+import Button from "../atoms/Button";
+import Input from "../atoms/Input";
 
 interface LoginFormProps {
   onSuccess: () => void;
@@ -14,7 +14,11 @@ interface LoginFormProps {
   onForgotPassword: () => void;
 }
 
-export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassword }: LoginFormProps) {
+export default function LoginForm({
+  onSuccess,
+  onSwitchToRegister,
+  onForgotPassword,
+}: LoginFormProps) {
   const { login, isLoginLoading } = useAuth();
 
   const {
@@ -24,10 +28,10 @@ export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassw
     reset,
   } = useForm<LoginFormData>({
     resolver: zodResolver(loginSchema),
-    mode: 'onChange',
+    mode: "onChange",
     defaultValues: {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     },
   });
 
@@ -37,7 +41,10 @@ export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassw
       reset();
       onSuccess();
     } catch (error: any) {
-      Alert.alert('Erreur de connexion', error.message || 'Une erreur est survenue');
+      Alert.alert(
+        "Erreur de connexion",
+        error.message || "Une erreur est survenue"
+      );
     }
   };
 
@@ -79,7 +86,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassw
       />
 
       <Button
-        title={isLoginLoading ? 'Connexion...' : 'Se connecter'}
+        title={isLoginLoading ? "Connexion..." : "Se connecter"}
         onPress={handleSubmit(onSubmit)}
         disabled={!isValid || isLoginLoading}
         style={styles.submitButton}
@@ -92,12 +99,12 @@ export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassw
           variant="ghost"
           style={styles.linkButton}
         />
-        
+
         <Button
           title="Créer un compte"
           onPress={onSwitchToRegister}
           variant="secondary"
-          style={styles.linkButton}
+          style={{ ...styles.linkButton }}
         />
       </View>
     </View>
@@ -106,7 +113,7 @@ export default function LoginForm({ onSuccess, onSwitchToRegister, onForgotPassw
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%',
+    width: "100%",
   },
   submitButton: {
     marginTop: 8,

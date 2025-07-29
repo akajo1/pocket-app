@@ -1,5 +1,5 @@
-import React from 'react';
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 interface QuickAction {
   icon: React.ComponentType<any>;
@@ -13,7 +13,10 @@ interface QuickActionsGridProps {
   actions: QuickAction[];
 }
 
-export default function QuickActionsGrid({ title, actions }: QuickActionsGridProps) {
+export default function QuickActionsGrid({
+  title,
+  actions,
+}: QuickActionsGridProps) {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>{title}</Text>
@@ -22,8 +25,14 @@ export default function QuickActionsGrid({ title, actions }: QuickActionsGridPro
           <TouchableOpacity
             key={index}
             style={styles.actionButton}
-            onPress={action.onPress}>
-            <View style={[styles.iconContainer, { backgroundColor: action.color + '20' }]}>
+            onPress={action.onPress}
+          >
+            <View
+              style={[
+                styles.iconContainer,
+                { backgroundColor: action.color + "20" },
+              ]}
+            >
               <action.icon size={20} color={action.color} />
             </View>
             <Text style={styles.actionLabel}>{action.label}</Text>
@@ -41,37 +50,37 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 20,
-    fontWeight: 'bold',
-    color: '#111827',
+    fontWeight: "bold",
+    color: "#111827",
     marginBottom: 16,
   },
   grid3x3: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-around",
   },
   actionButton: {
-    width: '30%',
-    alignItems: 'center',
+    width: "30%",
+    alignItems: "center",
     marginBottom: 20,
   },
   iconContainer: {
     width: 56,
     height: 56,
     borderRadius: 28,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
     marginBottom: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    // shadowColor: "#ccc",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 10,
+    // elevation: 0.5,
   },
   actionLabel: {
     fontSize: 12,
-    color: '#374151',
-    fontWeight: '600',
-    textAlign: 'center',
+    color: "#374151",
+    fontWeight: "600",
+    textAlign: "center",
   },
 });

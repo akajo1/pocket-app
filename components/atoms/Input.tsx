@@ -1,5 +1,11 @@
-import React from 'react';
-import { View, TextInput, Text, StyleSheet, TextInputProps } from 'react-native';
+import React from "react";
+import {
+  StyleSheet,
+  Text,
+  TextInput,
+  TextInputProps,
+  View,
+} from "react-native";
 
 interface InputProps extends TextInputProps {
   label?: string;
@@ -8,13 +14,13 @@ interface InputProps extends TextInputProps {
   containerStyle?: any;
 }
 
-export default function Input({ 
-  label, 
-  error, 
-  icon, 
-  containerStyle, 
+export default function Input({
+  label,
+  error,
+  icon,
+  containerStyle,
   style,
-  ...props 
+  ...props
 }: InputProps) {
   return (
     <View style={[styles.container, containerStyle]}>
@@ -38,20 +44,20 @@ const styles = StyleSheet.create({
   },
   label: {
     fontSize: 16,
-    fontWeight: '600',
-    color: '#374151',
+    fontWeight: "600",
+    color: "#374151",
     marginBottom: 8,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F9FAFB',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "#F9FAFB",
     borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
+    // borderWidth: 1,
+    // borderColor: '#E5E7EB',
   },
   errorContainer: {
-    borderColor: '#DC2626',
+    borderColor: "#DC2626",
   },
   iconContainer: {
     paddingLeft: 16,
@@ -61,14 +67,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 16,
-    color: '#111827',
+    color: "#111827",
   },
   inputWithIcon: {
     paddingLeft: 12,
   },
   errorText: {
     fontSize: 14,
-    color: '#DC2626',
+    color: "#DC2626",
     marginTop: 4,
   },
 });

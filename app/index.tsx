@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import AuthGuard from '@/components/guards/AuthGuard';
-import { Redirect } from 'expo-router';
+import AuthGuard from "@/components/guards/AuthGuard";
+import { Redirect } from "expo-router";
+import React from "react";
 
 export default function Index() {
   return (

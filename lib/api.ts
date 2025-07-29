@@ -1,5 +1,5 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -22,14 +22,15 @@ export interface PaginatedResponse<T> {
 
 class ApiClient {
   private client: AxiosInstance;
-  private baseURL = process.env.EXPO_PUBLIC_API_URL || 'http://localhost:3001/api';
+  private baseURL =
+    process.env.EXPO_PUBLIC_API_URL || "http://192.168.89.250:3001/api/";
 
   constructor() {
     this.client = axios.create({
       baseURL: this.baseURL,
       timeout: 10000,
       headers: {
-        'Content-Type': 'application/json',
+        "Content-Type": "application/json",
       },
     });
 
@@ -78,7 +79,7 @@ class ApiClient {
 
   private async getAccessToken(): Promise<string | null> {
     try {
-      const tokens = await AsyncStorage.getItem('auth_tokens');
+      const tokens = await AsyncStorage.getItem("auth_tokens");
       return tokens ? JSON.parse(tokens).accessToken : null;
     } catch {
       return null;
@@ -87,7 +88,7 @@ class ApiClient {
 
   private async getRefreshToken(): Promise<string | null> {
     try {
-      const tokens = await AsyncStorage.getItem('auth_tokens');
+      const tokens = await AsyncStorage.getItem("auth_tokens");
       return tokens ? JSON.parse(tokens).refreshToken : null;
     } catch {
       return null;
@@ -104,7 +105,10 @@ class ApiClient {
       });
 
       if (response.data.success) {
-        await AsyncStorage.setItem('auth_tokens', JSON.stringify(response.data.data.tokens));
+        await AsyncStorage.setItem(
+          "auth_tokens",
+          JSON.stringify(response.data.data.tokens)
+        );
         return true;
       }
       return false;
@@ -115,34 +119,52 @@ class ApiClient {
 
   private async clearTokens(): Promise<void> {
     try {
-      await AsyncStorage.multiRemove(['auth_tokens', 'auth_user']);
+      await AsyncStorage.multiRemove(["auth_tokens", "auth_user"]);
     } catch (error) {
-      console.error('Error clearing tokens:', error);
+      console.error("Error clearing tokens:", error);
     }
   }
 
   // Generic request methods
-  async get<T>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+  async get<T>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<ApiResponse<T>> {
     const response = await this.client.get(url, config);
     return response.data;
   }
 
-  async post<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+  async post<T>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<ApiResponse<T>> {
     const response = await this.client.post(url, data, config);
     return response.data;
   }
 
-  async put<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+  async put<T>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<ApiResponse<T>> {
     const response = await this.client.put(url, data, config);
     return response.data;
   }
 
-  async delete<T>(url: string, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+  async delete<T>(
+    url: string,
+    config?: AxiosRequestConfig
+  ): Promise<ApiResponse<T>> {
     const response = await this.client.delete(url, config);
     return response.data;
   }
 
-  async patch<T>(url: string, data?: any, config?: AxiosRequestConfig): Promise<ApiResponse<T>> {
+  async patch<T>(
+    url: string,
+    data?: any,
+    config?: AxiosRequestConfig
+  ): Promise<ApiResponse<T>> {
     const response = await this.client.patch(url, data, config);
     return response.data;
   }
