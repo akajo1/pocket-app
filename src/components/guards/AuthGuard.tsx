@@ -1,0 +1,52 @@
+import { useAuth } from "@/src/lib/hooks/useAuth";
+import React from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import AlertModal from "../modals/AlertModal";
+import AuthModal from "../modals/AuthModal";
+
+interface AuthGuardProps {
+  children: React.ReactNode;
+  fallback?: React.ReactNode;
+}
+
+export default function AuthGuard({ children, fallback }: AuthGuardProps) {
+  const { isAuthenticated, isLoading } = useAuth();
+  console.log("--loading", isLoading);
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#4F46E5" />
+        <Text style={styles.loadingText}>Chargement...</Text>
+      </View>
+    );
+  }
+  if (!isAuthenticated) {
+    return (
+      <>
+        <AlertModal />
+        <AuthModal />
+      </>
+    );
+  }
+
+  return (
+    <>
+      <AlertModal />
+      {children}
+    </>
+  );
+}
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F8FAFC",
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#6B7280",
+  },
+});
