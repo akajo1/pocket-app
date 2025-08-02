@@ -1,4 +1,5 @@
 import { Send } from "lucide-react-native";
+import moment from "moment";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Badge from "../atoms/Badge";
@@ -42,7 +43,7 @@ export default function TransactionItem({
   const getAmountPrefix = () => {
     return transaction.type === "received" ? "+" : "-";
   };
-
+  const amount = transaction?.amount || transaction?.amount_encrypted;
   return (
     <TouchableOpacity
       style={styles.container}
@@ -68,9 +69,18 @@ export default function TransactionItem({
       </View>
 
       <View style={styles.details}>
-        <Text style={styles.description}>{transaction.description}</Text>
+        <Text style={[styles.description, { marginBottom: 2 }]}>
+          {transaction?.title}
+        </Text>
+        <Text style={[styles.time, { textTransform: "capitalize" }]}>
+          {transaction.description}
+        </Text>
         <View style={styles.meta}>
-          <Text style={styles.time}>{transaction.time}</Text>
+          <Text style={[styles.time, { marginTop: 4, fontSize: 12 }]}>
+            {moment
+              .utc(transaction?.transaction_date)
+              .format("DD/MM/YYYY hh:mm")}
+          </Text>
           {transaction.status && (
             <Badge
               text={
@@ -85,10 +95,12 @@ export default function TransactionItem({
         </View>
       </View>
 
-      <Text style={[styles.amount, { color: getAmountColor() }]}>
-        {getAmountPrefix()}$
-        {parseFloat(transaction?.amount_encrypted?.toString())?.toFixed(2)}
-      </Text>
+      <View style={{ justifyContent: "center" }}>
+        <Text style={[styles.amount, { color: getAmountColor() }]}>
+          {getAmountPrefix()}${parseFloat(amount?.toString())?.toFixed(2)}
+        </Text>
+        <Text style={styles.time}>{transaction.payment_method}</Text>
+      </View>
     </TouchableOpacity>
   );
 }
@@ -101,11 +113,11 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // elevation: 3,
   },
   iconContainer: {
     width: 40,
@@ -122,7 +134,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "600",
     color: "#111827",
-    marginBottom: 4,
+    // marginBottom: 4,
   },
   meta: {
     flexDirection: "row",

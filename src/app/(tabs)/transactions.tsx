@@ -1,11 +1,8 @@
-import TransactionAnalytics from "@/src/components/charts/TransactionAnalytics";
 import TransactionDetailModal from "@/src/components/modals/TransactionDetailModal";
+import { sign } from "@/src/lib/constants";
 import {
   ArrowDownLeft,
   ArrowUpRight,
-  Calendar,
-  Filter,
-  Search,
   TrendingDown,
   TrendingUp,
 } from "lucide-react-native";
@@ -15,7 +12,6 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
   TouchableOpacity,
   View,
 } from "react-native";
@@ -239,108 +235,78 @@ export default function TransactionsScreen() {
 
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView showsVerticalScrollIndicator={false}>
-        {/* Header */}
-        <View style={styles.header}>
-          <Text style={styles.headerTitle}>Transactions</Text>
-          <TouchableOpacity style={styles.calendarButton}>
-            <Calendar size={24} color="#4F46E5" />
-          </TouchableOpacity>
+      <View style={styles.header}>
+        <Text style={styles.headerTitle}>Transactions</Text>
+      </View>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.statsContainer}
+      >
+        <View style={[styles.statCard, { backgroundColor: "#DCFCE7" }]}>
+          <TrendingUp size={24} color="#059669" />
+          <Text style={styles.statLabel}>Revenus</Text>
+          <Text style={[styles.statAmount, { color: "#059669" }]}>
+            +{sign}
+            {stats.totalIncome.toLocaleString("fr-FR", {
+              minimumFractionDigits: 2,
+            })}
+          </Text>
         </View>
 
-        {/* Analytics Charts */}
-        <TransactionAnalytics transactions={transactions} />
-
-        {/* Search Bar */}
-        <View style={styles.searchContainer}>
-          <View style={styles.searchBar}>
-            <Search size={20} color="#9CA3AF" />
-            <TextInput
-              style={styles.searchInput}
-              placeholder="Rechercher une transaction..."
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              placeholderTextColor="#9CA3AF"
-            />
-          </View>
-          <TouchableOpacity style={styles.filterButton}>
-            <Filter size={20} color="#4F46E5" />
-          </TouchableOpacity>
+        <View style={[styles.statCard, { backgroundColor: "#FEF2F2" }]}>
+          <TrendingDown size={24} color="#DC2626" />
+          <Text style={styles.statLabel}>Dépenses</Text>
+          <Text style={[styles.statAmount, { color: "#DC2626" }]}>
+            -{sign}
+            {stats.totalExpenses.toLocaleString("fr-FR", {
+              minimumFractionDigits: 2,
+            })}
+          </Text>
         </View>
 
-        {/* Stats Cards */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.statsContainer}
-        >
-          <View style={[styles.statCard, { backgroundColor: "#DCFCE7" }]}>
-            <TrendingUp size={24} color="#059669" />
-            <Text style={styles.statLabel}>Revenus</Text>
-            <Text style={[styles.statAmount, { color: "#059669" }]}>
-              +€
-              {stats.totalIncome.toLocaleString("fr-FR", {
-                minimumFractionDigits: 2,
-              })}
-            </Text>
-          </View>
-
-          <View style={[styles.statCard, { backgroundColor: "#FEF2F2" }]}>
-            <TrendingDown size={24} color="#DC2626" />
-            <Text style={styles.statLabel}>Dépenses</Text>
-            <Text style={[styles.statAmount, { color: "#DC2626" }]}>
-              -€
-              {stats.totalExpenses.toLocaleString("fr-FR", {
-                minimumFractionDigits: 2,
-              })}
-            </Text>
-          </View>
-
-          <View style={[styles.statCard, { backgroundColor: "#F3E8FF" }]}>
-            <ArrowUpRight size={24} color="#7C3AED" />
-            <Text style={styles.statLabel}>Transferts</Text>
-            <Text style={[styles.statAmount, { color: "#7C3AED" }]}>
-              €
-              {stats.totalTransfers.toLocaleString("fr-FR", {
-                minimumFractionDigits: 2,
-              })}
-            </Text>
-          </View>
-        </ScrollView>
-
-        {/* Filter Tabs */}
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          style={styles.filtersContainer}
-        >
-          {filters.map((filter) => (
-            <TouchableOpacity
-              key={filter.key}
+        <View style={[styles.statCard, { backgroundColor: "#F3E8FF" }]}>
+          <ArrowUpRight size={24} color="#7C3AED" />
+          <Text style={styles.statLabel}>Transferts</Text>
+          <Text style={[styles.statAmount, { color: "#7C3AED" }]}>
+            {sign}
+            {stats.totalTransfers.toLocaleString("fr-FR", {
+              minimumFractionDigits: 2,
+            })}
+          </Text>
+        </View>
+      </ScrollView>
+      <ScrollView
+        horizontal
+        showsHorizontalScrollIndicator={false}
+        style={styles.filtersContainer}
+      >
+        {filters.map((filter) => (
+          <TouchableOpacity
+            key={filter.key}
+            style={[
+              styles.filterTab,
+              {
+                backgroundColor:
+                  selectedFilter === filter.key ? "#4F46E5" : "#FFFFFF",
+              },
+            ]}
+            onPress={() => setSelectedFilter(filter.key)}
+          >
+            <Text
               style={[
-                styles.filterTab,
+                styles.filterText,
                 {
-                  backgroundColor:
-                    selectedFilter === filter.key ? "#4F46E5" : "#FFFFFF",
+                  color: selectedFilter === filter.key ? "#FFFFFF" : "#6B7280",
                 },
               ]}
-              onPress={() => setSelectedFilter(filter.key)}
             >
-              <Text
-                style={[
-                  styles.filterText,
-                  {
-                    color:
-                      selectedFilter === filter.key ? "#FFFFFF" : "#6B7280",
-                  },
-                ]}
-              >
-                {filter.label}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-
+              {filter.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
+      </ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         {/* Transactions List */}
         <View style={styles.transactionsList}>
           <Text style={styles.sectionTitle}>
@@ -413,7 +379,8 @@ export default function TransactionsScreen() {
 
                 <View style={styles.transactionAmount}>
                   <Text style={[styles.amountText, { color }]}>
-                    {transaction.type === "income" ? "+" : "-"}€
+                    {transaction.type === "income" ? "+" : "-"}
+                    {sign}
                     {transaction.amount.toFixed(2)}
                   </Text>
                   <Text style={styles.categoryText}>
@@ -446,7 +413,7 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingVertical: 16,
+    paddingTop: 26,
   },
   headerTitle: {
     fontSize: 28,
@@ -503,18 +470,20 @@ const styles = StyleSheet.create({
   },
   statsContainer: {
     paddingLeft: 20,
-    marginVertical: 16,
+    marginTop: 16,
+    height: 160,
   },
   statCard: {
     width: 160,
     padding: 20,
     borderRadius: 16,
     marginRight: 16,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // elevation: 3,
   },
   statLabel: {
     fontSize: 14,
@@ -529,17 +498,18 @@ const styles = StyleSheet.create({
   filtersContainer: {
     paddingLeft: 20,
     marginVertical: 16,
+    paddingBottom: 5,
   },
   filterTab: {
     paddingHorizontal: 20,
     paddingVertical: 12,
     borderRadius: 20,
     marginRight: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // elevation: 3,
   },
   filterText: {
     fontSize: 14,
@@ -547,7 +517,7 @@ const styles = StyleSheet.create({
   },
   transactionsList: {
     paddingHorizontal: 20,
-    marginVertical: 16,
+    marginBottom: 16,
   },
   sectionTitle: {
     fontSize: 18,
@@ -562,11 +532,11 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 12,
     marginBottom: 12,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
+    // shadowColor: "#000",
+    // shadowOffset: { width: 0, height: 2 },
+    // shadowOpacity: 0.1,
+    // shadowRadius: 4,
+    // elevation: 3,
   },
   transactionIcon: {
     width: 48,

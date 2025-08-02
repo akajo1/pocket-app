@@ -65,7 +65,7 @@ export default function TransactionDetailModal({
   };
 
   const color = getTransactionColor(transaction.type);
-
+  const amount = transaction?.amount || transaction?.amount_encrypted;
   return (
     <Modal
       visible={visible}
@@ -88,7 +88,7 @@ export default function TransactionDetailModal({
             <Text style={[styles.amount, { color }]}>
               {transaction.type === "income" ? "+" : "-"}
               {sign}
-              {parseFloat(transaction?.amount_encrypted?.toString()).toFixed(2)}
+              {parseFloat(amount.toString()).toFixed(2)}
             </Text>
             <Text style={styles.transactionType}>
               {getTransactionTypeLabel(transaction.type)}

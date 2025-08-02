@@ -1,4 +1,12 @@
-import { DollarSignIcon, Scan, Smartphone, Zap } from "lucide-react-native";
+import {
+  DollarSignIcon,
+  Plus,
+  Scan,
+  Settings,
+  Smartphone,
+  TrendingDown,
+  Zap,
+} from "lucide-react-native";
 import { Dimensions } from "react-native";
 
 export const { width, height } = Dimensions.get("screen");
@@ -11,12 +19,19 @@ export const alertType = {
 
 export const quickActions = [
   // { icon: Send, label: "Envoyer", color: "#4F46E5" },
+  { icon: TrendingDown, label: "Retirer", key: "appro", color: "#DC2626" },
   { icon: DollarSignIcon, label: "Appro", key: "appro", color: "#059669" },
   { icon: Zap, label: "NFC Pay", key: "nfcpay", color: "#DC2626" },
   { icon: Scan, label: "QR Pay", key: "qrpay", color: "#7C2D12" },
   //   { icon: QrCode, label: "QR Code", color: "#7C2D12" },
   { icon: Smartphone, label: "Crédit", key: "credit", color: "#6B7280" },
   //   { icon: Wifi, label: "NFC Write", color: "#7C3AED" },
+];
+export const quickActionsChild = [
+  { icon: Plus, label: "Charger", key: "charger", color: "#059669" },
+  { icon: TrendingDown, label: "Retirer", key: "retirer", color: "#DC2626" },
+  { icon: Zap, label: "NFC", key: "nfc", color: "#7C3AED" },
+  { icon: Settings, label: "Limites", key: "limit", color: "#F59E0B" },
 ];
 export const sign = "$";
 export const mockNotifications = [

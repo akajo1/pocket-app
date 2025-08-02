@@ -1,12 +1,6 @@
+import { QuickAction } from "@/src/lib/types";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-
-interface QuickAction {
-  icon: React.ComponentType<any>;
-  label: string;
-  color: string;
-  onPress: () => void;
-}
 
 interface QuickActionsGridProps {
   title: string;

@@ -286,3 +286,10 @@ export interface TopUpWalletRequest {
 }
 
 export type alertTypeProp = "success" | "error" | "warning" | "info";
+
+export interface QuickAction {
+  icon: React.ComponentType<any>;
+  label: string;
+  color: string;
+  onPress: () => void;
+}
