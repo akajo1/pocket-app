@@ -4,6 +4,9 @@ import ChildDetail from "@/src/components/molecules/child/ChildDetail";
 import {
   ChildrenCarousel,
   CreateChildWallet,
+  LimitChildModal,
+  LoadChildWalletModal,
+  UnloadChildWallet,
 } from "@/src/components/organisms";
 import { colors } from "@/src/lib/colors";
 import { quickActionsChild } from "@/src/lib/constants";
@@ -25,7 +28,6 @@ export default function ChildrenWalletsScreen() {
     [key: string]: boolean;
   } | null>(null);
 
-  // Trouver l'index de l'enfant sélectionné ou utiliser 0 par défaut
   function findChildIndex() {
     if (selectedChildId) {
       const index = children.findIndex(
@@ -53,7 +55,6 @@ export default function ChildrenWalletsScreen() {
 
   return (
     <SafeAreaView style={childrenStyle.container}>
-      {/* Header */}
       <View style={childrenStyle.header}>
         <Text style={childrenStyle.headerTitle}>Wallets Enfants</Text>
         <TouchableOpacity
@@ -79,12 +80,21 @@ export default function ChildrenWalletsScreen() {
         }}
       />
 
-      {/* Analytics for Selected Child */}
-      {/* {showDetails && selectedChild && (
-          <TransactionAnalytics
-            transactions={selectedChild?.recentTransactions || []}
-          />
-        )} */}
+      <LoadChildWalletModal
+        isShown={currentModal?.charger === true ? true : false}
+        handleHidemodal={() => handleCurrentModal("charger", false)}
+        selectedChildIndex={selectedChildIndex}
+      />
+      <UnloadChildWallet
+        isShown={currentModal?.unload === true ? true : false}
+        handleHidemodal={() => handleCurrentModal("unload", false)}
+        selectedChildIndex={selectedChildIndex}
+      />
+      <LimitChildModal
+        isShown={currentModal?.limit === true ? true : false}
+        selectedChildIndex={selectedChildIndex}
+        onCloseModal={() => handleCurrentModal("limit", false)}
+      />
       <TransactionDetailModal
         visible={currentModal?.transaction ? true : false}
         onClose={() => setCurrentModal(null)}

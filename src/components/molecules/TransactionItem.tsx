@@ -6,7 +6,7 @@ import Badge from "../atoms/Badge";
 
 interface Transaction {
   id: number;
-  type: "received" | "sent";
+  type: "income" | "sent";
   amount: number;
   description: string;
   time: string;
@@ -29,19 +29,19 @@ export default function TransactionItem({
   onPress,
 }: TransactionItemProps) {
   const getIconColor = () => {
-    return transaction.type === "received" ? "#059669" : "#DC2626";
+    return transaction.type === "income" ? "#059669" : "#DC2626";
   };
 
   const getIconBackgroundColor = () => {
-    return transaction.type === "received" ? "#DCFCE7" : "#FEF2F2";
+    return transaction.type === "income" ? "#DCFCE7" : "#FEF2F2";
   };
 
   const getAmountColor = () => {
-    return transaction.type === "received" ? "#059669" : "#DC2626";
+    return transaction.type === "income" ? "#059669" : "#DC2626";
   };
 
   const getAmountPrefix = () => {
-    return transaction.type === "received" ? "+" : "-";
+    return transaction.type === "income" ? "+" : "-";
   };
   const amount = transaction?.amount || transaction?.amount_encrypted;
   return (
@@ -62,7 +62,7 @@ export default function TransactionItem({
           color={getIconColor()}
           style={{
             transform: [
-              { rotate: transaction.type === "received" ? "180deg" : "0deg" },
+              { rotate: transaction.type === "income" ? "180deg" : "0deg" },
             ],
           }}
         />

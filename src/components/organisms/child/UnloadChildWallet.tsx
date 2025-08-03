@@ -43,7 +43,9 @@ const UnloadChildWallet = ({
               <Text style={childrenStyle.balanceLabel}>Solde enfant</Text>
               <Text style={childrenStyle.balanceValue}>
                 {sign}
-                {children[selectedChildIndex]?.balance.toFixed(2)}
+                {parseFloat(
+                  children[selectedChildIndex]?.balance.toString()
+                )?.toFixed(2)}
               </Text>
             </View>
           </View>

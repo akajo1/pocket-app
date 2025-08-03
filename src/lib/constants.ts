@@ -29,7 +29,7 @@ export const quickActions = [
 ];
 export const quickActionsChild = [
   { icon: Plus, label: "Charger", key: "charger", color: "#059669" },
-  { icon: TrendingDown, label: "Retirer", key: "retirer", color: "#DC2626" },
+  { icon: TrendingDown, label: "Retirer", key: "unload", color: "#DC2626" },
   { icon: Zap, label: "NFC", key: "nfc", color: "#7C3AED" },
   { icon: Settings, label: "Limites", key: "limit", color: "#F59E0B" },
 ];

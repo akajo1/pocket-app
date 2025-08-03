@@ -4,6 +4,7 @@ import { childDetailStyle } from "@/src/lib/styles/childDetailStyle";
 import { QuickAction, Transaction } from "@/src/lib/types";
 import React, { useState } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
+import TransactionAnalytics from "../../charts/TransactionAnalytics";
 import TransactionItem from "../TransactionItem";
 import NfcChildSection from "./NfcChildSection";
 
@@ -21,7 +22,7 @@ const ChildDetail = ({
   onPressTransaction,
 }: Props) => {
   const { useChildDetails } = useChildren();
-  const { data, isLoading } = useChildDetails(selectedChild);
+  const { data } = useChildDetails(selectedChild);
   const [isNFCSupported, setIsNFCSupported] = useState<boolean>(false);
 
   return (
@@ -37,7 +38,6 @@ const ChildDetail = ({
         style={{ height: height / 2 }}
       >
         <View style={childDetailStyle.childDetails}>
-          {/* Quick Actions */}
           <View style={childDetailStyle.quickActionsGrid3x3}>
             {onQuickClick.map((action, index) => (
               <TouchableOpacity
@@ -64,6 +64,9 @@ const ChildDetail = ({
               </TouchableOpacity>
             ))}
           </View>
+        </View>
+        <View>
+          <TransactionAnalytics transactions={data?.recentTransactions || []} />
         </View>
         <View style={childDetailStyle.childDetails}>
           <View style={childDetailStyle.transactionsSection}>

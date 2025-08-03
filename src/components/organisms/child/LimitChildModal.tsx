@@ -32,7 +32,7 @@ const LimitChildModal = ({
               style={childrenStyle.textInput}
               defaultValue={children[
                 selectedChildIndex
-              ]?.weeklyLimit.toString()}
+              ]?.weekly_limit.toString()}
               placeholder="0.00"
               keyboardType="numeric"
             />

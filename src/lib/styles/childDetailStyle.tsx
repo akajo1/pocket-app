@@ -30,7 +30,7 @@ export const childDetailStyle = StyleSheet.create({
     flexDirection: "row",
     flexWrap: "wrap",
     justifyContent: "space-between",
-    marginBottom: 24,
+    // marginBottom: 24,
   },
   quickActionButton3x3: {
     width: "20%",
