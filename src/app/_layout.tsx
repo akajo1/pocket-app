@@ -1,59 +1,66 @@
 import { AuthProvider } from "@/src/components/contexts/AuthContext";
-import AuthGuard from "@/src/components/guards/AuthGuard";
-import { useFrameworkReady } from "@/src/hooks/useFrameworkReady";
-import { alertTypeProp } from "@/src/lib/types";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
-import { createContext, useState } from "react";
-type AlertTypo = {
-  visible: boolean;
-  message: string;
-  title?: string;
-  type?: alertTypeProp;
-  onPress?: () => void;
-  btnText: string;
-};
+import React from "react";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import AlertModal from "../components/modals/AlertModal";
+import AuthModal from "../components/modals/AuthModal";
+import { AlertProvider, useAlert } from "../lib/context/AlertContext";
+import { useAuth } from "../lib/hooks/useAuth";
+
+// Création du client React Query
 const queryClient = new QueryClient();
-export const AlertMessageContext = createContext<{
-  alertMessage: AlertTypo;
-  setAlertMessage: React.Dispatch<React.SetStateAction<AlertTypo>>;
-}>({
-  alertMessage: {
-    visible: false,
-    message: "",
-    title: "",
-    type: "info",
-    onPress: () => {},
-    btnText: "ok",
-  },
-  setAlertMessage: () => {},
-});
+
+function LayoutContent() {
+  const { isAuthenticated, isLoading } = useAuth();
+  const { alertMessage } = useAlert();
+
+  if (isLoading) {
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator size="large" color="#4F46E5" />
+        <Text style={styles.loadingText}>Chargement...</Text>
+      </View>
+    );
+  }
+
+  if (!isAuthenticated) return <AuthModal />;
+
+  return (
+    <>
+      <StatusBar style="auto" />
+      {alertMessage.visible && <AlertModal />}
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="+not-found" />
+      </Stack>
+    </>
+  );
+}
+
 export default function RootLayout() {
-  const [alertMessage, setAlertMessage] = useState<AlertTypo>({
-    visible: false,
-    message: "",
-    title: "",
-    type: "info",
-    onPress: () => {},
-    btnText: "",
-  });
-
-  useFrameworkReady();
-
   return (
     <QueryClientProvider client={queryClient}>
       <AuthProvider>
-        <AlertMessageContext value={{ alertMessage, setAlertMessage }}>
-          <AuthGuard>
-            <Stack screenOptions={{ headerShown: false }}>
-              <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-              <Stack.Screen name="+not-found" />
-            </Stack>
-            <StatusBar style="auto" />
-          </AuthGuard>
-        </AlertMessageContext>
+        <AlertProvider>
+          <LayoutContent />
+        </AlertProvider>
       </AuthProvider>
     </QueryClientProvider>
   );
 }
+
+const styles = StyleSheet.create({
+  loadingContainer: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "#F8FAFC",
+  },
+  loadingText: {
+    marginTop: 16,
+    fontSize: 16,
+    color: "#6B7280",
+  },
+});

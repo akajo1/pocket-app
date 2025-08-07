@@ -10,7 +10,7 @@ export const childrenStyle = StyleSheet.create({
     justifyContent: "space-between",
     alignItems: "center",
     paddingHorizontal: 20,
-    paddingTop: 32,
+    // paddingTop: 5,
   },
   headerTitle: {
     fontSize: 28,

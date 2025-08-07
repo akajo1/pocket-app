@@ -1,11 +1,12 @@
 import { AlertMessageContext } from "@/src/app/_layout";
+import { colors } from "@/src/lib/colors";
 import { useAuth } from "@/src/lib/hooks/useAuth";
 import { RegisterFormData, registerSchema } from "@/src/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Lock, Mail, Phone, User } from "lucide-react-native";
 import React, { useContext } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, Text, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import Button from "../atoms/Button";
 import Input from "../atoms/Input";
 
@@ -14,7 +15,7 @@ interface RegisterFormProps {
 }
 
 export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
-  const { register, isRegisterLoading } = useAuth();
+  const { register, isLoading, isRegisterSuccess } = useAuth();
   const message = useContext(AlertMessageContext);
 
   const {
@@ -39,8 +40,8 @@ export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      await register(data);
-      reset();
+      register(data);
+      if (isRegisterSuccess) reset();
 
       message?.setAlertMessage({
         visible: true,
@@ -159,9 +160,14 @@ export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
       )}
 
       <Button
-        title={isRegisterLoading ? "Création..." : "Créer le compte"}
+        title={isLoading ? "Création..." : "Créer le compte"}
         onPress={handleSubmit(onSubmit)}
-        disabled={!isValid || isRegisterLoading}
+        disabled={!isValid || isLoading}
+        icon={
+          isLoading ? (
+            <ActivityIndicator size={20} color={colors.white} />
+          ) : null
+        }
         style={styles.submitButton}
       />
 

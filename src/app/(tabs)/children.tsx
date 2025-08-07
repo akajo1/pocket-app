@@ -1,6 +1,6 @@
-import NFCLinkingModal from "@/src/components/modals/NFCLinkingModal";
 import TransactionDetailModal from "@/src/components/modals/TransactionDetailModal";
 import ChildDetail from "@/src/components/molecules/child/ChildDetail";
+import EmptyChildWalletScreen from "@/src/components/molecules/EmptyChildrenWallet";
 import {
   ChildrenCarousel,
   CreateChildWallet,
@@ -18,7 +18,7 @@ import { Plus } from "lucide-react-native";
 import React, { useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 
-export default function ChildrenWalletsScreen() {
+function ChildrenScreen() {
   const { selectedChildId } = useLocalSearchParams();
   const { children, createChild } = useChildren();
   const [selectedChildIndex, setSelectedChildIndex] = useState(findChildIndex);
@@ -53,6 +53,43 @@ export default function ChildrenWalletsScreen() {
     setSelectedChildIndex(index);
   };
 
+  const displayChildren = () => {
+    if (!children.length)
+      return (
+        <EmptyChildWalletScreen
+          onPress={() => handleCurrentModal("create", true)}
+        />
+      );
+    return (
+      <>
+        <ChildrenCarousel
+          childrenWallets={children}
+          onScroll={onScroll}
+          selectedChildIndex={selectedChildIndex}
+        />
+        <ChildDetail
+          selectedChild={children[selectedChildIndex].id}
+          onQuickClick={quickActionsWithHandlers}
+          onNfcShowModal={(value) => handleCurrentModal("addnfc", value)}
+          onPressTransaction={(trans) => {
+            setSelectedTransaction(trans);
+            handleCurrentModal("transaction", true);
+          }}
+        />
+
+        <LoadChildWalletModal
+          isShown={currentModal?.charger === true ? true : false}
+          handleHidemodal={() => handleCurrentModal("charger", false)}
+          selectedChildIndex={selectedChildIndex}
+        />
+        <UnloadChildWallet
+          isShown={currentModal?.unload === true ? true : false}
+          handleHidemodal={() => handleCurrentModal("unload", false)}
+          selectedChildIndex={selectedChildIndex}
+        />
+      </>
+    );
+  };
   return (
     <SafeAreaView style={childrenStyle.container}>
       <View style={childrenStyle.header}>
@@ -64,32 +101,7 @@ export default function ChildrenWalletsScreen() {
           <Plus size={24} color={colors.blue} />
         </TouchableOpacity>
       </View>
-
-      <ChildrenCarousel
-        childrenWallets={children}
-        onScroll={onScroll}
-        selectedChildIndex={selectedChildIndex}
-      />
-      <ChildDetail
-        selectedChild={children[selectedChildIndex].id}
-        onQuickClick={quickActionsWithHandlers}
-        onNfcShowModal={(value) => handleCurrentModal("addnfc", value)}
-        onPressTransaction={(trans) => {
-          setSelectedTransaction(trans);
-          handleCurrentModal("transaction", true);
-        }}
-      />
-
-      <LoadChildWalletModal
-        isShown={currentModal?.charger === true ? true : false}
-        handleHidemodal={() => handleCurrentModal("charger", false)}
-        selectedChildIndex={selectedChildIndex}
-      />
-      <UnloadChildWallet
-        isShown={currentModal?.unload === true ? true : false}
-        handleHidemodal={() => handleCurrentModal("unload", false)}
-        selectedChildIndex={selectedChildIndex}
-      />
+      {displayChildren()}
       <LimitChildModal
         isShown={currentModal?.limit === true ? true : false}
         selectedChildIndex={selectedChildIndex}
@@ -100,13 +112,13 @@ export default function ChildrenWalletsScreen() {
         onClose={() => setCurrentModal(null)}
         transaction={selectedTransaction}
       />
-      <NFCLinkingModal
+      {/* <NFCLinkingModal
         visible={currentModal?.addnfc ? true : false}
         onClose={() => handleCurrentModal("addnfc", false)}
         childName={children[selectedChildIndex]?.name || ""}
         childId={children[selectedChildIndex]?.id || 0}
         onLinkSuccess={() => {}}
-      />
+      /> */}
       <CreateChildWallet
         isShown={currentModal?.create === true ? true : false}
         handleHidemodal={(value) => handleCurrentModal("create", value)}
@@ -114,3 +126,5 @@ export default function ChildrenWalletsScreen() {
     </SafeAreaView>
   );
 }
+
+export default ChildrenScreen;

@@ -1,17 +1,13 @@
 import { useAuth } from "@/src/lib/hooks/useAuth";
+import { Stack } from "expo-router";
+import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
 import AlertModal from "../modals/AlertModal";
 import AuthModal from "../modals/AuthModal";
 
-interface AuthGuardProps {
-  children: React.ReactNode;
-  fallback?: React.ReactNode;
-}
-
-export default function AuthGuard({ children, fallback }: AuthGuardProps) {
+export default function AuthGuard() {
   const { isAuthenticated, isLoading } = useAuth();
-  console.log("--loading", isLoading);
   if (isLoading) {
     return (
       <View style={styles.loadingContainer}>
@@ -20,19 +16,23 @@ export default function AuthGuard({ children, fallback }: AuthGuardProps) {
       </View>
     );
   }
-  if (!isAuthenticated) {
+
+  const render = () => {
+    if (!isAuthenticated) return <AuthModal />;
+
     return (
-      <>
-        <AlertModal />
-        <AuthModal />
-      </>
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="+not-found" />
+      </Stack>
     );
-  }
+  };
 
   return (
     <>
+      <StatusBar style="auto" />
       <AlertModal />
-      {children}
+      {render()}
     </>
   );
 }

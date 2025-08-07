@@ -1,19 +1,7 @@
-import { useRouter } from "expo-router";
-import React, { useState } from "react";
-import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
-
-// Templates
-
-// Organisms
-import AppHeader from "@/src/components/organisms/AppHeader";
-
-// Molecules
-import WalletCard from "@/src/components/molecules/WalletCard";
-
-// Modals
 import TransactionDetailModal from "@/src/components/modals/TransactionDetailModal";
+import WalletCard from "@/src/components/molecules/WalletCard";
 import NetworkCreditModal from "@/src/components/NetworkCreditModal";
-import NFCPaymentModal from "@/src/components/NFCPaymentModal";
+import AppHeader from "@/src/components/organisms/AppHeader";
 import QuickActionsGrid from "@/src/components/organisms/QuickActionsGrid";
 import SubWalletsList from "@/src/components/organisms/SubWalletsList";
 import TransactionsList from "@/src/components/organisms/TransactionsList";
@@ -24,8 +12,11 @@ import { useChildren } from "@/src/lib/hooks/useChildren";
 import { useNotifications } from "@/src/lib/hooks/useNotifications";
 import { useTransactions } from "@/src/lib/hooks/useTransactions";
 import { useWallets } from "@/src/lib/hooks/useWallets";
+import { useRouter } from "expo-router";
+import React, { useState } from "react";
+import { SafeAreaView, ScrollView, StyleSheet } from "react-native";
 
-export default function HomeScreen() {
+function HomeScreen() {
   const auth = useAuth();
   const { notifications } = useNotifications();
   const { wallets } = useWallets();
@@ -75,11 +66,11 @@ export default function HomeScreen() {
         isBalanceVisible={isBalanceVisible}
         onToggleVisibility={() => setIsBalanceVisible(!isBalanceVisible)}
       />
-
       <QuickActionsGrid
         title="Actions Rapides"
         actions={quickActionsWithHandlers}
       />
+
       <ScrollView showsVerticalScrollIndicator={false}>
         <SubWalletsList
           title="Sous-Portefeuilles"
@@ -93,18 +84,19 @@ export default function HomeScreen() {
           onViewAll={() => router.push("/(tabs)/transactions")}
         />
       </ScrollView>
-      {/* <SendMoneyModal
-        visible={currentModal?.envoyer ? true : false}
-        onClose={() => setCurrentModal(null)}
-        childName="Portefeuille Principal"
-        onSend={() => {}}
-      /> */}
 
-      <NFCPaymentModal
+      {/* <SendMoneyModal
+         visible={currentModal?.envoyer ? true : false}
+         onClose={() => setCurrentModal(null)}
+         childName="Portefeuille Principal"
+         onSend={() => {}}
+       /> */}
+
+      {/* <NFCPaymentModal
         visible={currentModal?.nfcpay ? true : false}
         onClose={() => setCurrentModal(null)}
         onPaymentSuccess={() => {}}
-      />
+      /> */}
       <QRScannerModal
         visible={currentModal?.qrpay ? true : false}
         onClose={() => setCurrentModal(null)}
@@ -112,7 +104,6 @@ export default function HomeScreen() {
         title="Scanner QR Code"
         subtitle="Scannez un QR code pour payer ou recevoir des informations"
       />
-
       <NetworkCreditModal
         visible={currentModal?.credit ? true : false}
         onClose={() => setCurrentModal(null)}
@@ -132,3 +123,5 @@ const styles = StyleSheet.create({
     backgroundColor: "#F8FAFC",
   },
 });
+
+export default HomeScreen;

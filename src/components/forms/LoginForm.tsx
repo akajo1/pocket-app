@@ -18,7 +18,7 @@ export default function LoginForm({
   onSwitchToRegister,
   onForgotPassword,
 }: LoginFormProps) {
-  const { login, isLoading, error } = useAuth();
+  const { login, isLoading, error, isLoginSuccess } = useAuth();
   const {
     control,
     handleSubmit,
@@ -35,7 +35,7 @@ export default function LoginForm({
 
   const onSubmit = async (data: LoginFormData) => {
     login(data);
-    if (!error) reset();
+    if (isLoginSuccess) reset();
   };
 
   return (

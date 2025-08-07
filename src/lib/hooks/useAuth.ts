@@ -1,9 +1,9 @@
-import { AlertMessageContext } from "@/src/app/_layout";
 import { StorageData } from "@/src/components/services/AsyncStorageService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useCallback, useContext } from "react";
+import { useCallback } from "react";
 import { Alert } from "react-native";
 import { authApi } from "../api/authApi";
+import { useAlert } from "../context/AlertContext";
 import { useAuthStore } from "../stores/authStore";
 import {
   ChangePasswordRequest,
@@ -14,7 +14,7 @@ import {
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
-  const message = useContext(AlertMessageContext);
+  const message = useAlert();
   const {
     user,
     isAuthenticated,
@@ -56,16 +56,6 @@ export const useAuth = () => {
   // Register mutation
   const registerMutation = useMutation({
     mutationFn: authApi.register,
-    onSuccess: (response) => {
-      if (response.success && response.data) {
-        setUser(response.data.user);
-        setTokens(
-          response.data.tokens.accessToken,
-          response.data.tokens.refreshToken
-        );
-        queryClient.invalidateQueries({ queryKey: ["user"] });
-      }
-    },
     onError: (error: any) => {
       Alert.alert(
         "Erreur d'inscription",
@@ -304,6 +294,8 @@ export const useAuth = () => {
       logoutMutation.isPending ||
       changePasswordMutation.isPending,
     login,
+    isLoginSuccess: loginMutation.isSuccess,
+    isRegisterSuccess: registerMutation.isSuccess,
     register,
     logout,
     changePassword,
