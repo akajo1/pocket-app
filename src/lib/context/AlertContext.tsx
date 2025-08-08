@@ -11,7 +11,7 @@ type AlertTypo = {
   btnText: string;
 };
 
-const AlertContext = createContext<{
+export const AlertContext = createContext<{
   alertMessage: AlertTypo;
   setAlertMessage: React.Dispatch<React.SetStateAction<AlertTypo>>;
 } | null>(null);

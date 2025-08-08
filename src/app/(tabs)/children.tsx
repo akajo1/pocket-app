@@ -1,3 +1,4 @@
+import NFCLinkingModal from "@/src/components/modals/NFCLinkingModal";
 import TransactionDetailModal from "@/src/components/modals/TransactionDetailModal";
 import ChildDetail from "@/src/components/molecules/child/ChildDetail";
 import EmptyChildWalletScreen from "@/src/components/molecules/EmptyChildrenWallet";
@@ -112,13 +113,13 @@ function ChildrenScreen() {
         onClose={() => setCurrentModal(null)}
         transaction={selectedTransaction}
       />
-      {/* <NFCLinkingModal
+      <NFCLinkingModal
         visible={currentModal?.addnfc ? true : false}
         onClose={() => handleCurrentModal("addnfc", false)}
         childName={children[selectedChildIndex]?.name || ""}
         childId={children[selectedChildIndex]?.id || 0}
         onLinkSuccess={() => {}}
-      /> */}
+      />
       <CreateChildWallet
         isShown={currentModal?.create === true ? true : false}
         handleHidemodal={(value) => handleCurrentModal("create", value)}

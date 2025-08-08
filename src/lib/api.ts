@@ -24,7 +24,7 @@ export interface PaginatedResponse<T> {
 class ApiClient {
   private client: AxiosInstance;
   private baseURL =
-    process.env.EXPO_PUBLIC_API_URL || "http://192.168.1.73:3001/api/";
+    process.env.EXPO_PUBLIC_API_URL || "http://192.168.0.66:3001/api/";
 
   constructor() {
     this.client = axios.create({
@@ -36,7 +36,6 @@ class ApiClient {
     });
 
     this.setupInterceptors();
-    console.log(this.baseURL);
   }
 
   private setupInterceptors() {
@@ -59,7 +58,6 @@ class ApiClient {
         if (error.response?.status === 401 && (await this.getAccessToken())) {
           this.clearTokens();
         }
-
         return Promise.reject(error);
       }
     );

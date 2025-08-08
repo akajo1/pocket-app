@@ -1,6 +1,7 @@
 import TransactionDetailModal from "@/src/components/modals/TransactionDetailModal";
 import WalletCard from "@/src/components/molecules/WalletCard";
 import NetworkCreditModal from "@/src/components/NetworkCreditModal";
+import NFCPaymentModal from "@/src/components/NFCPaymentModal";
 import AppHeader from "@/src/components/organisms/AppHeader";
 import QuickActionsGrid from "@/src/components/organisms/QuickActionsGrid";
 import SubWalletsList from "@/src/components/organisms/SubWalletsList";
@@ -92,11 +93,11 @@ function HomeScreen() {
          onSend={() => {}}
        /> */}
 
-      {/* <NFCPaymentModal
+      <NFCPaymentModal
         visible={currentModal?.nfcpay ? true : false}
         onClose={() => setCurrentModal(null)}
         onPaymentSuccess={() => {}}
-      /> */}
+      />
       <QRScannerModal
         visible={currentModal?.qrpay ? true : false}
         onClose={() => setCurrentModal(null)}

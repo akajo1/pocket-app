@@ -1,6 +1,6 @@
-import { AlertMessageContext } from "@/src/app/_layout";
 import { colors } from "@/src/lib/colors";
 import { alertType, height, width } from "@/src/lib/constants";
+import { AlertContext } from "@/src/lib/context/AlertContext";
 import AntDesign from "@expo/vector-icons/AntDesign";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import Ionicons from "@expo/vector-icons/Ionicons";
@@ -8,8 +8,9 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React, { useContext } from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
+
 const AlertModal = () => {
-  const { alertMessage, setAlertMessage } = useContext(AlertMessageContext);
+  const { alertMessage, setAlertMessage } = useContext(AlertContext);
 
   const handleCloseModal = () =>
     setAlertMessage({

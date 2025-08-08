@@ -25,29 +25,33 @@ function LayoutContent() {
     );
   }
 
-  if (!isAuthenticated) return <AuthModal />;
-
-  return (
-    <>
-      <StatusBar style="auto" />
-      {alertMessage.visible && <AlertModal />}
+  const displayScreen = () => {
+    if (!isAuthenticated) return <AuthModal />;
+    return (
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
         <Stack.Screen name="+not-found" />
       </Stack>
+    );
+  };
+  return (
+    <>
+      <StatusBar style="auto" />
+      {alertMessage.visible && <AlertModal />}
+      {displayScreen()}
     </>
   );
 }
 
 export default function RootLayout() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <AlertProvider>
+    <AlertProvider>
+      <QueryClientProvider client={queryClient}>
+        <AuthProvider>
           <LayoutContent />
-        </AlertProvider>
-      </AuthProvider>
-    </QueryClientProvider>
+        </AuthProvider>
+      </QueryClientProvider>
+    </AlertProvider>
   );
 }
 
