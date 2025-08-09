@@ -1,5 +1,5 @@
-import { AlertMessageContext } from "@/src/app/_layout";
 import { colors } from "@/src/lib/colors";
+import { AlertContext } from "@/src/lib/context/AlertContext";
 import { useAuth } from "@/src/lib/hooks/useAuth";
 import { RegisterFormData, registerSchema } from "@/src/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,7 +16,7 @@ interface RegisterFormProps {
 
 export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
   const { register, isLoading, isRegisterSuccess } = useAuth();
-  const message = useContext(AlertMessageContext);
+  const message = useContext(AlertContext);
 
   const {
     control,

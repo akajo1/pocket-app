@@ -24,7 +24,7 @@ export interface PaginatedResponse<T> {
 class ApiClient {
   private client: AxiosInstance;
   private baseURL =
-    process.env.EXPO_PUBLIC_API_URL || "http://192.168.0.66:3001/api/";
+    process.env.EXPO_PUBLIC_API_URL || "http://192.168.1.77:3001/api/";
 
   constructor() {
     this.client = axios.create({
