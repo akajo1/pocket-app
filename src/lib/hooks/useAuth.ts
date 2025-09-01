@@ -5,12 +5,7 @@ import { Alert } from "react-native";
 import { authApi } from "../api/authApi";
 import { useAlert } from "../context/AlertContext";
 import { useAuthStore } from "../stores/authStore";
-import {
-  ChangePasswordRequest,
-  LoginRequest,
-  RegisterRequest,
-  User,
-} from "../types";
+import { ChangePasswordRequest, LoginRequest, User } from "../types";
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
@@ -57,10 +52,17 @@ export const useAuth = () => {
   const registerMutation = useMutation({
     mutationFn: authApi.register,
     onError: (error: any) => {
-      Alert.alert(
-        "Erreur d'inscription",
-        error.response?.data?.message || "Erreur inconnue"
-      );
+      message?.setAlertMessage({
+        visible: true,
+        message:
+          typeof error.response.data.message === "string"
+            ? error.response.data.message
+            : error.response.data.message.map((msg) => msg.message),
+        title: "Erreur d'inscription",
+        type: "error",
+        onPress: () => {},
+        btnText: "D'accord",
+      });
     },
   });
 
@@ -227,13 +229,6 @@ export const useAuth = () => {
     [loginMutation]
   );
 
-  const register = useCallback(
-    (data: RegisterRequest) => {
-      return registerMutation.mutate(data);
-    },
-    [registerMutation]
-  );
-
   const logout = useCallback(() => {
     return logoutMutation.mutate();
   }, [logoutMutation]);
@@ -296,7 +291,7 @@ export const useAuth = () => {
     login,
     isLoginSuccess: loginMutation.isSuccess,
     isRegisterSuccess: registerMutation.isSuccess,
-    register,
+    register: registerMutation,
     logout,
     changePassword,
     requestPasswordReset,

@@ -25,7 +25,7 @@ export default function AuthModal() {
       <View style={styles.modalOverlay}>
         <View style={styles.mask} />
         <View style={styles.modalContent}>
-          {/* <Text style={styles.logo}>Smart Pocket</Text> */}
+          <Text style={styles.logo}>Smart Pocket</Text>
           <View style={styles.modalHeader}>
             <Text style={styles.modalTitle}>
               {authMode === "login" ? "Connexion" : "Inscription"}
