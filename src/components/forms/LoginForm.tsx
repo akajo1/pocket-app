@@ -2,10 +2,11 @@ import { colors } from "@/src/lib/colors";
 import { useAuth } from "@/src/lib/hooks/useAuth";
 import { LoginFormData, loginSchema } from "@/src/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, Mail } from "lucide-react-native";
-import React from "react";
+import { Lock } from "lucide-react-native";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { ActivityIndicator, StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import PhoneInput from "react-native-international-phone-number";
 import Button from "../atoms/Button";
 import Input from "../atoms/Input";
 
@@ -19,6 +20,7 @@ export default function LoginForm({
   onForgotPassword,
 }: LoginFormProps) {
   const { login, isLoading, error, isLoginSuccess } = useAuth();
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
   const {
     control,
     handleSubmit,
@@ -28,13 +30,17 @@ export default function LoginForm({
     resolver: zodResolver(loginSchema),
     mode: "onChange",
     defaultValues: {
-      email: "",
+      phone: "",
       password: "",
     },
   });
 
   const onSubmit = async (data: LoginFormData) => {
-    login(data);
+    const phone = `${selectedCountry?.idd?.root}${data.phone.replaceAll(
+      " ",
+      ""
+    )}`;
+    login({ ...data, phone });
     if (isLoginSuccess) reset();
   };
 
@@ -42,23 +48,37 @@ export default function LoginForm({
     <View style={styles.container}>
       <Controller
         control={control}
-        name="email"
+        name="phone"
         render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            label="Adresse email"
-            placeholder="votre@email.com"
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            keyboardType="email-address"
-            autoCapitalize="none"
-            icon={<Mail size={20} color="#9CA3AF" />}
-            error={errors.email?.message}
-            editable={!isLoading}
-          />
+          <View style={{ marginBottom: 10 }}>
+            <Text style={styles.label}>Téléphone</Text>
+            <PhoneInput
+              value={value}
+              defaultCountry="CD"
+              onChangePhoneNumber={onChange}
+              placeholderTextColor="#9CA3AF"
+              language="fra"
+              placeholder="XXX XXX XXX"
+              selectedCountry={selectedCountry}
+              onChangeSelectedCountry={(country) => setSelectedCountry(country)}
+              onBlur={onBlur}
+              phoneInputStyles={{
+                divider: { display: "none" },
+                caret: { display: "none" },
+                container: {
+                  backgroundColor: "#F9FAFB",
+                  borderWidth: 0,
+                  borderRadius: 10,
+                },
+                flagContainer: {
+                  width: 80,
+                },
+                callingCode: { fontSize: 11, color: "#374151" },
+              }}
+            />
+          </View>
         )}
       />
-
       <Controller
         control={control}
         name="password"
@@ -121,5 +141,11 @@ const styles = StyleSheet.create({
   },
   linkButton: {
     paddingVertical: 8,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#374151",
+    marginBottom: 8,
   },
 });

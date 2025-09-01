@@ -3,12 +3,22 @@ import { AlertContext } from "@/src/lib/context/AlertContext";
 import { useAuth } from "@/src/lib/hooks/useAuth";
 import { RegisterFormData, registerSchema } from "@/src/lib/validations";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Lock, Mail, Phone, User } from "lucide-react-native";
-import React, { useContext } from "react";
+import Checkbox from "expo-checkbox";
+import { Lock, Mail, User } from "lucide-react-native";
+import React, { useContext, useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import {
+  ActivityIndicator,
+  Platform,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import PhoneInput from "react-native-international-phone-number";
 import Button from "../atoms/Button";
 import Input from "../atoms/Input";
+import TermsAndConditionsModal from "../modals/TermsConditionsModal";
 
 interface RegisterFormProps {
   onSwitchToLogin: () => void;
@@ -16,6 +26,9 @@ interface RegisterFormProps {
 
 export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
   const { register, isLoading, isRegisterSuccess } = useAuth();
+  const [selectedCountry, setSelectedCountry] = useState<string>("");
+  const [isChecked, setIsChecked] = useState<string>("");
+  const [isOpen, setIsOpen] = useState<boolean>(false);
   const message = useContext(AlertContext);
 
   const {
@@ -40,16 +53,29 @@ export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      register(data);
-      if (isRegisterSuccess) reset();
+      const phone = `${selectedCountry?.idd?.root}${data.phone.replaceAll(
+        " ",
+        ""
+      )}`;
+      if (data.email) {
+        if (
+          !data.email?.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/)
+        ) {
+          message?.setAlertMessage({
+            visible: true,
+            message: "Format d'email incorrect",
+            title: "Erreur d'inscription",
+            type: "error",
+            onPress: () => {},
+            btnText: "D'accord",
+          });
+          return;
+        }
+      }
 
-      message?.setAlertMessage({
-        visible: true,
-        message: "Inscription effectuer avec succes",
-        title: "inscription",
-        type: "success",
-        onPress: () => onSwitchToLogin(),
-        btnText: "Se connecter",
+      await register.mutate({
+        ...data,
+        phone,
       });
     } catch (error: any) {
       message?.setAlertMessage({
@@ -62,6 +88,20 @@ export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
       });
     }
   };
+
+  useEffect(() => {
+    if (isRegisterSuccess) {
+      reset();
+      message?.setAlertMessage({
+        visible: true,
+        message: "Inscription effectuer avec succes",
+        title: "inscription",
+        type: "success",
+        onPress: () => onSwitchToLogin(),
+        btnText: "Se connecter",
+      });
+    }
+  }, [isRegisterSuccess]);
 
   return (
     <View style={styles.container}>
@@ -103,10 +143,44 @@ export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
 
       <Controller
         control={control}
+        name="phone"
+        render={({ field: { onChange, onBlur, value } }) => (
+          <View style={{ marginBottom: 10 }}>
+            <Text style={styles.label}>Téléphone</Text>
+            <PhoneInput
+              value={value}
+              defaultCountry="CD"
+              onChangePhoneNumber={onChange}
+              placeholderTextColor="#9CA3AF"
+              language="fra"
+              placeholder="XXX XXX XXX"
+              selectedCountry={selectedCountry}
+              onChangeSelectedCountry={(country) => setSelectedCountry(country)}
+              onBlur={onBlur}
+              phoneInputStyles={{
+                divider: { display: "none" },
+                caret: { display: "none" },
+                container: {
+                  backgroundColor: "#F9FAFB",
+                  borderWidth: 0,
+                  borderRadius: 10,
+                },
+                flagContainer: {
+                  width: 80,
+                },
+                callingCode: { fontSize: 11, color: "#374151" },
+              }}
+            />
+          </View>
+        )}
+      />
+
+      <Controller
+        control={control}
         name="email"
         render={({ field: { onChange, onBlur, value } }) => (
           <Input
-            label="Adresse email"
+            label="Adresse email (optionnel)"
             placeholder="votre@email.com"
             value={value}
             onChangeText={onChange}
@@ -115,23 +189,6 @@ export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
             autoCapitalize="none"
             icon={<Mail size={20} color="#9CA3AF" />}
             error={errors.email?.message}
-          />
-        )}
-      />
-
-      <Controller
-        control={control}
-        name="phone"
-        render={({ field: { onChange, onBlur, value } }) => (
-          <Input
-            label="Téléphone (optionnel)"
-            placeholder="+33 6 12 34 56 78"
-            value={value}
-            onChangeText={onChange}
-            onBlur={onBlur}
-            keyboardType="phone-pad"
-            icon={<Phone size={20} color="#9CA3AF" />}
-            error={errors.phone?.message}
           />
         )}
       />
@@ -159,10 +216,20 @@ export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
         </View>
       )}
 
+      <View style={styles.section}>
+        <Checkbox
+          style={styles.checkbox}
+          value={isChecked}
+          onValueChange={setIsChecked}
+        />
+        <TouchableOpacity onPress={() => setIsOpen(true)}>
+          <Text style={styles.paragraph}>Termes et conditions</Text>
+        </TouchableOpacity>
+      </View>
       <Button
         title={isLoading ? "Création..." : "Créer le compte"}
         onPress={handleSubmit(onSubmit)}
-        disabled={!isValid || isLoading}
+        disabled={!isValid || isLoading || !isChecked}
         icon={
           isLoading ? (
             <ActivityIndicator size={20} color={colors.white} />
@@ -176,6 +243,20 @@ export default function RegisterForm({ onSwitchToLogin }: RegisterFormProps) {
         onPress={onSwitchToLogin}
         variant="secondary"
         style={styles.linkButton}
+      />
+
+      <TermsAndConditionsModal
+        visible={isOpen}
+        accepted={isChecked}
+        onAccept={(accept) => {
+          setIsChecked(accept);
+        }}
+        onClose={() => setIsOpen(false)}
+        pdfUrl={Platform.select({
+          ios: "sandbox:/mnt/data/termes_conditions_wallet.pdf",
+          android: "sandbox:/mnt/data/termes_conditions_wallet.pdf",
+        })}
+        brandName="IllicoCash / SmartPocket"
       />
     </View>
   );
@@ -227,6 +308,19 @@ const styles = StyleSheet.create({
   passwordRequirements: {
     marginBottom: 16,
   },
+  section: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  paragraph: {
+    fontSize: 14,
+    color: "#374151",
+    textTransform: "capitalize",
+    textDecorationLine: "underline",
+  },
+  checkbox: {
+    margin: 8,
+  },
   requirements: {
     backgroundColor: "#F9FAFB",
     borderRadius: 8,
@@ -253,5 +347,11 @@ const styles = StyleSheet.create({
   },
   linkButton: {
     paddingVertical: 8,
+  },
+  label: {
+    fontSize: 16,
+    fontWeight: "600",
+    color: "#374151",
+    marginBottom: 8,
   },
 });
