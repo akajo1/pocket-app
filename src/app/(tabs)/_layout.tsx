@@ -32,7 +32,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="children"
         options={{
-          title: "Enfants",
+          title: "Dépendant",
           tabBarIcon: ({ size, color }) => <Users size={size} color={color} />,
         }}
       />
