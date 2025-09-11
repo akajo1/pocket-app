@@ -70,19 +70,23 @@ export const authApi = {
 
   // Profile management
   async getProfile() {
-    return apiClient.get<User>("/auth/profil");
+    const response = await apiClient.get<User>("/auth/profil");
+    console.log("-response", response);
+    return response;
   },
 
   async updateProfile(data: Partial<User>) {
-    return apiClient.put<User>("/auth/profile", data);
+    return await apiClient.put<User>("/auth/profile", data);
   },
 
   // Security
   async getSecurityLogs(page = 1, limit = 20) {
-    return apiClient.get(`/auth/security-logs?page=${page}&limit=${limit}`);
+    return await apiClient.get(
+      `/auth/security-logs?page=${page}&limit=${limit}`
+    );
   },
 
   async logoutAllDevices() {
-    return apiClient.post("/auth/logout-all");
+    return await apiClient.post("/auth/logout-all");
   },
 };

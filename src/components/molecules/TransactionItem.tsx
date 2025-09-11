@@ -29,21 +29,25 @@ export default function TransactionItem({
   onPress,
 }: TransactionItemProps) {
   const getIconColor = () => {
-    return transaction.type === "income" ? "#059669" : "#DC2626";
+    return transaction?.typeTransaction !== "transfer" ? "#059669" : "#DC2626";
   };
 
   const getIconBackgroundColor = () => {
-    return transaction.type === "income" ? "#DCFCE7" : "#FEF2F2";
+    return transaction?.typeTransaction !== "transfer" ? "#DCFCE7" : "#FEF2F2";
   };
 
   const getAmountColor = () => {
-    return transaction.type === "income" ? "#059669" : "#DC2626";
+    return transaction?.typeTransaction !== "transfer" ? "#059669" : "#DC2626";
   };
 
   const getAmountPrefix = () => {
-    return transaction.type === "income" ? "+" : "-";
+    return transaction?.typeTransaction !== "transfer" ? "+" : "-";
   };
-  const amount = transaction?.amount || transaction?.amount_encrypted;
+  const displayPay = () => {
+    return transaction?.typeTransaction !== "transfer" ? "Reçu" : "Envoyé";
+  };
+  const amount = transaction?.amount;
+
   return (
     <TouchableOpacity
       style={styles.container}
@@ -69,17 +73,12 @@ export default function TransactionItem({
       </View>
 
       <View style={styles.details}>
-        <Text style={[styles.description, { marginBottom: 2 }]}>
-          {transaction?.title}
-        </Text>
         <Text style={[styles.time, { textTransform: "capitalize" }]}>
           {transaction.description}
         </Text>
         <View style={styles.meta}>
           <Text style={[styles.time, { marginTop: 4, fontSize: 12 }]}>
-            {moment
-              .utc(transaction?.transaction_date)
-              .format("DD/MM/YYYY hh:mm")}
+            {moment.utc(transaction?.created_at).format("DD/MM/YYYY HH:mm")}
           </Text>
           {transaction.status && (
             <Badge
@@ -99,7 +98,9 @@ export default function TransactionItem({
         <Text style={[styles.amount, { color: getAmountColor() }]}>
           {getAmountPrefix()}${parseFloat(amount?.toString())?.toFixed(2)}
         </Text>
-        <Text style={styles.time}>{transaction.payment_method}</Text>
+        <Text style={[styles.time, { alignSelf: "flex-end", marginRight: 0 }]}>
+          {displayPay()}
+        </Text>
       </View>
     </TouchableOpacity>
   );

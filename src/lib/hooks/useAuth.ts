@@ -207,12 +207,6 @@ export const useAuth = () => {
   const profileData = useQuery({
     queryKey: ["user", "profile"],
     queryFn: () => authApi.getProfile(),
-    enabled: isAuthenticated,
-    onSuccess: (response) => {
-      if (response.success && response.data) {
-        updateUser(response.data);
-      }
-    },
   });
 
   // Security logs query
@@ -303,6 +297,6 @@ export const useAuth = () => {
     updateProfile,
     error: loginMutation.isError,
     securityLogs: securityLogs?.data,
-    // Mutation states
+    profileData,
   };
 };

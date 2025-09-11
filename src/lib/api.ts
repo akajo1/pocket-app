@@ -1,5 +1,4 @@
 import { StorageData } from "@/src/components/services/AsyncStorageService";
-import { QueryClient } from "@tanstack/react-query";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
 import { useAuthStore } from "./stores/authStore";
 
@@ -56,9 +55,8 @@ class ApiClient {
     this.client.interceptors.response.use(
       (response) => response,
       async (error) => {
-        if (error.response?.status === 401 && (await this.getAccessToken())) {
+        if (error.response?.status === 401 && (await this.getAccessToken()))
           this.clearTokens();
-        }
         return Promise.reject(error);
       }
     );
@@ -102,12 +100,8 @@ class ApiClient {
   }
 
   private async clearTokens(): Promise<void> {
-    const queryClient = new QueryClient();
     try {
-      useAuthStore.getState().setUser(null);
-      useAuthStore.getState().setTokens("", "");
-      StorageData().remove("auth_tokens");
-      queryClient.clear();
+      useAuthStore.getState().logout();
     } catch (error) {
       console.error("Error clearing tokens:", error);
     }

@@ -1,3 +1,4 @@
+import SendMoneyModal from "@/src/components/modals/SendMoneyModal";
 import TransactionDetailModal from "@/src/components/modals/TransactionDetailModal";
 import WalletCard from "@/src/components/molecules/WalletCard";
 import NetworkCreditModal from "@/src/components/NetworkCreditModal";
@@ -86,12 +87,12 @@ function HomeScreen() {
         />
       </ScrollView>
 
-      {/* <SendMoneyModal
-         visible={currentModal?.envoyer ? true : false}
-         onClose={() => setCurrentModal(null)}
-         childName="Portefeuille Principal"
-         onSend={() => {}}
-       /> */}
+      <SendMoneyModal
+        visible={currentModal?.appro ? true : false}
+        onClose={() => setCurrentModal(null)}
+        childName="Portefeuille Principal"
+        onSend={() => {}}
+      />
 
       <NFCPaymentModal
         visible={currentModal?.nfcpay ? true : false}

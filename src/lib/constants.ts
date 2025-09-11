@@ -19,7 +19,7 @@ export const alertType = {
 
 export const quickActions = [
   // { icon: Send, label: "Envoyer", color: "#4F46E5" },
-  { icon: TrendingDown, label: "Retirer", key: "appro", color: "#DC2626" },
+  { icon: TrendingDown, label: "Retirer", key: "withdraw", color: "#DC2626" },
   { icon: DollarSignIcon, label: "Appro", key: "appro", color: "#059669" },
   { icon: Zap, label: "NFC Pay", key: "nfcpay", color: "#DC2626" },
   { icon: Scan, label: "QR Pay", key: "qrpay", color: "#7C2D12" },
