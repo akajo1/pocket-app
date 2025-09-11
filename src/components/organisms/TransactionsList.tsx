@@ -44,7 +44,7 @@ export default function TransactionsList({
         />
       ) : (
         <>
-          {transactions.map((transaction) => (
+          {transactions.slice(0, 3).map((transaction) => (
             <TransactionItem
               key={transaction.id}
               transaction={transaction}

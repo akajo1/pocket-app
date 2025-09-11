@@ -1,5 +1,5 @@
-import { create } from 'zustand';
-import { Transaction, TransactionAnalytics } from '../types';
+import { create } from "zustand";
+import { Transaction, TransactionAnalytics } from "../types";
 
 interface TransactionState {
   transactions: Transaction[];
@@ -20,6 +20,8 @@ interface TransactionState {
     totalPages: number;
     hasNext: boolean;
     hasPrev: boolean;
+    totalIncomeAndLoad: number;
+    totalTransfer: number;
   };
 }
 
@@ -31,12 +33,14 @@ interface TransactionActions {
   setAnalytics: (analytics: TransactionAnalytics) => void;
   setLoading: (loading: boolean) => void;
   setError: (error: string | null) => void;
-  setFilters: (filters: Partial<TransactionState['filters']>) => void;
-  setPagination: (pagination: Partial<TransactionState['pagination']>) => void;
+  setFilters: (filters: Partial<TransactionState["filters"]>) => void;
+  setPagination: (pagination: Partial<TransactionState["pagination"]>) => void;
   clearFilters: () => void;
 }
 
-export const useTransactionStore = create<TransactionState & TransactionActions>((set, get) => ({
+export const useTransactionStore = create<
+  TransactionState & TransactionActions
+>((set, get) => ({
   // State
   transactions: [],
   analytics: null,
@@ -55,19 +59,24 @@ export const useTransactionStore = create<TransactionState & TransactionActions>
   // Actions
   setTransactions: (transactions) => set({ transactions }),
 
-  addTransaction: (transaction) => set((state) => ({ 
-    transactions: [transaction, ...state.transactions] 
-  })),
+  addTransaction: (transaction) =>
+    set((state) => ({
+      transactions: [transaction, ...state.transactions],
+    })),
 
-  updateTransaction: (id, updates) => set((state) => ({
-    transactions: state.transactions.map(transaction => 
-      transaction.id === id ? { ...transaction, ...updates } : transaction
-    )
-  })),
+  updateTransaction: (id, updates) =>
+    set((state) => ({
+      transactions: state.transactions.map((transaction) =>
+        transaction.id === id ? { ...transaction, ...updates } : transaction
+      ),
+    })),
 
-  removeTransaction: (id) => set((state) => ({
-    transactions: state.transactions.filter(transaction => transaction.id !== id)
-  })),
+  removeTransaction: (id) =>
+    set((state) => ({
+      transactions: state.transactions.filter(
+        (transaction) => transaction.id !== id
+      ),
+    })),
 
   setAnalytics: (analytics) => set({ analytics }),
 
@@ -75,16 +84,19 @@ export const useTransactionStore = create<TransactionState & TransactionActions>
 
   setError: (error) => set({ error }),
 
-  setFilters: (newFilters) => set((state) => ({
-    filters: { ...state.filters, ...newFilters }
-  })),
+  setFilters: (newFilters) =>
+    set((state) => ({
+      filters: { ...state.filters, ...newFilters },
+    })),
 
-  setPagination: (newPagination) => set((state) => ({
-    pagination: { ...state.pagination, ...newPagination }
-  })),
+  setPagination: (newPagination) =>
+    set((state) => ({
+      pagination: { ...state.pagination, ...newPagination },
+    })),
 
-  clearFilters: () => set({ 
-    filters: {},
-    pagination: { ...get().pagination, page: 1 }
-  }),
+  clearFilters: () =>
+    set({
+      filters: {},
+      pagination: { ...get().pagination, page: 1 },
+    }),
 }));
