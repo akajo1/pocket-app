@@ -55,12 +55,13 @@ function ChildrenScreen() {
   };
 
   const displayChildren = () => {
-    if (!children.length)
+    if (!children?.length)
       return (
         <EmptyChildWalletScreen
           onPress={() => handleCurrentModal("create", true)}
         />
       );
+
     return (
       <>
         <ChildrenCarousel
@@ -88,13 +89,30 @@ function ChildrenScreen() {
           handleHidemodal={() => handleCurrentModal("unload", false)}
           selectedChildIndex={selectedChildIndex}
         />
+        <LimitChildModal
+          isShown={currentModal?.limit === true ? true : false}
+          selectedChildIndex={selectedChildIndex}
+          onCloseModal={() => handleCurrentModal("limit", false)}
+        />
+        <TransactionDetailModal
+          visible={currentModal?.transaction ? true : false}
+          onClose={() => setCurrentModal(null)}
+          transaction={selectedTransaction}
+        />
+        <NFCLinkingModal
+          visible={currentModal?.addnfc ? true : false}
+          onClose={() => handleCurrentModal("addnfc", false)}
+          childName={children[selectedChildIndex]?.name || ""}
+          childId={children[selectedChildIndex]?.id || 0}
+          onLinkSuccess={() => {}}
+        />
       </>
     );
   };
   return (
     <SafeAreaView style={childrenStyle.container}>
       <View style={childrenStyle.header}>
-        <Text style={childrenStyle.headerTitle}>Wallets Enfants</Text>
+        <Text style={childrenStyle.headerTitle}>Mes dépendants</Text>
         <TouchableOpacity
           style={childrenStyle.addButton}
           onPress={() => handleCurrentModal("create", true)}
@@ -103,23 +121,6 @@ function ChildrenScreen() {
         </TouchableOpacity>
       </View>
       {displayChildren()}
-      <LimitChildModal
-        isShown={currentModal?.limit === true ? true : false}
-        selectedChildIndex={selectedChildIndex}
-        onCloseModal={() => handleCurrentModal("limit", false)}
-      />
-      <TransactionDetailModal
-        visible={currentModal?.transaction ? true : false}
-        onClose={() => setCurrentModal(null)}
-        transaction={selectedTransaction}
-      />
-      <NFCLinkingModal
-        visible={currentModal?.addnfc ? true : false}
-        onClose={() => handleCurrentModal("addnfc", false)}
-        childName={children[selectedChildIndex]?.name || ""}
-        childId={children[selectedChildIndex]?.id || 0}
-        onLinkSuccess={() => {}}
-      />
       <CreateChildWallet
         isShown={currentModal?.create === true ? true : false}
         handleHidemodal={(value) => handleCurrentModal("create", value)}

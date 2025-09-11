@@ -27,10 +27,10 @@ const CreateChildWallet = ({ isShown, handleHidemodal }: Props) => {
     <Modal visible={isShown} animationType="slide" transparent={true}>
       <View style={childrenStyle.modalOverlay}>
         <View style={childrenStyle.modalContent}>
-          <Text style={childrenStyle.modalTitle}>Créer un wallet enfant</Text>
+          <Text style={childrenStyle.modalTitle}>Créer un dépendant</Text>
 
           <View style={childrenStyle.inputContainer}>
-            <Text style={childrenStyle.inputLabel}>Nom de l&apos;enfant</Text>
+            <Text style={childrenStyle.inputLabel}>Nom complet</Text>
             <TextInput
               style={childrenStyle.textInput}
               value={form.fullname}
