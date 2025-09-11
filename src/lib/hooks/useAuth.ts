@@ -33,10 +33,11 @@ export const useAuth = () => {
         };
         StorageData().set("auth_tokens", tokens);
         setTokens(tokens.accessToken, tokens.refreshToken);
-        queryClient.invalidateQueries({ queryKey: ["user"] });
+        queryClient.invalidateQueries();
       }
     },
     onError: (error: any) => {
+      console.log("--login issue");
       message?.setAlertMessage({
         visible: true,
         message: error.response?.data?.message || "Une erreur est survenue",
@@ -223,8 +224,8 @@ export const useAuth = () => {
 
   // Helper functions
   const login = useCallback(
-    (data: LoginRequest) => {
-      return loginMutation.mutate(data);
+    async (data: LoginRequest) => {
+      return await loginMutation.mutateAsync(data);
     },
     [loginMutation]
   );

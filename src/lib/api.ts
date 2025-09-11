@@ -1,6 +1,6 @@
 import { StorageData } from "@/src/components/services/AsyncStorageService";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import axios, { AxiosInstance, AxiosRequestConfig } from "axios";
+import { useAuthStore } from "./stores/authStore";
 
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -24,7 +24,7 @@ export interface PaginatedResponse<T> {
 class ApiClient {
   private client: AxiosInstance;
   private baseURL =
-    process.env.EXPO_PUBLIC_API_URL || "http://192.168.10.89:3001/api/";
+    process.env.EXPO_PUBLIC_API_URL || "http://10.212.36.3:3001/api/";
 
   constructor() {
     this.client = axios.create({
@@ -102,11 +102,9 @@ class ApiClient {
 
   private async clearTokens(): Promise<void> {
     try {
-      await AsyncStorage.multiRemove([
-        "auth_tokens",
-        "auth_user",
-        "auth-storage",
-      ]);
+      useAuthStore.getState().setUser(null);
+      useAuthStore.getState().setTokens("", "");
+      StorageData().remove("auth_tokens");
     } catch (error) {
       console.error("Error clearing tokens:", error);
     }
