@@ -1,8 +1,9 @@
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { QueryClient } from "@tanstack/react-query";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import { User } from "../types";
-
+const queryClient = new QueryClient();
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
@@ -44,14 +45,15 @@ export const useAuthStore = create<AuthState & AuthActions>()(
 
       setLoading: (isLoading) => set({ isLoading }),
 
-      logout: () =>
+      logout: () => {
         set({
           user: null,
           isAuthenticated: false,
           accessToken: null,
           refreshToken: null,
-        }),
-
+        });
+        queryClient.clear();
+      },
       updateUser: (updates) => {
         const currentUser = get().user;
         if (currentUser) {

@@ -38,14 +38,14 @@ export default function SubWalletsList({
         )}
       </View>
 
-      {wallets.map((wallet) => (
+      {wallets?.map((wallet) => (
         <SubWalletCard
           key={wallet.id}
           wallet={wallet}
           onPress={() => onWalletPress(wallet.id.toString())}
         />
       ))}
-      {!wallets.length ? (
+      {!wallets?.length ? (
         <View style={{ backgroundColor: colors.white, padding: 20 }}>
           <Text style={{ alignSelf: "center" }}>
             Aucun wallet enfant creer pour le moment

@@ -63,7 +63,7 @@ function HomeScreen() {
       />
       <WalletCard
         title="Mon Portemonnaie"
-        balance={parseFloat(wallets?.balance.toString()) || 0.0}
+        balance={parseFloat(wallets?.balance?.toString()) || 0.0}
         isBalanceVisible={isBalanceVisible}
         onToggleVisibility={() => setIsBalanceVisible(!isBalanceVisible)}
       />

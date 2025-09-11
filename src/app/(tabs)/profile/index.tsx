@@ -110,7 +110,7 @@ export default function ProfileScreen() {
 
   const handleLogout = async () => {
     try {
-      await logout();
+      logout();
       router.replace("/");
     } catch (error) {
       console.error("Logout error:", error);
