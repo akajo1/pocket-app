@@ -1,7 +1,9 @@
-import { sign } from "@/src/lib/constants";
+import { height, sign } from "@/src/lib/constants";
 import { childrenStyle } from "@/src/lib/styles/childrenStyle";
+import moment from "moment";
 import React, { useState } from "react";
 import { Modal, Text, TextInput, TouchableOpacity, View } from "react-native";
+import DateTimePicker, { useDefaultStyles } from "react-native-ui-datepicker";
 
 type Props = {
   isShown: boolean;
@@ -14,6 +16,9 @@ const CreateChildWallet = ({ isShown, handleHidemodal }: Props) => {
     age: 0,
     amount: 0,
   });
+  const defaultStyles = useDefaultStyles();
+  const [isShownAge, setIsShownAge] = useState(false);
+
   const createChildWallet = () => {
     if (form.fullname && form.age && form.amount) {
       // Logique de création du wallet enfant
@@ -41,13 +46,13 @@ const CreateChildWallet = ({ isShown, handleHidemodal }: Props) => {
 
           <View style={childrenStyle.inputContainer}>
             <Text style={childrenStyle.inputLabel}>date de naissance</Text>
-            <TextInput
-              style={childrenStyle.textInput}
-              value={form.age.toString()}
-              onChangeText={(value) => handleChange("age", value)}
-              placeholder="Entrez l'âge"
-              keyboardType="numeric"
-            />
+            <TouchableOpacity onPress={() => setIsShownAge(true)}>
+              <Text style={childrenStyle.textInput}>
+                {form.age
+                  ? moment(form.age).format("DD/MM/YYYY")
+                  : "Sélectionner une date"}
+              </Text>
+            </TouchableOpacity>
           </View>
 
           <View style={childrenStyle.inputContainer}>
@@ -79,6 +84,39 @@ const CreateChildWallet = ({ isShown, handleHidemodal }: Props) => {
           </View>
         </View>
       </View>
+      <Modal
+        visible={isShownAge}
+        animationType="fade"
+        style={{ height: height / 1.5 }}
+        transparent
+      >
+        <View
+          style={{
+            backgroundColor: "#00000098",
+            borderRadius: 10,
+            padding: 16,
+            flex: 1,
+            alignItems: "center",
+            justifyContent: "center",
+          }}
+        >
+          <DateTimePicker
+            mode="single"
+            locale="fr-FR"
+            date={form.age}
+            onChange={({ date }) => {
+              handleChange("age", date);
+              setIsShownAge(false);
+            }}
+            styles={defaultStyles}
+            style={{
+              backgroundColor: "white",
+              borderRadius: 20,
+              padding: 10,
+            }}
+          />
+        </View>
+      </Modal>
     </Modal>
   );
 };
