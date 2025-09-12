@@ -4,6 +4,7 @@ import { Stack } from "expo-router";
 import { StatusBar } from "expo-status-bar";
 import React from "react";
 import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
+import ToastManager from "toastify-react-native";
 import AlertModal from "../components/modals/AlertModal";
 import AuthModal from "../components/modals/AuthModal";
 import { AlertProvider, useAlert } from "../lib/context/AlertContext";
@@ -30,6 +31,10 @@ function LayoutContent() {
     return (
       <Stack screenOptions={{ headerShown: false }}>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen
+          name="confirmationScreen"
+          options={{ headerShown: false }}
+        />
         <Stack.Screen name="+not-found" />
       </Stack>
     );
@@ -45,13 +50,16 @@ function LayoutContent() {
 
 export default function RootLayout() {
   return (
-    <AlertProvider>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <LayoutContent />
-        </AuthProvider>
-      </QueryClientProvider>
-    </AlertProvider>
+    <>
+      <ToastManager />
+      <AlertProvider>
+        <QueryClientProvider client={queryClient}>
+          <AuthProvider>
+            <LayoutContent />
+          </AuthProvider>
+        </QueryClientProvider>
+      </AlertProvider>
+    </>
   );
 }
 

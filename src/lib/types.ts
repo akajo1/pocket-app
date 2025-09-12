@@ -205,8 +205,7 @@ export interface RegisterRequest {
 
 export interface CreateChildRequest {
   name: string;
-  age: number;
-  avatar?: string;
+  age: string;
   initialAmount?: number;
   weeklyLimit?: number;
   dailyLimit?: number;

@@ -1,4 +1,5 @@
 import { StyleSheet } from "react-native";
+import { colors } from "../colors";
 
 export const childrenStyle = StyleSheet.create({
   container: {
@@ -16,6 +17,12 @@ export const childrenStyle = StyleSheet.create({
     fontSize: 28,
     fontWeight: "bold",
     color: "#111827",
+  },
+  errorText: {
+    color: colors.red,
+    marginTop: 4,
+    fontSize: 13,
+    textTransform: "capitalize",
   },
   addButton: {
     backgroundColor: "#FFFFFF",

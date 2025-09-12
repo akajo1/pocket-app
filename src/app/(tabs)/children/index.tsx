@@ -4,7 +4,6 @@ import ChildDetail from "@/src/components/molecules/child/ChildDetail";
 import EmptyChildWalletScreen from "@/src/components/molecules/EmptyChildrenWallet";
 import {
   ChildrenCarousel,
-  CreateChildWallet,
   LimitChildModal,
   LoadChildWalletModal,
   UnloadChildWallet,
@@ -14,7 +13,7 @@ import { quickActionsChild } from "@/src/lib/constants";
 import { useChildren } from "@/src/lib/hooks/useChildren";
 import { childrenStyle } from "@/src/lib/styles/childrenStyle";
 import { Transaction } from "@/src/lib/types";
-import { useLocalSearchParams } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
 import React, { useState } from "react";
 import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
@@ -22,6 +21,7 @@ import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 function ChildrenScreen() {
   const { selectedChildId } = useLocalSearchParams();
   const { children, createChild } = useChildren();
+  const router = useRouter();
   const [selectedChildIndex, setSelectedChildIndex] = useState(findChildIndex);
   const [selectedTransaction, setSelectedTransaction] =
     useState<Transaction | null>(null);
@@ -58,7 +58,7 @@ function ChildrenScreen() {
     if (!children?.length)
       return (
         <EmptyChildWalletScreen
-          onPress={() => handleCurrentModal("create", true)}
+          onPress={() => router.navigate("/(tabs)/children/createChildren")}
         />
       );
 
@@ -115,16 +115,12 @@ function ChildrenScreen() {
         <Text style={childrenStyle.headerTitle}>Mes dépendants</Text>
         <TouchableOpacity
           style={childrenStyle.addButton}
-          onPress={() => handleCurrentModal("create", true)}
+          onPress={() => router.navigate("/(tabs)/children/createChildren")}
         >
           <Plus size={24} color={colors.blue} />
         </TouchableOpacity>
       </View>
       {displayChildren()}
-      <CreateChildWallet
-        isShown={currentModal?.create === true ? true : false}
-        handleHidemodal={(value) => handleCurrentModal("create", value)}
-      />
     </SafeAreaView>
   );
 }

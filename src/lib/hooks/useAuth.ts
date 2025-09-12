@@ -37,7 +37,6 @@ export const useAuth = () => {
       }
     },
     onError: (error: any) => {
-      console.log("--login issue");
       message?.setAlertMessage({
         visible: true,
         message: error.response?.data?.message || "Une erreur est survenue",
