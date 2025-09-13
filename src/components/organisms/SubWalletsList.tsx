@@ -1,4 +1,5 @@
 import { colors } from "@/src/lib/colors";
+import { router } from "expo-router";
 import { Plus } from "lucide-react-native";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
@@ -59,6 +60,7 @@ export default function SubWalletsList({
               borderRadius: 8,
               marginTop: 5,
             }}
+            onPress={() => router.navigate("/(tabs)/children/createChildren")}
           >
             <Text
               style={{

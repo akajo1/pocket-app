@@ -20,7 +20,7 @@ import { SafeAreaView, Text, TouchableOpacity, View } from "react-native";
 
 function ChildrenScreen() {
   const { selectedChildId } = useLocalSearchParams();
-  const { children, createChild } = useChildren();
+  const { children } = useChildren();
   const router = useRouter();
   const [selectedChildIndex, setSelectedChildIndex] = useState(findChildIndex);
   const [selectedTransaction, setSelectedTransaction] =

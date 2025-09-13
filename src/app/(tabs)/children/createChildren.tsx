@@ -5,10 +5,10 @@ import { useWallets } from "@/src/lib/hooks/useWallets";
 import { childrenStyle } from "@/src/lib/styles/childrenStyle";
 import { useRouter } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
+import React, { useEffect, useState } from "react";
 import DateTimePicker, { useDefaultStyles } from "react-native-ui-datepicker";
 
 import moment from "moment";
-import React, { useEffect, useState } from "react";
 
 import {
   Modal,
@@ -84,7 +84,14 @@ export default function createChildren({}: Props) {
 
   useEffect(() => {
     if (isValide) {
-      router.navigate("/confirmationScreen", { state: { form } });
+      router.navigate({
+        pathname: "/confirmationScreen",
+        params: {
+          form: JSON.stringify(form),
+          type: "create-child",
+          selectedWalletCurrency: wallets?.currency,
+        },
+      });
     }
   }, [isValide]);
 

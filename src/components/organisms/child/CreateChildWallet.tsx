@@ -1,9 +1,17 @@
 import { colors } from "@/src/lib/colors";
-import { height } from "@/src/lib/constants";
+import { height, sign } from "@/src/lib/constants";
 import { useChildren } from "@/src/lib/hooks/useChildren";
 import { childrenStyle } from "@/src/lib/styles/childrenStyle";
+import moment from "moment";
 import React, { useEffect, useState } from "react";
-import { Modal, StyleSheet, View } from "react-native";
+import {
+  Modal,
+  StyleSheet,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from "react-native";
 import DateTimePicker, { useDefaultStyles } from "react-native-ui-datepicker";
 
 type Props = {
@@ -51,7 +59,72 @@ const CreateChildWallet = ({ isShown, handleHidemodal }: Props) => {
       transparent={true}
       style={{ zIndex: 9 }}
     >
-      <View style={childrenStyle.modalOverlay}></View>
+      <View style={childrenStyle.modalOverlay}>
+        <View style={childrenStyle.modalContent}>
+          <Text style={childrenStyle.modalTitle}>Créer un dépendant</Text>
+
+          <View style={childrenStyle.inputContainer}>
+            <Text style={childrenStyle.inputLabel}>Nom complet</Text>
+            <TextInput
+              style={childrenStyle.textInput}
+              value={form.fullname}
+              onChangeText={(value) => handleChange("fullname", value)}
+              placeholder="Entrez le nom"
+            />
+          </View>
+
+          <View style={childrenStyle.inputContainer}>
+            <Text style={childrenStyle.inputLabel}>date de naissance</Text>
+            <TouchableOpacity onPress={() => setIsShownAge(true)}>
+              <Text style={childrenStyle.textInput}>
+                {form.age
+                  ? moment(form.age).format("DD/MM/YYYY")
+                  : "Sélectionner une date"}
+              </Text>
+            </TouchableOpacity>
+          </View>
+
+          <View style={childrenStyle.inputContainer}>
+            <Text style={childrenStyle.inputLabel}>
+              Montant initial ({sign})
+            </Text>
+            <TextInput
+              style={childrenStyle.textInput}
+              value={form.amount.toString()}
+              onChangeText={(value) => handleChange("amount", value)}
+              placeholder="0.00"
+              keyboardType="numeric"
+            />
+          </View>
+          {createChildError ? (
+            <View style={styles.errorContainer}>
+              <Text
+                style={{
+                  color: colors.white,
+                  textAlign: "center",
+                  fontWeight: "700",
+                }}
+              >
+                {createChildError}
+              </Text>
+            </View>
+          ) : null}
+          <View style={childrenStyle.modalButtons}>
+            <TouchableOpacity
+              style={childrenStyle.cancelButton}
+              onPress={() => handleHidemodal(false)}
+            >
+              <Text style={childrenStyle.cancelButtonText}>Annuler</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={childrenStyle.createButton}
+              onPress={createChildWallet}
+            >
+              <Text style={childrenStyle.createButtonText}>Créer</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </View>
       <Modal
         visible={isShownAge}
         animationType="fade"
@@ -97,11 +170,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     paddingHorizontal: 12,
     paddingVertical: 8,
-  },
-  errorText: {
-    color: colors.white,
-    textAlign: "center",
-    fontWeight: "700",
   },
 });
 export default CreateChildWallet;
