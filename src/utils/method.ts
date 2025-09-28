@@ -1,5 +1,3 @@
-export const isNonEmptyObject = (obj: {}) =>
-  obj != null &&
-  typeof obj === "object" &&
-  !Array.isArray(obj) &&
-  Object.keys(obj).length > 0;
+import { Dimensions } from "react-native";
+
+export const { width, height } = Dimensions.get("screen");
