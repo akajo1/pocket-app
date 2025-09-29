@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   label: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
     color: pallete.black,
     marginBottom: 8,
@@ -71,8 +71,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: pallete.white,
     borderRadius: 12,
-    // borderWidth: 1,
-    // borderColor: '#E5E7EB',
+    height: 48,
   },
   errorContainer: {
     borderColor: "#DC2626",

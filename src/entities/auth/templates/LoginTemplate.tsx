@@ -1,6 +1,10 @@
 import images from "@/src/assets/images";
 import { Wrapper } from "@/src/shared/components";
-import { SmartImage, SmartText } from "@/src/shared/components/atoms";
+import {
+  SmartImage,
+  SmartKeyboardAvoidView,
+  SmartText,
+} from "@/src/shared/components/atoms";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
 import {
   CheckBoxInput,
@@ -59,7 +63,7 @@ const Login = () => {
         containerStyle={styles.containerLogo}
       />
 
-      <View style={styles.container}>
+      <SmartKeyboardAvoidView>
         <Controller
           control={control}
           name="phone"
@@ -132,7 +136,7 @@ const Login = () => {
             S'inscrire maintenant!!
           </SmartText>
         </View>
-      </View>
+      </SmartKeyboardAvoidView>
     </Wrapper>
   );
 };
