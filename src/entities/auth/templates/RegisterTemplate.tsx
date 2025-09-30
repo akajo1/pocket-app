@@ -8,17 +8,21 @@ import SmartButton from "@/src/shared/components/atoms/SmartButton";
 import { Header, Input, PhoneInput } from "@/src/shared/components/molecules";
 import Wrapper from "@/src/shared/components/Wrapper";
 import { pallete } from "@/src/utils/pallete";
+import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "expo-router";
 import { ChevronLeft, Lock, Mail, User } from "lucide-react-native";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { StyleSheet, View } from "react-native";
+import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { ICountry } from "react-native-international-phone-number";
+import useRegister from "../hook/useRegister";
+import { registerSchema } from "../services/schema";
 
 type Props = {};
 
 const RegisterTemplate = (props: Props) => {
   const navigation = useRouter();
+  const register = useRegister();
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
 
   const {
@@ -27,13 +31,20 @@ const RegisterTemplate = (props: Props) => {
     formState: { errors, isValid },
     reset,
   } = useForm({
-    // resolver: yupResolver(),
-    mode: "onSubmit",
-    // defaultValues: {
-    //   phone: "",
-    //   password: "",
-    // },
+    resolver: yupResolver(registerSchema),
+    mode: "onChange",
+    defaultValues: {
+      phone: "",
+      password: "",
+    },
   });
+  const onSubmit = (formData: any) => {
+    const phone = `${selectedCountry?.idd?.root}${formData.phone.replaceAll(
+      " ",
+      ""
+    )}`;
+    register.mutate({ ...formData, phone });
+  };
   return (
     <Wrapper>
       <Header
@@ -56,7 +67,7 @@ const RegisterTemplate = (props: Props) => {
         />
         <Controller
           control={control}
-          name="nom"
+          name="lastName"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               label="Nom"
@@ -65,15 +76,15 @@ const RegisterTemplate = (props: Props) => {
               onChangeText={onChange}
               onBlur={onBlur}
               icon={<User size={20} color={pallete.black} />}
-              // error={errors.password?.message}
-              // editable={!auth.isPending}
+              error={errors.lastName?.message}
+              editable={!register.isPending}
             />
           )}
         />
 
         <Controller
           control={control}
-          name="prenom"
+          name="firstName"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
               label="Prénom"
@@ -82,8 +93,8 @@ const RegisterTemplate = (props: Props) => {
               onChangeText={onChange}
               onBlur={onBlur}
               icon={<User size={20} color={pallete.black} />}
-              // error={errors.password?.message}
-              // editable={!auth.isPending}
+              error={errors.firstName?.message}
+              editable={!register.isPending}
             />
           )}
         />
@@ -110,17 +121,17 @@ const RegisterTemplate = (props: Props) => {
 
         <Controller
           control={control}
-          name="Email"
+          name="email"
           render={({ field: { onChange, onBlur, value } }) => (
             <Input
-              label="Email"
+              label="Email (optionel)"
               placeholder="Votre email"
               value={value}
               onChangeText={onChange}
               onBlur={onBlur}
               icon={<Mail size={20} color={pallete.black} />}
-              // error={errors.password?.message}
-              // editable={!auth.isPending}
+              error={errors.email?.message}
+              editable={!register.isPending}
             />
           )}
         />
@@ -136,8 +147,8 @@ const RegisterTemplate = (props: Props) => {
               onBlur={onBlur}
               secureTextEntry
               icon={<Lock size={20} color={pallete.black} />}
-              // error={errors.password?.message}
-              // editable={!auth.isPending}
+              error={errors.password?.message}
+              editable={!register.isPending}
             />
           )}
         />
@@ -154,20 +165,20 @@ const RegisterTemplate = (props: Props) => {
               onBlur={onBlur}
               secureTextEntry
               icon={<Lock size={20} color={pallete.black} />}
-              // error={errors.password?.message}
-              // editable={!auth.isPending}
+              error={errors.cpassword?.message}
+              editable={!register.isPending}
             />
           )}
         />
         <SmartButton
           title="Créer mon compte"
-          onPress={() => {}}
-          // disabled={!isValid || auth.isPending}
-          // icon={
-          //   auth.isPending ? (
-          //     <ActivityIndicator size={20} color={pallete.white} />
-          //   ) : null
-          // }
+          onPress={handleSubmit(onSubmit)}
+          disabled={!isValid || register.isPending}
+          icon={
+            register.isPending ? (
+              <ActivityIndicator size={20} color={pallete.white} />
+            ) : null
+          }
         />
       </SmartKeyboardAvoidView>
     </Wrapper>

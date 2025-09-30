@@ -1,14 +1,4 @@
-import React from "react";
-import { Text, View } from "react-native";
-
-type Props = {};
-
-const _layout = (props: Props) => {
-  return (
-    <View>
-      <Text>_layout</Text>
-    </View>
-  );
-};
-
-export default _layout;
+import { Stack } from "expo-router";
+export default function DashboardLayout() {
+  return <Stack screenOptions={{ headerShown: false }} />;
+}

@@ -1,20 +1,39 @@
+import { useAlert } from "@/src/shared/provider/AlertProvider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import authApi, { LoginFormType } from "../services/api";
 import useUserStore, { User } from "../store/userStore";
 
 const useAuth = () => {
-  const { setUser } = useUserStore();
+  const { setUser } = useUserStore.getState();
+  const message = useAlert();
   const queryClient = useQueryClient();
+
+  const handleCloseModal = () =>
+    message.setAlertMessage({
+      visible: false,
+      message: "",
+      title: "",
+      type: "info",
+      onPress: () => {},
+      btnText: "",
+    });
+
   return useMutation<User, Error, LoginFormType>({
     mutationFn: authApi.login,
     onSuccess: (response) => {
-      // Handle successful login
-      console.log(response);
       queryClient.invalidateQueries();
+      const { user, tokens } = response;
+      setUser({ ...user, token: tokens.accessToken });
     },
     onError: (error) => {
-      // Handle login error
-      console.error(error);
+      message?.setAlertMessage({
+        visible: true,
+        message: error?.message || "Une erreur est survenue",
+        title: "Connexion",
+        type: "warning",
+        onPress: () => handleCloseModal(),
+        btnText: "D'accord",
+      });
     },
   });
 };

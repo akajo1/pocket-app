@@ -3,8 +3,8 @@ import React from "react";
 
 type Props = {};
 
-const _layout = (props: Props) => {
+const AuthLayout = (props: Props) => {
   return <AuthNavigation />;
 };
 
-export default _layout;
+export default AuthLayout;

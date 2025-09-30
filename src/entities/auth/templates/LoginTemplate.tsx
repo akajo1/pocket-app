@@ -16,17 +16,19 @@ import { pallete } from "@/src/utils/pallete";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { useRouter } from "expo-router";
 import { Lock } from "lucide-react-native";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { ICountry } from "react-native-international-phone-number";
 import useAuth from "../hook/useAuth";
 import { loginSchema } from "../services/schema";
+import useUserStore from "../store/userStore";
 
 const Login = () => {
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const [accepted, setAccepted] = useState(false);
   const auth = useAuth();
+  const user = useUserStore.getState().user;
   const navigation = useRouter();
 
   const {
@@ -47,8 +49,14 @@ const Login = () => {
       " ",
       ""
     )}`;
-    console.log(data);
+    auth.mutate({ ...data, phone });
   };
+
+  useEffect(() => {
+    if (user) {
+      navigation.replace("/(dashboard)");
+    }
+  }, [user]);
 
   return (
     <Wrapper>

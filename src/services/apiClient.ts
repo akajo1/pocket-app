@@ -2,7 +2,7 @@ import axios from "axios";
 import useUserStore from "../entities/auth/store/userStore";
 
 const axiosInstance = axios.create({
-  baseURL: process.env.REACT_APP_API_URL,
+  baseURL: process.env.EXPO_PUBLIC_API_URL,
   headers: {
     "Content-Type": "application/json",
   },
@@ -10,7 +10,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const { user } = useUserStore();
+    const user = useUserStore.getState().user;
     if (user?.token) {
       config.headers.Authorization = `Bearer ${user.token}`;
     }
@@ -26,12 +26,10 @@ axiosInstance.interceptors.response.use(
     return response.data;
   },
   async (error) => {
-    const { user, clearUser } = useUserStore();
+    const { user, clearUser } = useUserStore.getState();
 
-    if (error.response?.status === 401 && user?.token) {
-      clearUser();
-    }
-    return Promise.reject(error);
+    if (error.response?.status === 401 && user?.token) clearUser();
+    return Promise.reject(error.response.data);
   }
 );
 
@@ -42,32 +40,54 @@ class ApiClient<T, D> {
     this.endpoint = endpoint;
   }
 
-  getAll = (route: string = ""): Promise<D[]> => {
-    return axiosInstance
-      .get<D[]>(this.endpoint + route)
-      .then((response) => response.data);
+  getAll = async (route: string = ""): Promise<D[]> => {
+    try {
+      const response = await axiosInstance.get<D[]>(this.endpoint + route);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   };
 
-  fetch = (params: T = {} as T, route: string = ""): Promise<D[] | D> => {
-    return axiosInstance
-      .get<D[] | D>(this.endpoint + route, { params })
-      .then((response) => response.data);
+  fetch = async (params: T = {} as T, route: string = ""): Promise<D[] | D> => {
+    try {
+      const response = await axiosInstance.get<D[] | D>(this.endpoint + route, {
+        params,
+      });
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   };
-  post = (data: T, route: string = ""): Promise<D> => {
-    return axiosInstance
-      .post<D>(this.endpoint + route, data)
-      .then((response) => response.data);
+  post = async (data: T, route: string = ""): Promise<D> => {
+    try {
+      const response = await axiosInstance.post<D>(this.endpoint + route, data);
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   };
 
-  update = (id: string, data: T, route: string = ""): Promise<D> => {
-    return axiosInstance
-      .put<D>(this.endpoint + route + `/${id}`, data)
-      .then((response) => response.data);
+  update = async (id: string, data: T, route: string = ""): Promise<D> => {
+    try {
+      const response = await axiosInstance.put<D>(
+        this.endpoint + route + `/${id}`,
+        data
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   };
-  delete = (id: string, route: string = ""): Promise<D> => {
-    return axiosInstance
-      .delete<D>(this.endpoint + route + `/${id}`)
-      .then((response) => response.data);
+  delete = async (id: string, route: string = ""): Promise<D> => {
+    try {
+      const response = await axiosInstance.delete<D>(
+        this.endpoint + route + `/${id}`
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
+    }
   };
 }
 

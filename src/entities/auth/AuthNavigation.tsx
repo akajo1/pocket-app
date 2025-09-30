@@ -5,8 +5,8 @@ import useOnBoardingStore from "./store/onBoardingStore";
 type Props = {};
 
 const AuthNavigation = (props: Props) => {
-  const { isOnBoarding } = useOnBoardingStore();
-  console.log("--isOnBoarding:", isOnBoarding);
+  const isOnBoarding = useOnBoardingStore.getState()?.isOnBoarding;
+
   return (
     <Stack
       screenOptions={{ headerShown: false }}
