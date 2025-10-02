@@ -1,4 +1,4 @@
-import { Stack } from "expo-router";
+import DashboardNavigation from "@/src/entities/dashboard/DashboardNavigation";
 export default function DashboardLayout() {
-  return <Stack screenOptions={{ headerShown: false }} />;
+  return <DashboardNavigation />;
 }

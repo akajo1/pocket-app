@@ -9,7 +9,6 @@ import { Header, Input, PhoneInput } from "@/src/shared/components/molecules";
 import Wrapper from "@/src/shared/components/Wrapper";
 import { pallete } from "@/src/utils/pallete";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "expo-router";
 import { ChevronLeft, Lock, Mail, User } from "lucide-react-native";
 import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
@@ -17,12 +16,10 @@ import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { ICountry } from "react-native-international-phone-number";
 import useRegister from "../hook/useRegister";
 import { registerSchema } from "../services/schema";
+import { AuthNavigationProps, authNavigationType } from "../services/types";
 
-type Props = {};
-
-const RegisterTemplate = (props: Props) => {
-  const navigation = useRouter();
-  const register = useRegister();
+const RegisterTemplate = ({ onChangeScreen }: AuthNavigationProps) => {
+  const register = useRegister(onChangeScreen);
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
 
   const {
@@ -51,7 +48,7 @@ const RegisterTemplate = (props: Props) => {
         left={
           <IconButton
             icon={<ChevronLeft />}
-            onPress={() => navigation.back()}
+            onPress={() => onChangeScreen(authNavigationType.TERMS)}
             variant="ghost"
             size="medium"
           />

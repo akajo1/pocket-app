@@ -7,6 +7,7 @@ import ToastManager from "toastify-react-native";
 
 import { Stack } from "expo-router";
 import { KeyboardProvider } from "react-native-keyboard-controller";
+import AuthNavigation from "../entities/auth/AuthNavigation";
 import useUserStore from "../entities/auth/store/userStore";
 import { AlertModal } from "../shared/components/organims";
 import { AlertProvider } from "../shared/provider";
@@ -16,19 +17,27 @@ const queryClient = new QueryClient();
 export default function RootLayout() {
   const { user } = useUserStore.getState();
 
+  const screenDisplay = () => {
+    if (!user) {
+      return <AuthNavigation />;
+    }
+
+    return (
+      <Stack
+        initialRouteName="(dashboard)"
+        screenOptions={{ headerShown: false }}
+      >
+        <Stack.Screen name="(dashboard)" />
+      </Stack>
+    );
+  };
   return (
     <>
       <ToastManager />
       <AlertProvider>
         <QueryClientProvider client={queryClient}>
           <KeyboardProvider>
-            <Stack
-              initialRouteName={user ? "(dashboard)" : "(auth)"}
-              screenOptions={{ headerShown: false }}
-            >
-              <Stack.Screen name="(auth)" />
-              <Stack.Screen name="(dashboard)" />
-            </Stack>
+            {screenDisplay()}
             <AlertModal />
             {Platform.OS === "web" && (
               <ReactQueryDevtools initialIsOpen={false} />

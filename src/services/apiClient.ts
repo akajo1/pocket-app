@@ -29,6 +29,7 @@ axiosInstance.interceptors.response.use(
     const { user, clearUser } = useUserStore.getState();
 
     if (error.response?.status === 401 && user?.token) clearUser();
+    console.log("--global", error.response.data);
     return Promise.reject(error.response.data);
   }
 );
@@ -56,6 +57,7 @@ class ApiClient<T, D> {
       });
       return response.data;
     } catch (error) {
+      console.log("--error", error);
       throw error;
     }
   };

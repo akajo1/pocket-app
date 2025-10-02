@@ -1,3 +1,4 @@
+export { default as Badge } from "./Badge";
 export { default as Checkbox } from "./Checkbox.atoms";
 export { default as IconButton } from "./IconButton";
 export { default as SmartImage } from "./SmartImage";

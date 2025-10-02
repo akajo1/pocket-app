@@ -1,23 +1,32 @@
-import { Stack } from "expo-router";
 import React from "react";
+import { OnBoarding, RegisterTemplate, TermsTemplate } from "./screens";
+import Login from "./screens/LoginTemplate";
 import useOnBoardingStore from "./store/onBoardingStore";
 
 type Props = {};
 
 const AuthNavigation = (props: Props) => {
   const isOnBoarding = useOnBoardingStore.getState()?.isOnBoarding;
-
-  return (
-    <Stack
-      screenOptions={{ headerShown: false }}
-      initialRouteName={isOnBoarding ? "onBoarding" : "login"}
-    >
-      <Stack.Screen name="onBoarding" />
-      <Stack.Screen name="login" />
-      <Stack.Screen name="terms" />
-      <Stack.Screen name="register" />
-    </Stack>
+  const [currentScreen, setCurrentScreen] = React.useState(
+    isOnBoarding ? "login" : "onboarding"
   );
+
+  const handleChangeScreen = (screen: string) => {
+    setCurrentScreen(screen);
+  };
+  const navigation = () => {
+    switch (currentScreen) {
+      case "onboarding":
+        return <OnBoarding onChangeScreen={handleChangeScreen} />;
+      case "signup":
+        return <RegisterTemplate onChangeScreen={handleChangeScreen} />;
+      case "terms":
+        return <TermsTemplate onChangeScreen={handleChangeScreen} />;
+      default:
+        return <Login onChangeScreen={handleChangeScreen} />;
+    }
+  };
+  return navigation();
 };
 
 export default AuthNavigation;

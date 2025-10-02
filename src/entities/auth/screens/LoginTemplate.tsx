@@ -14,22 +14,19 @@ import {
 } from "@/src/shared/components/molecules";
 import { pallete } from "@/src/utils/pallete";
 import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "expo-router";
 import { Lock } from "lucide-react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { ActivityIndicator, StyleSheet, View } from "react-native";
 import { ICountry } from "react-native-international-phone-number";
 import useAuth from "../hook/useAuth";
 import { loginSchema } from "../services/schema";
-import useUserStore from "../store/userStore";
+import { AuthNavigationProps, authNavigationType } from "../services/types";
 
-const Login = () => {
+const Login = ({ onChangeScreen }: AuthNavigationProps) => {
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const [accepted, setAccepted] = useState(false);
   const auth = useAuth();
-  const user = useUserStore.getState().user;
-  const navigation = useRouter();
 
   const {
     control,
@@ -51,12 +48,6 @@ const Login = () => {
     )}`;
     auth.mutate({ ...data, phone });
   };
-
-  useEffect(() => {
-    if (user) {
-      navigation.replace("/(dashboard)");
-    }
-  }, [user]);
 
   return (
     <Wrapper>
@@ -139,7 +130,7 @@ const Login = () => {
           <SmartText
             style={styles.forgot}
             isPressable
-            onPress={() => navigation.navigate("/(auth)/terms")}
+            onPress={() => onChangeScreen(authNavigationType.TERMS)}
           >
             S'inscrire maintenant!!
           </SmartText>

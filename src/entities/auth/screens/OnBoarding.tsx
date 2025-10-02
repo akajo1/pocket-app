@@ -5,24 +5,22 @@ import { SmartImage } from "@/src/shared/components/atoms";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
 import { height } from "@/src/utils/method";
 import { pallete } from "@/src/utils/pallete";
-import { useRouter } from "expo-router";
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
+import { AuthNavigationProps, authNavigationType } from "../services/types";
 import useOnBoardingStore from "../store/onBoardingStore";
 
-type Props = {};
-
-const OnBoarding = (props: Props) => {
-  const { completeOnBoarding } = useOnBoardingStore();
-  const router = useRouter();
+const OnBoarding = ({ onChangeScreen }: AuthNavigationProps) => {
+  const { completeOnBoarding } = useOnBoardingStore.getState();
 
   const handleOnStart = () => {
-    router.navigate("/(auth)/terms");
+    onChangeScreen(authNavigationType.TERMS);
   };
   const handleOnLogin = () => {
     completeOnBoarding();
-    router.replace("/(auth)/login");
+    onChangeScreen(authNavigationType.LOGIN);
   };
+
   return (
     <Wrapper>
       <SmartImage

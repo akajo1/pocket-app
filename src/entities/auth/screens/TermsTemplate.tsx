@@ -20,9 +20,14 @@ import {
   Text,
   View,
 } from "react-native";
-import { TermItem, TERMS_DATA } from "../services/types";
+import {
+  AuthNavigationProps,
+  authNavigationType,
+  TermItem,
+  TERMS_DATA,
+} from "../services/types";
 
-const TermsTemplate = () => {
+const TermsTemplate = ({ onChangeScreen }: AuthNavigationProps) => {
   //   const { completeOnBoarding } = useOnBoardingStore();
 
   const navigation = useRouter();
@@ -47,7 +52,7 @@ const TermsTemplate = () => {
 
   const onAccept = () => {
     // completeOnBoarding();
-    navigation.navigate("/(auth)/register");
+    onChangeScreen(authNavigationType.SIGNUP);
   };
   const renderItem: any = ({ item }) => {
     if (item.id.startsWith("g-")) {
@@ -73,7 +78,7 @@ const TermsTemplate = () => {
       <View style={styles.container}>
         <IconButton
           icon={<ChevronLeft />}
-          onPress={() => navigation.back()}
+          onPress={() => onChangeScreen(authNavigationType.LOGIN)}
           variant="ghost"
           size="medium"
         />

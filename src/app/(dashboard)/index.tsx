@@ -1,14 +1,10 @@
+import { Home } from "@/src/entities/dashboard/screens";
 import React from "react";
-import { Text, View } from "react-native";
 
 type Props = {};
 
-const Home = (props: Props) => {
-  return (
-    <View>
-      <Text>Home</Text>
-    </View>
-  );
+const Portemonnaie = (props: Props) => {
+  return <Home />;
 };
 
-export default Home;
+export default Portemonnaie;

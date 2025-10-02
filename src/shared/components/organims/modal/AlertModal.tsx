@@ -7,7 +7,7 @@ import MaterialIcons from "@expo/vector-icons/MaterialIcons";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Modal from "react-native-modal";
-import { useAlert } from "../../provider/AlertProvider";
+import { useAlert } from "../../../provider/AlertProvider";
 
 export const alertType = {
   success: "success",

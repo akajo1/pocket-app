@@ -3,9 +3,10 @@ import { useAlert } from "@/src/shared/provider/AlertProvider";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "expo-router";
 import authApi from "../services/api";
+import { authNavigationType } from "../services/types";
 import { User } from "../store/userStore";
 
-const useRegister = () => {
+const useRegister = (callback: (navigation: any) => void) => {
   const message = useAlert();
   const queryClient = useQueryClient();
   const navigation = useRouter();
@@ -32,7 +33,7 @@ const useRegister = () => {
         type: "success",
         onPress: () => {
           handleCloseModal();
-          navigation.replace("/(auth)/login");
+          callback(authNavigationType.LOGIN);
         },
         btnText: "Me connecter",
       });

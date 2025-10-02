@@ -72,3 +72,15 @@ export const TERMS_DATA: TermItem[] = [
     ],
   },
 ];
+
+export const authNavigationType = {
+  ONBOARDING: "onboarding",
+  LOGIN: "login",
+  SIGNUP: "signup",
+  TERMS: "terms",
+};
+export interface AuthNavigationProps {
+  onChangeScreen: (
+    screen: (typeof authNavigationType)[keyof typeof authNavigationType]
+  ) => void;
+}
