@@ -3,6 +3,7 @@ import { Send } from "lucide-react-native";
 import moment from "moment";
 import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import { Badge } from "../atoms";
 
 interface Transaction {
   id: number;
@@ -35,12 +36,14 @@ export default function TransactionItem({
   };
 
   const getIconBackgroundColor = () => {
-    return transaction?.typeTransaction !== "transfer" ? "#DCFCE7" : "#FEF2F2";
+    return transaction?.typeTransaction !== "transfer"
+      ? pallete.franc
+      : pallete.red;
   };
 
   const getAmountColor = () => {
     return transaction?.typeTransaction !== "transfer"
-      ? pallete.green
+      ? pallete.franc
       : pallete.red;
   };
 
@@ -67,7 +70,7 @@ export default function TransactionItem({
       >
         <Send
           size={16}
-          color={getIconColor()}
+          color={pallete.white}
           style={{
             transform: [
               { rotate: transaction.type === "income" ? "180deg" : "0deg" },
@@ -77,7 +80,7 @@ export default function TransactionItem({
       </View>
 
       <View style={styles.details}>
-        <Text style={[styles.time, { textTransform: "capitalize" }]}>
+        <Text style={[styles.title, { textTransform: "capitalize" }]}>
           {transaction.description}
         </Text>
         <View style={styles.meta}>
@@ -130,10 +133,14 @@ const styles = StyleSheet.create({
   details: {
     flex: 1,
   },
+  title: {
+    fontWeight: "700",
+    color: pallete.black,
+  },
   description: {
     fontSize: 16,
     fontWeight: "600",
-    color: pallete.black,
+    color: pallete.grey,
   },
   meta: {
     flexDirection: "row",
@@ -141,7 +148,7 @@ const styles = StyleSheet.create({
   },
   time: {
     fontSize: 14,
-    color: pallete.gray,
+    color: pallete.black,
     marginRight: 8,
   },
   amount: {

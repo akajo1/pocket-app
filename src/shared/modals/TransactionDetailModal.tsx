@@ -1,4 +1,3 @@
-import { sign } from "@/src/lib/constants";
 import { Calendar, Clock, Hash, User2Icon, X } from "lucide-react-native";
 import React from "react";
 import {
@@ -109,7 +108,7 @@ export default function TransactionDetailModal({
           <View style={styles.amountSection}>
             <Text style={[styles.amount, { color }]}>
               {transaction.type !== "transfer" ? "+" : "-"}
-              {sign}
+              {transaction?.wallet_currency === "USD" ? "$" : "Fc"}
               {parseFloat(amount.toString()).toFixed(2)}
             </Text>
             <Text style={styles.transactionType}>

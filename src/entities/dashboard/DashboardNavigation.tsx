@@ -1,3 +1,4 @@
+import { pallete } from "@/src/utils/pallete";
 import { Tabs } from "expo-router";
 import { HistoryIcon, User, Users, Wallet } from "lucide-react-native";
 
@@ -6,8 +7,8 @@ export default function DashboardNavigation() {
     <Tabs
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: "#4F46E5",
-        tabBarInactiveTintColor: "#9CA3AF",
+        tabBarActiveTintColor: pallete.blue,
+        tabBarInactiveTintColor: pallete.grey,
         tabBarStyle: {
           backgroundColor: "#FFFFFF",
           borderTopWidth: 1,

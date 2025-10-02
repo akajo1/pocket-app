@@ -1,8 +1,16 @@
+import { pallete } from "@/src/utils/pallete";
 import FontAwesome5 from "@expo/vector-icons/FontAwesome5";
 import React from "react";
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
+import {
+  FlatList,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { TransactionItem } from "../molecules";
 import NoData from "../molecules/NoData";
-import TransactionItem from "../molecules/TransactionItem";
+
 interface Transaction {
   id: number;
   type: "received" | "sent";
@@ -44,17 +52,21 @@ export default function TransactionsList({
         />
       ) : (
         <>
-          {transactions.slice(0, 3).map((transaction) => (
-            <TransactionItem
-              key={transaction.id}
-              transaction={transaction}
-              onPress={
-                onTransactionPress
-                  ? () => onTransactionPress(transaction)
-                  : undefined
-              }
-            />
-          ))}
+          <FlatList
+            data={transactions.slice(0, 3)}
+            renderItem={({ item: transaction }) => (
+              <TransactionItem
+                key={transaction.id}
+                transaction={transaction}
+                onPress={
+                  onTransactionPress
+                    ? () => onTransactionPress(transaction)
+                    : undefined
+                }
+              />
+            )}
+          />
+
           {showViewAll && onViewAll && (
             <TouchableOpacity style={styles.viewAllButton} onPress={onViewAll}>
               <Text style={styles.viewAllText}>Voir tout</Text>
@@ -82,7 +94,7 @@ const styles = StyleSheet.create({
     paddingVertical: 12,
   },
   viewAllText: {
-    color: "#4F46E5",
+    color: pallete.blue,
     fontSize: 16,
     fontWeight: "600",
   },

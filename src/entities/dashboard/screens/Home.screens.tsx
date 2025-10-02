@@ -4,14 +4,17 @@ import { IconButton, SmartImage } from "@/src/shared/components/atoms";
 import { Header, QuickActionsGrid } from "@/src/shared/components/molecules";
 import { WalletCarousel } from "@/src/shared/components/organims";
 import TransactionsList from "@/src/shared/components/organims/TransactionsList";
+import TransactionDetailModal from "@/src/shared/modals/TransactionDetailModal";
 import { pallete } from "@/src/utils/pallete";
 import { Bell } from "lucide-react-native";
-import React from "react";
+import React, { useState } from "react";
 import {
   NativeScrollEvent,
   NativeSyntheticEvent,
+  ScrollView,
   StyleSheet,
 } from "react-native";
+import { useTransactions } from "../hook/useTransaction";
 import { useWallet } from "../hook/useWallet";
 import { quickActions } from "../services/mocks";
 
@@ -19,7 +22,20 @@ type Props = {};
 
 const Home = (props: Props) => {
   const { data } = useWallet();
-  const [currentIndex, setCurrentIndex] = React.useState(0);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [selectedTransaction, setSelectedTransaction] = useState(null);
+
+  const [currentModal, setCurrentModal] = useState<{
+    [key: string]: boolean;
+  } | null>(null);
+  const { data: transactions } = useTransactions({
+    walletId: currentIndex.toString(),
+    category: "",
+    endDate: "",
+    limit: 10,
+    page: 1,
+    type: "",
+  });
 
   const handleMomentumScrollEnd = (
     event: NativeSyntheticEvent<NativeScrollEvent>
@@ -35,6 +51,10 @@ const Home = (props: Props) => {
     onPress: () => {},
   }));
 
+  const handleTransactionPress = (transaction: any) => {
+    setSelectedTransaction(transaction);
+    setCurrentModal({ transaction: true });
+  };
   return (
     <Wrapper>
       <Header
@@ -59,17 +79,24 @@ const Home = (props: Props) => {
         handleMomentumScrollEnd={handleMomentumScrollEnd}
       />
 
-      <QuickActionsGrid
-        title="Actions Rapides"
-        actions={quickActionsWithHandlers}
-        currentIndex={currentIndex}
-      />
+      <ScrollView>
+        <QuickActionsGrid
+          title="Actions Rapides"
+          actions={quickActionsWithHandlers}
+          currentIndex={currentIndex}
+        />
 
-      <TransactionsList
-        title="Transactions Récentes"
-        transactions={[]}
-        onTransactionPress={() => {}}
-        onViewAll={() => {}}
+        <TransactionsList
+          title="Transactions Récentes"
+          transactions={transactions?.transactions || []}
+          onTransactionPress={handleTransactionPress}
+          onViewAll={() => {}}
+        />
+      </ScrollView>
+      <TransactionDetailModal
+        visible={currentModal?.transaction ? true : false}
+        onClose={() => setCurrentModal(null)}
+        transaction={selectedTransaction}
       />
     </Wrapper>
   );
