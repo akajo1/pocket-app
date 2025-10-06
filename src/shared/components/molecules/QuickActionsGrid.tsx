@@ -10,19 +10,21 @@ export interface QuickAction {
 }
 
 interface QuickActionsGridProps {
-  title: string;
+  title?: string;
   actions: QuickAction[];
-  currentIndex: number;
+  currentIndex?: number;
+  isChild?: boolean;
 }
 
 export default function QuickActionsGrid({
   title,
   actions,
   currentIndex,
+  isChild,
 }: QuickActionsGridProps) {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
+      {title && <Text style={styles.title}>{title}</Text>}
       <View style={styles.grid3x3}>
         {actions?.length &&
           actions?.map((action, index) => (
@@ -35,10 +37,11 @@ export default function QuickActionsGrid({
                 style={[
                   styles.iconContainer,
                   {
-                    backgroundColor:
-                      currentIndex === 0
-                        ? pallete.dollars
-                        : pallete.franc + "90",
+                    backgroundColor: isChild
+                      ? pallete.blue
+                      : currentIndex === 0
+                      ? pallete.dollars
+                      : pallete.franc + "90",
                   },
                 ]}
               >
@@ -55,6 +58,7 @@ export default function QuickActionsGrid({
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 10,
+    paddingVertical: 20,
     backgroundColor: pallete.white,
     width: "90%",
     marginHorizontal: "auto",
@@ -64,7 +68,6 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
     color: pallete.black,
-    paddingTop: 16,
     marginBottom: 16,
   },
   grid3x3: {
@@ -75,7 +78,7 @@ const styles = StyleSheet.create({
   actionButton: {
     width: "20%",
     alignItems: "center",
-    marginBottom: 20,
+    // marginBottom: 20,
   },
   iconContainer: {
     width: 56,
@@ -84,11 +87,6 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginBottom: 8,
-    // shadowColor: "#ccc",
-    // shadowOffset: { width: 0, height: 2 },
-    // shadowOpacity: 0.1,
-    // shadowRadius: 10,
-    // elevation: 0.5,
   },
   actionLabel: {
     fontSize: 12,

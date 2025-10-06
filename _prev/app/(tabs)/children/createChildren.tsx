@@ -1,8 +1,3 @@
-import WalletCard from "@/src/components/molecules/WalletCard";
-import { colors } from "@/src/lib/colors";
-import { height, sign } from "@/src/lib/constants";
-import { useWallets } from "@/src/lib/hooks/useWallets";
-import { childrenStyle } from "@/src/lib/styles/childrenStyle";
 import { useRouter } from "expo-router";
 import { ChevronLeft } from "lucide-react-native";
 import React, { useEffect, useState } from "react";

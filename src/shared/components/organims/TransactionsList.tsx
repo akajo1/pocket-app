@@ -54,6 +54,7 @@ export default function TransactionsList({
         <>
           <FlatList
             data={transactions.slice(0, 3)}
+            showsVerticalScrollIndicator={false}
             renderItem={({ item: transaction }) => (
               <TransactionItem
                 key={transaction.id}

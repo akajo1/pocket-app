@@ -3,12 +3,12 @@ import { Text, View } from "react-native";
 
 type Props = {};
 
-const children = (props: Props) => {
+const createChildren = (props: Props) => {
   return (
     <View>
-      <Text>children</Text>
+      <Text>createChildren</Text>
     </View>
   );
 };
 
-export default children;
+export default createChildren;

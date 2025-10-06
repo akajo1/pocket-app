@@ -18,6 +18,7 @@ export default function RootLayout() {
   const { user } = useUserStore.getState();
 
   const screenDisplay = () => {
+    console.log("--user", user);
     if (!user) {
       return <AuthNavigation />;
     }
@@ -31,6 +32,7 @@ export default function RootLayout() {
       </Stack>
     );
   };
+
   return (
     <>
       <ToastManager />

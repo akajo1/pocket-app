@@ -1,18 +1,14 @@
-import NFCLinkingModal from "@/src/components/modals/NFCLinkingModal";
-import TransactionDetailModal from "@/src/components/modals/TransactionDetailModal";
-import ChildDetail from "@/src/components/molecules/child/ChildDetail";
-import EmptyChildWalletScreen from "@/src/components/molecules/EmptyChildrenWallet";
+import EmptyChildWalletScreen from "@/_prev/components/molecules/EmptyChildrenWallet";
+import { quickActionsChild } from "@/_prev/lib/constants";
 import {
   ChildrenCarousel,
   LimitChildModal,
   LoadChildWalletModal,
   UnloadChildWallet,
 } from "@/src/components/organisms";
-import { colors } from "@/src/lib/colors";
-import { quickActionsChild } from "@/src/lib/constants";
-import { useChildren } from "@/src/lib/hooks/useChildren";
-import { childrenStyle } from "@/src/lib/styles/childrenStyle";
-import { Transaction } from "@/src/lib/types";
+
+import NFCLinkingModal from "@/src/shared/modals/NFCLinkingModal";
+import TransactionDetailModal from "@/src/shared/modals/TransactionDetailModal";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { Plus } from "lucide-react-native";
 import React, { useState } from "react";

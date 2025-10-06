@@ -17,6 +17,7 @@ axiosInstance.interceptors.request.use(
     return config;
   },
   (error) => {
+    console.log("--request-error", error);
     return Promise.reject(error);
   }
 );
@@ -26,10 +27,13 @@ axiosInstance.interceptors.response.use(
     return response.data;
   },
   async (error) => {
-    const { user, clearUser } = useUserStore.getState();
+    const { clearUser } = useUserStore.getState();
+    console.log(error.response?.status);
+    if (error.response?.status === 401 || error.response?.status === 500) {
+      clearUser();
+      console.log("--ixi");
+    }
 
-    if (error.response?.status === 401 && user?.token) clearUser();
-    console.log("--global", error.response.data);
     return Promise.reject(error.response.data);
   }
 );

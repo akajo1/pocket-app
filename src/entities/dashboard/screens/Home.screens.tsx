@@ -79,7 +79,7 @@ const Home = (props: Props) => {
         handleMomentumScrollEnd={handleMomentumScrollEnd}
       />
 
-      <ScrollView>
+      <ScrollView showsVerticalScrollIndicator={false}>
         <QuickActionsGrid
           title="Actions Rapides"
           actions={quickActionsWithHandlers}
