@@ -1,26 +1,36 @@
+import { width } from "@/_prev/lib/constants";
 import { Wallet } from "@/src/entities/dashboard/services/walletApi";
 import { height } from "@/src/utils/method";
 import { pallete } from "@/src/utils/pallete";
 import React, { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
+import { SmartText } from "../atoms";
 import { WalletCardItem } from "../molecules";
 
 type Props = {
   wallets: Wallet[];
   currentIndex: number;
   handleMomentumScrollEnd: (event: any) => void;
+  title?: string;
 };
 
 const WalletCarousel = ({
   wallets,
   currentIndex,
   handleMomentumScrollEnd,
+  title,
 }: Props) => {
   const [isBalanceVisible, setIsBalanceVisible] = useState<boolean>(false);
 
   if (!wallets.length) return null;
   return (
-    <View style={styles.containerFluid}>
+    <View
+      style={[
+        styles.containerFluid,
+        { height: !!title ? height / 3.6 : height / 4.2 },
+      ]}
+    >
+      {title && <SmartText style={styles.title}>{title}</SmartText>}
       <FlatList
         data={wallets}
         horizontal
@@ -58,7 +68,14 @@ export default WalletCarousel;
 
 const styles = StyleSheet.create({
   containerFluid: {
-    height: height / 4.2,
+    height: height / 3.8,
+  },
+  title: {
+    fontWeight: "700",
+    fontSize: 16,
+    marginLeft: width / 18,
+    marginTop: 12,
+    textTransform: "capitalize",
   },
   container: {
     flex: 1,

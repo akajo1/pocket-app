@@ -1,12 +1,13 @@
 import { pallete } from "@/src/utils/pallete";
 import { Eye, EyeOff } from "lucide-react-native";
+import moment from "moment";
 import React, { useState } from "react";
 import {
   Pressable,
   StyleSheet,
-  Text,
   TextInput,
   TextInputProps,
+  TouchableOpacity,
   View,
 } from "react-native";
 import { SmartText } from "../atoms";
@@ -18,6 +19,9 @@ interface InputProps extends TextInputProps {
   containerStyle?: any;
   isSecure?: boolean;
   secureTextEntry?: boolean;
+  type?: any;
+  value: any;
+  onPress?: () => void;
 }
 
 export default function Input({
@@ -28,13 +32,35 @@ export default function Input({
   style,
   isSecure,
   secureTextEntry = false,
+  value,
+  type,
+  onPress,
   ...props
 }: InputProps) {
   const [isVisible, setIsVisible] = useState(!secureTextEntry);
-
+  if (type === "date") {
+    return (
+      <View style={[styles.container, containerStyle]}>
+        {label && <SmartText style={styles.label}>{label}</SmartText>}
+        <TouchableOpacity onPress={onPress}>
+          <View style={styles.inputContainer}>
+            {icon && <View style={styles.iconContainer}>{icon}</View>}
+            <SmartText
+              style={[styles.input, icon && styles.inputWithIcon, style]}
+            >
+              {value
+                ? moment(value).format("DD/MM/YYYY")
+                : "Sélectionner une date"}
+            </SmartText>
+          </View>
+        </TouchableOpacity>
+        {error && <SmartText style={styles.errorText}>{error}</SmartText>}
+      </View>
+    );
+  }
   return (
     <View style={[styles.container, containerStyle]}>
-      {label && <Text style={styles.label}>{label}</Text>}
+      {label && <SmartText style={styles.label}>{label}</SmartText>}
       <View style={[styles.inputContainer, error && styles.errorContainer]}>
         {icon && <View style={styles.iconContainer}>{icon}</View>}
         <TextInput

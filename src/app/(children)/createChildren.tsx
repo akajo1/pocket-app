@@ -1,14 +1,10 @@
+import { CreateChild } from "@/src/features/children/screens";
 import React from "react";
-import { Text, View } from "react-native";
 
 type Props = {};
 
 const createChildren = (props: Props) => {
-  return (
-    <View>
-      <Text>createChildren</Text>
-    </View>
-  );
+  return <CreateChild />;
 };
 
 export default createChildren;

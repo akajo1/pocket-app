@@ -121,7 +121,7 @@ function ChildrenScreen() {
         right={
           <IconButton
             icon={<PlusIcon size={24} color={pallete.grey} />}
-            onPress={() => {}}
+            onPress={() => navigation.navigate("/(children)/createChildren")}
             size="medium"
           />
         }
