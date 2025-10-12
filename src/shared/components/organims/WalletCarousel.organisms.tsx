@@ -1,6 +1,5 @@
-import { width } from "@/_prev/lib/constants";
 import { Wallet } from "@/src/entities/dashboard/services/walletApi";
-import { height } from "@/src/utils/method";
+import {height, width} from "@/src/utils/method";
 import { pallete } from "@/src/utils/pallete";
 import React, { useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";

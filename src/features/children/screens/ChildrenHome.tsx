@@ -62,7 +62,7 @@ function ChildrenScreen() {
       return (
         <EmptyChildWalletScreen
           onPress={() =>
-            navigation.navigate("/(dashboard)/children/createChildren")
+            navigation.navigate("/(children)/createChildren")
           }
         />
       );

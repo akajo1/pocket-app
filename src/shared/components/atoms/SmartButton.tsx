@@ -1,4 +1,3 @@
-import { pallete } from "@/_prev/utils/pallete";
 import React from "react";
 import {
   StyleSheet,
@@ -8,6 +7,7 @@ import {
   View,
   ViewStyle,
 } from "react-native";
+import {pallete} from "@/src/utils/pallete";
 
 interface ButtonProps {
   title: string;

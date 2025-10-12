@@ -1,7 +1,7 @@
 import { height } from "@/src/utils/method";
 import { pallete } from "@/src/utils/pallete";
 import moment from "moment";
-import React from "react";
+import React, {useState} from "react";
 import { Modal, StyleSheet, View } from "react-native";
 import DateTimePicker, {
   DateType,
@@ -11,17 +11,22 @@ import DateTimePicker, {
 type Props = {
   isShown: boolean;
   onChange: (date: DateType) => void;
-  value: Date;
+  value: DateType;
+  onCloseModal: () => void;
 };
 
-const SmartDatePicker = ({ isShown, onChange, value }: Props) => {
+const SmartDatePicker = ({ isShown, onChange, value, onCloseModal }: Props) => {
   const defaultStyles = useDefaultStyles();
+
   return (
     <Modal
       visible={isShown}
       animationType="fade"
       style={styles.modal}
       transparent
+      onRequestClose={() => {
+        onCloseModal();
+      }}
     >
       <View style={styles.containerDatePicker}>
         <DateTimePicker
@@ -30,13 +35,13 @@ const SmartDatePicker = ({ isShown, onChange, value }: Props) => {
           date={value}
           initialView="year"
           startDate={moment().subtract(18, "years").toDate()}
-          endDate={moment().subtract(3, "years").toDate()}
+         endDate={moment().subtract(3, "years").toDate()}
           startYear={moment().subtract(18, "years").year()}
           endYear={moment().subtract(3, "years").year()}
           minDate={moment().subtract(18, "years").toDate()}
           maxDate={moment().subtract(3, "years").toDate()}
           onChange={({ date }) => {
-            onChange(date);
+              onChange(date);
           }}
           styles={defaultStyles}
           style={styles.datePicker}

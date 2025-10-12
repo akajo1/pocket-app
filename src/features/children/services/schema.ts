@@ -5,12 +5,12 @@ export const childrenSchema = yup.object().shape({
     .string()
     .min(2, "Au moins 2 charactères requis")
     .required("Nom complet requis"),
-  age: yup.string().required("Nom requis"),
+  age: yup.string().required("la date de naissance est requise"),
   initialAmount: yup
     .number()
-    .min(0, "Montant initial invalide")
+    .min(1, "Montant initial invalide")
     .required("Montant initial requis"),
   currency: yup.string().required("Devise requise"),
-  weeklyLimit: yup.number().min(0, "Limite hebdomadaire invalide"),
-  dailyLimit: yup.number().min(0, "Limite quotidienne invalide"),
+  weeklyLimit: yup.number().min(1, "Limite hebdomadaire invalide").required(),
+  dailyLimit: yup.number().min(1, "Limite quotidienne invalide").required(),
 });

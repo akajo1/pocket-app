@@ -38,6 +38,24 @@ export default function Input({
   ...props
 }: InputProps) {
   const [isVisible, setIsVisible] = useState(!secureTextEntry);
+  if (type === "dropdown") {
+    return (
+      <View style={[styles.container, containerStyle]}>
+        {label && <SmartText style={styles.label}>{label}</SmartText>}
+        <TouchableOpacity onPress={onPress}>
+          <View style={styles.inputContainer}>
+            {icon && <View style={styles.iconContainer}>{icon}</View>}
+            <SmartText
+              style={[styles.input, icon && styles.inputWithIcon, style]}
+            >
+              {value ? value : "Sélectionner une valeur"}
+            </SmartText>
+          </View>
+        </TouchableOpacity>
+        {error && <SmartText style={styles.errorText}>{error}</SmartText>}
+      </View>
+    );
+  }
   if (type === "date") {
     return (
       <View style={[styles.container, containerStyle]}>
