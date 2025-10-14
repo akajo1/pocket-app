@@ -32,12 +32,10 @@ import {
   StyleSheet,
 } from "react-native";
 import { childrenSchema } from "../services/schema";
-import {DateType} from "react-native-ui-datepicker";
 import {useAlert} from "@/src/shared/provider/AlertProvider";
+import {sendMoneyType, typeTransaction} from "@/src/utils/method";
 
-type Props = {};
-
-const CreateChild = (props: Props) => {
+const CreateChild = () => {
   const navigation = useRouter();
     const message = useAlert();
 
@@ -50,8 +48,6 @@ const CreateChild = (props: Props) => {
     handleSubmit,
     formState: { errors, isValid },
     setValue,
-    getValues,
-    reset,
   } = useForm({
     resolver: yupResolver(childrenSchema),
     mode: "onChange",
@@ -91,27 +87,28 @@ const CreateChild = (props: Props) => {
             btnText: "",
         });
 
-  const onSubmit = (dataForm: any) => {
-    const currentBalance:number = parseFloat(data?.wallets[currentIndex]?.balance).toFixed(2);
-if(dataForm.initialAmount >= currentBalance ){
-    message?.setAlertMessage({
-        visible: true,
-        message: "Solde insuffisant pour effectuer cette opération",
-        title: "Attention!!",
-        type: "warning",
-        onPress: () => handleCloseModal(),
-        btnText: "D'accord",
-    });
-    return
-}
-      navigation.navigate({pathname:"/(transactions)/confirmationScreen", params:{
-              form: JSON.stringify({...dataForm, walletId: data?.wallets[currentIndex]?.id}),
-              type: "createChild",
-          } }  )
+    const onSubmit = (dataForm: any) => {
+        const currentBalance: number = parseFloat(data?.wallets[currentIndex]?.balance).toFixed(2);
+        if (dataForm.initialAmount >= currentBalance) {
+            message?.setAlertMessage({
+                visible: true,
+                message: "Solde insuffisant pour effectuer cette opération",
+                title: "Attention!!",
+                type: "warning",
+                onPress: () => handleCloseModal(),
+                btnText: "D'accord",
+            });
+            return
+        }
+        navigation.navigate({
+            pathname: "/(transactions)/confirmationScreen", params: {
+                form: JSON.stringify({...dataForm, walletId: data?.wallets[currentIndex]?.id}),
+                transactionType: typeTransaction.createChild,
+                type: sendMoneyType.w2c
+            }
+        })
+    };
 
-
-  };
-console.log(errors)
   return (
     <Wrapper>
       <Header

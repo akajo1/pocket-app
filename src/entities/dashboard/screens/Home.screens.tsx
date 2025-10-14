@@ -17,14 +17,13 @@ import {
 import { useTransactions } from "../hook/useTransaction";
 import { useWallet } from "../hook/useWallet";
 import { quickActions } from "../services/mocks";
-
-type Props = {};
+import {useRouter} from "expo-router";
 
 const Home = (props: Props) => {
   const { data } = useWallet();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selectedTransaction, setSelectedTransaction] = useState(null);
-
+    const navigation = useRouter()
   const [currentModal, setCurrentModal] = useState<{
     [key: string]: boolean;
   } | null>(null);
@@ -67,7 +66,7 @@ const Home = (props: Props) => {
         right={
           <IconButton
             icon={<Bell size={24} color={pallete.grey} />}
-            onPress={() => {}}
+            onPress={() => navigation.navigate("/notifications")}
             size="medium"
           />
         }
@@ -88,9 +87,9 @@ const Home = (props: Props) => {
 
         <TransactionsList
           title="Transactions Récentes"
-          transactions={transactions?.transactions || []}
+          transactions={transactions?.transactions?.slice(0, 3) || []}
           onTransactionPress={handleTransactionPress}
-          onViewAll={() => {}}
+          onViewAll={() => navigation.navigate("/allUserTransactions")}
         />
       </ScrollView>
       <TransactionDetailModal

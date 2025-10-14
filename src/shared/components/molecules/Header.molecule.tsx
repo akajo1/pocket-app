@@ -12,9 +12,9 @@ type Props = {
 const Header = ({ left, right, title }: Props) => {
   return (
     <View style={styles.container}>
-      {left}
+      {left || <View  style={{width: 30, height: 30}} />}
       <SmartText style={styles.title}>{title}</SmartText>
-      {right}
+      {right || <View  style={{width: 30, height: 30}} />}
     </View>
   );
 };

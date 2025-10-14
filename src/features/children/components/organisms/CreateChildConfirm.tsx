@@ -9,9 +9,9 @@ type Props = {
 }
 export default function CreateChildConfirm({data}: Props) {
     const currency = data.currency === "USD" ? "$" : "Fc";
-    return  <View
-        style={styles.container}
-    >
+        return  <View
+            style={styles.container}
+        >
         <SmartText style={styles.title}>Bénéficiaire</SmartText>
 
         <View style={styles.containerText}>

@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
-import React from "react";
+import React, {useEffect} from "react";
 import { Platform } from "react-native";
 import ToastManager from "toastify-react-native";
 
@@ -11,15 +11,26 @@ import AuthNavigation from "../entities/auth/AuthNavigation";
 import useUserStore from "../entities/auth/store/userStore";
 import { AlertModal } from "../shared/components/organims";
 import { AlertProvider } from "../shared/provider";
+import Notifications from "@/src/app/notifications";
 
 const queryClient = new QueryClient();
 
 export default function RootLayout() {
   const { user } = useUserStore.getState();
+  const [isActive, setIsActive] = React.useState(false);
+
+    useEffect(() => {
+        console.log("--changement")
+        if(user){
+            setIsActive(true)
+            return
+        }
+        setIsActive(false)
+    }, [user]);
 
   const screenDisplay = () => {
     console.log("--user", user);
-    if (!user) {
+    if (!isActive) {
       return <AuthNavigation />;
     }
 
@@ -28,7 +39,8 @@ export default function RootLayout() {
         initialRouteName="(dashboard)"
         screenOptions={{ headerShown: false }}
       >
-        <Stack.Screen name="(dashboard)" />
+          <Stack.Screen name="(dashboard)" />
+          <Stack.Screen name="notifications" />
       </Stack>
     );
   };

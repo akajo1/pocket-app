@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Mail, X, ArrowLeft, Key, CircleCheck as CheckCircle } from 'lucide-react-native';
-import { useAuthContext } from '../contexts/AuthContext';
-import Button from '../atoms/Button';
+import SmartButton from "@/src/shared/components/atoms/SmartButton";
 
 interface ForgotPasswordModalProps {
   visible: boolean;
@@ -10,7 +9,6 @@ interface ForgotPasswordModalProps {
 }
 
 export default function ForgotPasswordModal({ visible, onClose }: ForgotPasswordModalProps) {
-  const { requestPasswordReset, resetPassword } = useAuthContext();
   const [step, setStep] = useState<'email' | 'code' | 'newPassword' | 'success'>('email');
   const [email, setEmail] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
@@ -26,7 +24,7 @@ export default function ForgotPasswordModal({ visible, onClose }: ForgotPassword
 
     setIsLoading(true);
     
-    try {
+  /*  try {
       const response = await requestPasswordReset(email);
       
       if (response.success) {
@@ -38,7 +36,7 @@ export default function ForgotPasswordModal({ visible, onClose }: ForgotPassword
       Alert.alert('Erreur', 'Impossible d\'envoyer le code');
     } finally {
       setIsLoading(false);
-    }
+    }*/
   };
 
   const handleVerifyCode = () => {
@@ -68,7 +66,7 @@ export default function ForgotPasswordModal({ visible, onClose }: ForgotPassword
 
     setIsLoading(true);
     
-    try {
+  /*  try {
       const response = await resetPassword(email, verificationCode, newPassword);
       
       if (response.success) {
@@ -78,7 +76,7 @@ export default function ForgotPasswordModal({ visible, onClose }: ForgotPassword
       }
     } finally {
       setIsLoading(false);
-    }
+    }*/
   };
 
   const handleClose = () => {
@@ -114,7 +112,7 @@ export default function ForgotPasswordModal({ visible, onClose }: ForgotPassword
         />
       </View>
 
-      <Button
+      <SmartButton
         title={isLoading ? "Envoi en cours..." : "Envoyer le code"}
         onPress={handleSendCode}
         disabled={isLoading}
@@ -155,7 +153,7 @@ export default function ForgotPasswordModal({ visible, onClose }: ForgotPassword
         ))}
       </View>
 
-      <Button
+      <SmartButton
         title="Vérifier le code"
         onPress={handleVerifyCode}
         style={styles.primaryButton}
@@ -213,7 +211,7 @@ export default function ForgotPasswordModal({ visible, onClose }: ForgotPassword
         <Text style={styles.requirementText}>• Un chiffre</Text>
       </View>
 
-      <Button
+      <SmartButton
         title="Réinitialiser le mot de passe"
         onPress={handleResetPassword}
         style={styles.primaryButton}
@@ -231,7 +229,7 @@ export default function ForgotPasswordModal({ visible, onClose }: ForgotPassword
         Votre mot de passe a été mis à jour avec succès. Vous pouvez maintenant vous connecter avec votre nouveau mot de passe.
       </Text>
 
-      <Button
+      <SmartButton
         title="Retour à la connexion"
         onPress={handleClose}
         style={styles.primaryButton}

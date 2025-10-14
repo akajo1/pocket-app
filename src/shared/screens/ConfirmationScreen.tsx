@@ -4,28 +4,40 @@ import {IconButton, SmartImage, SmartText} from "@/src/shared/components/atoms";
 import {ChevronLeft, WalletIcon} from "lucide-react-native";
 import images from "@/src/assets/images";
 import React from "react";
-import {ScrollView, StyleSheet, View} from "react-native";
+import {ActivityIndicator, ScrollView, StyleSheet, View} from "react-native";
 import {useLocalSearchParams, useRouter} from "expo-router";
 import {pallete} from "@/src/utils/pallete";
-import {height, width} from "@/src/utils/method";
+import {height, typeTransaction, width} from "@/src/utils/method";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
 import {CreateChildConfirm} from "@/src/features/children/components/organisms";
+import useCreateChild from "@/src/features/children/hook/useCreateChild";
+import {useFee} from "@/src/shared/hooks/useFee";
+import moment from "moment";
 
 type ParamsType = {
     form: string
     type: string
+    transactionType: string
 }
 
 function ConfirmationScreen() {
-    const {form, type} = useLocalSearchParams<ParamsType>();
+    const {form, type, transactionType} = useLocalSearchParams<ParamsType>();
+
+    const createChildMutate = useCreateChild()
     const navigation = useRouter()
     const parsedForm = JSON.parse(form)
-    console.log("--Confirmation", form, type);
+    const {data: fee, isLoading} = useFee(  {
+        type,
+        currency:parsedForm?.currency?.toLowerCase()
+    })
     const currency = parsedForm.currency === "USD" ? "$" : "Fc";
+    const feeMonney = (parseFloat(parsedForm?.initialAmount.toString()) * parseFloat(fee?.percentage?.toString()))/ 100
+    const total = parseFloat(parsedForm?.initialAmount.toString()) + feeMonney
+
 
     const displayTransactionDetails = () => {
-        switch (type) {
-            case "createChild":
+        switch (transactionType) {
+            case typeTransaction.createChild:
                 return <CreateChildConfirm data={parsedForm} />
             default:
                return <></>
@@ -43,6 +55,16 @@ function ConfirmationScreen() {
             </View>
             <SmartText style={styles.wallet}>{parsedForm.currency}</SmartText>
         </View>
+    }
+
+    const handleConfirmationClick = () => {
+      switch (transactionType) {
+          case typeTransaction.createChild:
+             return  createChildMutate.mutate({...parsedForm, age: moment(parsedForm?.age)?.format("YYYY-MM-DD")})
+          default:
+              return
+
+      }
     }
     return <Wrapper>
         <Header
@@ -72,30 +94,27 @@ function ConfirmationScreen() {
                 <View style={[styles.container, styles.transaction, {marginBottom: 10}]}>
                     <SmartText style={styles.subTitle}>Type de transaction</SmartText>
                     <SmartText style={styles.type}>
-                        {type === "createChild" ? "Création de dependant" : "Inconnu"}
+                        {transactionType === typeTransaction.createChild ? "Création de dependant" : "Inconnu"}
                     </SmartText>
                 </View>
                 <View style={[styles.container, styles.transaction]}>
                     <SmartText style={styles.subTitle}>Frais de transaction</SmartText>
                     <SmartText style={styles.text}>
-
-                        0.00 {currency}
+                        {feeMonney}   {currency}
                     </SmartText>
                 </View>
                 <View style={[styles.container, styles.transaction,{marginTop:10}]}>
                     <SmartText style={styles.subTitle}>Total à payer</SmartText>
                     <SmartText style={styles.text}>
-
-                        {parseFloat(parsedForm?.initialAmount.toString()).toFixed(2)} {currency}
+                        {total} {currency}
                     </SmartText>
                 </View>
-                <SmartButton title="Confirmez la transaction" onPress={()=> navigation.navigate({
-                    pathname:"/(transactions)/receiptScreen",
-                    params:{
-                        form,
-                        type
-                    }
-                })}  style={{marginTop: 20}}/>
+
+                <SmartButton
+                    title="Confirmez la transaction"
+                    disabled={createChildMutate.isPending  || isLoading}
+                    icon={createChildMutate.isPending ? <ActivityIndicator color={pallete.white} size={20} /> : null}
+                    onPress={()=>handleConfirmationClick()} style={{marginTop: 20}}/>
             </View>
 
         </ScrollView>

@@ -96,9 +96,9 @@ function ChildrenScreen() {
           </SmartText>
           <TransactionsList
             title="Transactions Récentes"
-            transactions={transactions || []}
+            transactions={transactions?.slice(0, 3) || []}
             onTransactionPress={handleTransactionPress}
-            onViewAll={() => {}}
+            onViewAll={() => navigation.navigate("/(transactions)/allChildTransactions")}
           />
         </ScrollView>
         <TransactionDetailModal

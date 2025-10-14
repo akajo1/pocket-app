@@ -52,7 +52,7 @@ export default ChildrenCarousel;
 
 const styles = StyleSheet.create({
   containerFluid: {
-    height: height / 4,
+    height: height / 3.8,
     width: "90%",
     marginHorizontal: "auto",
     marginTop: 16,

@@ -50,6 +50,7 @@
     "react-native-confirmation-code-field": "^8.0.1",
     "react-native-expo-fancy-alerts": "^2.1.1",
     "react-native-gesture-handler": "~2.24.0",
+    "react-native-gifted-charts": "^1.4.64",
     "react-native-international-phone-number": "^0.10.5",
     "react-native-keyboard-controller": "^1.18.6",
     "react-native-modal": "^14.0.0-rc.1",

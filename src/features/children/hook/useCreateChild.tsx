@@ -2,6 +2,7 @@ import {useAlert} from "@/src/shared/provider/AlertProvider";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {useRouter} from "expo-router";
 import childrenApi, {CreateChildren} from "@/src/features/children/services/api";
+import {queryKey, sendMoneyType, typeTransaction} from "@/src/utils/method";
 
 const useCreateChild = () => {
     const message = useAlert();
@@ -18,17 +19,20 @@ const useCreateChild = () => {
             btnText: "",
         });
 
-    return useMutation<CreateChildren, Error, CreateChildren>({
+    return useMutation<any, Error, CreateChildren>({
         mutationFn: (body) => childrenApi.createChild(body),
         onSuccess: (response) => {
-            queryClient.invalidateQueries(["children"]);
+            queryClient.invalidateQueries([queryKey.children]);
+            queryClient.invalidateQueries([queryKey.transaction]);
+            console.log("--response", response)
             navigation.navigate({
-                pathname: "",
-                data: JSON.stringify(body),
-                type: "createChild"
+                pathname: "/(transactions)/receiptScreen",
+                params: {
+                    data: JSON.stringify(response),
+                    transactionType: typeTransaction.createChild,
+                    type: sendMoneyType.w2c
+                }
             })
-
-
         },
         onError: (error) => {
             message?.setAlertMessage({

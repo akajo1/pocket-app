@@ -53,7 +53,7 @@ export default function TransactionsList({
       ) : (
         <>
           <FlatList
-            data={transactions.slice(0, 3)}
+            data={transactions}
             showsVerticalScrollIndicator={false}
             renderItem={({ item: transaction }) => (
               <TransactionItem

@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, TextInput, Alert } from 'react-native';
 import { Key, X, Eye, EyeOff, CheckCircle, Shield } from 'lucide-react-native';
-import { useAuthContext } from '../contexts/AuthContext';
-import Button from '../atoms/Button';
+import SmartButton from "@/src/shared/components/atoms/SmartButton";
 
 interface ChangePasswordModalProps {
   visible: boolean;
@@ -11,7 +10,6 @@ interface ChangePasswordModalProps {
 }
 
 export default function ChangePasswordModal({ visible, onClose, onSuccess }: ChangePasswordModalProps) {
-  const { changePassword } = useAuthContext();
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -63,7 +61,7 @@ export default function ChangePasswordModal({ visible, onClose, onSuccess }: Cha
 
     setIsLoading(true);
     
-    try {
+   /* try {
       const response = await changePassword(currentPassword, newPassword);
       
       setIsLoading(false);
@@ -81,7 +79,7 @@ export default function ChangePasswordModal({ visible, onClose, onSuccess }: Cha
     } catch (error) {
       setIsLoading(false);
       Alert.alert('Erreur', 'Impossible de changer le mot de passe');
-    }
+    }*/
   };
 
   const handleClose = () => {
@@ -282,13 +280,13 @@ export default function ChangePasswordModal({ visible, onClose, onSuccess }: Cha
 
             {/* Action Buttons */}
             <View style={styles.actionButtons}>
-              <Button
+              <SmartButton
                 title="Annuler"
                 onPress={handleClose}
                 variant="secondary"
                 style={styles.actionButton}
               />
-              <Button
+              <SmartButton
                 title={isLoading ? "Modification..." : "Changer le mot de passe"}
                 onPress={handleChangePassword}
                 disabled={isLoading || !isPasswordValid || !currentPassword || newPassword !== confirmPassword}

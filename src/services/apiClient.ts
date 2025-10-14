@@ -31,7 +31,6 @@ axiosInstance.interceptors.response.use(
     console.log(error.response?.status);
     if (error.response?.status === 401 || error.response?.status === 500) {
       clearUser();
-      console.log("--ixi");
     }
 
     return Promise.reject(error.response.data);

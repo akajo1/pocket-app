@@ -11,6 +11,14 @@ export default function ChildrenLayout() {
                 name="receiptScreen"
                 options={{ headerShown: false,}}
             />
+            <Stack.Screen
+                name="allUserTransactions"
+                options={{ headerShown: false,}}
+            />
+            <Stack.Screen
+                name="allChildTransactions"
+                options={{ headerShown: false,}}
+            />
         </Stack>
     );
 }

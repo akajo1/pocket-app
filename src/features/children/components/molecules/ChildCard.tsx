@@ -79,7 +79,7 @@ export default ChildCard;
 
 const styles = StyleSheet.create({
   carouselCard: {
-    width: width - 40,
+    width: width - 50,
     marginRight: 16,
   },
   childCard: {
