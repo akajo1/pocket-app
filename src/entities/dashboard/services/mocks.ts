@@ -5,14 +5,14 @@ export const quickActions = [
   {
     icon: Upload,
     label: "Retirer",
-    key: "withdraw",
+    key: "withdrawCash",
     color: pallete.black,
   },
-  { icon: Download, label: "Appro", key: "appro", color: pallete.black },
+  { icon: Download, label: "Appro", key: "loadWallet", color: pallete.black },
   {
     icon: Send,
     label: "Envoie argent",
-    key: "nfcpay",
+    key: "sendMoneyToWallet",
     color: pallete.black,
   },
   { icon: Scan, label: "QR Pay", key: "qrpay", color: pallete.black },

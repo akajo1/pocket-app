@@ -47,7 +47,7 @@ const Home = (props: Props) => {
 
   const quickActionsWithHandlers = quickActions?.map((action) => ({
     ...action,
-    onPress: () => {},
+    onPress: () => navigation.navigate(`/${action.key}`),
   }));
 
   const handleTransactionPress = (transaction: any) => {
