@@ -10,9 +10,9 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.request.use(
   async (config) => {
-    const user = useUserStore.getState().user;
-    if (user?.token) {
-      config.headers.Authorization = `Bearer ${user.token}`;
+
+    if (useUserStore.getState().user?.token) {
+      config.headers.Authorization = `Bearer ${useUserStore.getState()?.user?.token}`;
     }
     return config;
   },
@@ -24,16 +24,15 @@ axiosInstance.interceptors.request.use(
 
 axiosInstance.interceptors.response.use(
   (response) => {
-    return response.data;
+    return response?.data;
   },
   async (error) => {
-    const { clearUser } = useUserStore.getState();
-    console.log(error.response?.status);
-    if (error.response?.status === 401 || error.response?.status === 500) {
-      clearUser();
+
+    if (error.response?.status === 401) {
+        useUserStore.getState().clearUser();
     }
 
-    return Promise.reject(error.response.data);
+    return Promise.reject(error?.response?.data );
   }
 );
 

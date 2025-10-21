@@ -8,6 +8,5 @@ export const useWallet = () => {
     queryKey: ["wallet"],
     queryFn: walletApi.fetchWallets,
     enabled: !!user,
-    staleTime: 1000 * 60 * 5,
   });
 };

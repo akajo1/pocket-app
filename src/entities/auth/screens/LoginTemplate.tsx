@@ -22,11 +22,12 @@ import { ICountry } from "react-native-international-phone-number";
 import useAuth from "../hook/useAuth";
 import { loginSchema } from "../services/schema";
 import { AuthNavigationProps, authNavigationType } from "../services/types";
+import {useAuthManager} from "@/src/entities/auth/hook/useAuthManager";
 
 const Login = ({ onChangeScreen }: AuthNavigationProps) => {
   const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
   const [accepted, setAccepted] = useState(false);
-  const auth = useAuth();
+  const auth = useAuthManager();
 
   const {
     control,
@@ -46,7 +47,7 @@ const Login = ({ onChangeScreen }: AuthNavigationProps) => {
       " ",
       ""
     )}`;
-    auth.mutate({ ...data, phone });
+    auth.login({ ...data, phone });
   };
 
   return (
@@ -106,11 +107,11 @@ const Login = ({ onChangeScreen }: AuthNavigationProps) => {
           label="Se souvenir de moi"
         />
         <SmartButton
-          title={auth.isPending ? "Connexion..." : "Connectez-vous"}
+          title={auth.loading? "Connexion..." : "Connectez-vous"}
           onPress={handleSubmit(onSubmit)}
-          disabled={!isValid || auth.isPending}
+          disabled={!isValid || auth.loading}
           icon={
-            auth.isPending ? (
+            auth.loading? (
               <ActivityIndicator size={20} color={pallete.white} />
             ) : null
           }

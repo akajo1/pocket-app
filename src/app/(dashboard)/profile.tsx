@@ -16,16 +16,18 @@ import {
     Users
 } from "lucide-react-native";
 import {pallete} from "@/src/utils/pallete";
-import React from "react";
+import React, {useContext} from "react";
 import {ScrollView, StyleSheet, TouchableOpacity, View} from "react-native";
 import {LinearGradient} from "expo-linear-gradient";
 import useUserStore from "@/src/entities/auth/store/userStore";
 import {router, useRouter} from "expo-router";
-
+import {AuthContext} from "@/src/shared/provider/AuthProvider";
+import {useQueryClient} from "@tanstack/react-query";
+import {useAuthManager} from "@/src/entities/auth/hook/useAuthManager";
 
 
 export default function Profile() {
-    const {user, clearUser} = useUserStore.getState()
+    const {user, logout} = useAuthManager()
     const navigation = useRouter()
     const menuItems = [
         {
@@ -43,12 +45,12 @@ export default function Profile() {
                     action: "security",
                     route: "/(profile)/security",
                 },
-               /* {
-                    icon: Bell,
-                    label: "Notifications",
-                    action: "notifications",
-                    route: "/(profile)/notifications",
-                },*/
+                /* {
+                     icon: Bell,
+                     label: "Notifications",
+                     action: "notifications",
+                     route: "/(profile)/notifications",
+                 },*/
             ],
         },
 
@@ -78,14 +80,6 @@ export default function Profile() {
         }
     };
 
-    const handleLogout = async () => {
-        try {
-            clearUser();
-            router.replace("/");
-        } catch (error) {
-            console.error("Logout error:", error);
-        }
-    };
 
     return <Wrapper>
         <Header
@@ -97,7 +91,7 @@ export default function Profile() {
             }
             right={
                 <IconButton
-                    icon={<Bell size={24} color={pallete.grey} />}
+                    icon={<Bell size={24} color={pallete.grey}/>}
                     onPress={() => navigation.navigate("/notifications")}
                     size="medium"
                 />
@@ -109,8 +103,8 @@ export default function Profile() {
             {/* Profile Header */}
             <LinearGradient
                 colors={[pallete.grey, "#7C3AED"]}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
+                start={{x: 0, y: 0}}
+                end={{x: 1, y: 1}}
                 style={styles.profileHeader}
             >
                 <View style={styles.avatarContainer}>
@@ -126,14 +120,14 @@ export default function Profile() {
 
                 <View style={styles.contactInfo}>
                     <View style={styles.contactItem}>
-                        <Mail size={16} color="#FFFFFF" />
+                        <Mail size={16} color="#FFFFFF"/>
                         <SmartText style={styles.contactText}>
                             {user?.isEmailVerified ? "Vérifiée" : "Non vérifiée"}
                         </SmartText>
                     </View>
                     {user?.phone && (
                         <View style={styles.contactItem}>
-                            <Phone size={16} color="#FFFFFF" />
+                            <Phone size={16} color="#FFFFFF"/>
                             <SmartText style={styles.contactText}>{user.phone}</SmartText>
                         </View>
                     )}
@@ -143,11 +137,10 @@ export default function Profile() {
                     style={styles.editProfileButton}
                     onPress={() => router.push("/(profile)/personal")}
                 >
-                    <Edit size={16} color="#FFFFFF" />
+                    <Edit size={16} color="#FFFFFF"/>
                     <SmartText style={styles.editProfileText}>Modifier le profil</SmartText>
                 </TouchableOpacity>
             </LinearGradient>
-
 
 
             {/* Menu Sections */}
@@ -163,11 +156,11 @@ export default function Profile() {
                             >
                                 <View style={styles.menuItemLeft}>
                                     <View style={styles.menuIcon}>
-                                        <item.icon size={20} color="#6B7280" />
+                                        <item.icon size={20} color="#6B7280"/>
                                     </View>
                                     <SmartText style={styles.menuLabel}>{item.label}</SmartText>
                                 </View>
-                                <ChevronRight size={16} color="#9CA3AF" />
+                                <ChevronRight size={16} color="#9CA3AF"/>
                             </TouchableOpacity>
                         ))}
                     </View>
@@ -175,10 +168,9 @@ export default function Profile() {
             ))}
 
 
-
             {/* Logout Button */}
-            <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
-                <LogOut size={20} color="#DC2626" />
+            <TouchableOpacity style={styles.logoutButton} onPress={() => logout()}>
+                <LogOut size={20} color="#DC2626"/>
                 <SmartText style={styles.logoutText}>Se déconnecter</SmartText>
             </TouchableOpacity>
 
@@ -269,7 +261,7 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         marginBottom: 20,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,
@@ -302,7 +294,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         borderRadius: 16,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,

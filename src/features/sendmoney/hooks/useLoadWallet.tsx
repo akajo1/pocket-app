@@ -1,10 +1,10 @@
 import {useAlert} from "@/src/shared/provider/AlertProvider";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {useRouter} from "expo-router";
-import childrenApi, {CreateChildren} from "@/src/features/children/services/api";
 import {queryKey, sendMoneyType, typeTransaction} from "@/src/utils/method";
+import walletApi from "@/src/entities/dashboard/services/walletApi";
 
-const useCreateChild = () => {
+const useLoadWallet = () => {
     const message = useAlert();
     const queryClient = useQueryClient();
     const navigation = useRouter();
@@ -15,22 +15,23 @@ const useCreateChild = () => {
             message: "",
             title: "",
             type: "info",
-            onPress: () => {},
+            onPress: () => {
+            },
             btnText: "",
         });
 
-    return useMutation<any, Error, CreateChildren>({
-        mutationFn: (body) => childrenApi.createChild(body),
+    return useMutation<any, Error, any>({
+        mutationFn: (body) => walletApi.loadWallets(body),
         onSuccess: (response) => {
-            queryClient.invalidateQueries({queryKey: [queryKey.children]});
+            queryClient.invalidateQueries({queryKey: [queryKey.wallet]});
             queryClient.invalidateQueries({queryKey: [queryKey.transaction]});
 
             navigation.navigate({
                 pathname: "/(transactions)/receiptScreen",
                 params: {
                     data: JSON.stringify(response),
-                    transactionType: typeTransaction.createChild,
-                    type: sendMoneyType.w2c
+                    transactionType: typeTransaction.loadWallet,
+                    type: sendMoneyType.load
                 }
             })
         },
@@ -46,4 +47,4 @@ const useCreateChild = () => {
         },
     });
 };
-export default useCreateChild;
+export default useLoadWallet;

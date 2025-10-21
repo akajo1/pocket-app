@@ -3,8 +3,6 @@ import { OnBoarding, RegisterTemplate, TermsTemplate } from "./screens";
 import Login from "./screens/LoginTemplate";
 import useOnBoardingStore from "./store/onBoardingStore";
 
-type Props = {};
-
 const AuthNavigation = (props: Props) => {
   const isOnBoarding = useOnBoardingStore.getState()?.isOnBoarding;
   const [currentScreen, setCurrentScreen] = React.useState(

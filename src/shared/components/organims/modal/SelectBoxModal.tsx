@@ -1,8 +1,9 @@
-import {Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View} from "react-native";
+import {Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View, ViewStyle} from "react-native";
 import {SmartText} from "@/src/shared/components/atoms";
 import {X} from "lucide-react-native";
 import React from "react";
 import {pallete} from "@/src/utils/pallete";
+import {height, width} from "@/src/utils/method";
 
 type dataType = {
     label: string,
@@ -15,8 +16,9 @@ type Props = {
     currentChoose: dataType;
     onChangeCurrentChoose: (value: dataType) => void;
     data: dataType[];
+    containerStyle?: ViewStyle;
 }
-export default function SelectBoxModal({isOpen, onClose, title, data, currentChoose, onChangeCurrentChoose}: Props){
+export default function SelectBoxModal({isOpen,containerStyle = { height: height - 30}, onClose, title, data, currentChoose, onChangeCurrentChoose}: Props){
 
     const handleChoose = (value: dataType) => {
         onChangeCurrentChoose(value);
@@ -28,7 +30,7 @@ export default function SelectBoxModal({isOpen, onClose, title, data, currentCho
         presentationStyle="pageSheet"
         onRequestClose={onClose}
     >
-        <View style={styles.container}>
+        <View style={[styles.container]}>
             <View style={styles.header}>
                 <Text style={styles.headerTitle}>{title}</Text>
                 <TouchableOpacity onPress={onClose} style={styles.closeButton}>
@@ -56,8 +58,8 @@ export default function SelectBoxModal({isOpen, onClose, title, data, currentCho
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: pallete.bg,
+        flex: 1,
     },
     containerView: {
         flexDirection: "row",

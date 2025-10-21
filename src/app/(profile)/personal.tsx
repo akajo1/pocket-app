@@ -22,20 +22,12 @@ import images from "@/src/assets/images";
 import {pallete} from "@/src/utils/pallete";
 import {Wrapper} from "@/src/shared/components";
 import {useRouter} from "expo-router";
+import {useAuthManager} from "@/src/entities/auth/hook/useAuthManager";
 
 export default function PersonalInfoScreen() {
     const navigation= useRouter()
     const [isEditing, setIsEditing] = useState(false);
-    const [userInfo, setUserInfo] = useState({
-        firstName: "Marie",
-        lastName: "Dupont",
-        email: "marie.dupont@email.com",
-        phone: "+33 6 12 34 56 78",
-        address: "123 Rue de la Paix, 75001 Paris",
-        birthDate: "15/03/1985",
-        profession: "Développeuse Web",
-        nationality: "Française",
-    });
+    const {user: userInfo} = useAuthManager()
 
     const handleSave = () => {
         setIsEditing(false);

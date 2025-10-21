@@ -16,11 +16,11 @@ import {pallete} from "@/src/utils/pallete";
 
 export default function ChildTransactions() {
     const navigation = useRouter();
-    const { data: children, isLoading } = useChildren();
+    const {data: children, isLoading} = useChildren();
 
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
-    const { data: transactions } = useChildTransactions(
+    const {data: transactions} = useChildTransactions(
         children?.children[currentIndex]?.id
     );
 
@@ -38,7 +38,7 @@ export default function ChildTransactions() {
     };
     const handleTransactionPress = (transaction: any) => {
         setSelectedTransaction(transaction);
-        setCurrentModal({ transaction: true });
+        setCurrentModal({transaction: true});
     };
     return <Wrapper>
         <Header
@@ -50,7 +50,7 @@ export default function ChildTransactions() {
             }
             left={
                 <IconButton
-                    icon={<ChevronLeft size={24} color={pallete.grey} />}
+                    icon={<ChevronLeft size={24} color={pallete.grey}/>}
                     onPress={() => navigation.back()}
                     size="medium"
                 />
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
         height: 40,
         alignSelf: "center",
     },
-    transactions:{
+    transactions: {
         height: height / 1.8
     }
 });

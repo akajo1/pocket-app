@@ -1,28 +1,53 @@
 import {Wrapper} from "@/src/shared/components";
-import {Header, Input} from "@/src/shared/components/molecules";
+import {Header, Input, PhoneInput} from "@/src/shared/components/molecules";
 import {IconButton, SmartImage, SmartKeyboardAvoidView} from "@/src/shared/components/atoms";
 import images from "@/src/assets/images";
-import {Banknote, ChevronLeft} from "lucide-react-native";
+import {Banknote, ChevronDown, ChevronLeft} from "lucide-react-native";
 import {pallete} from "@/src/utils/pallete";
 import React, {useState} from "react";
-import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet} from "react-native";
+import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View} from "react-native";
 import { useRouter} from "expo-router";
 import {useWallet} from "@/src/entities/dashboard/hook/useWallet";
-import {WalletCarousel} from "@/src/shared/components/organims";
+import {SelectBoxModal, WalletCarousel} from "@/src/shared/components/organims";
 import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {loginSchema} from "@/src/entities/auth/services/schema";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
+import {ICountry} from "react-native-international-phone-number";
 
+interface DataType {
+    label: string;
+    value: string;
+}
+
+const dropDownData= [
+    {
+        label: "Mobile Money",
+        value: "mobil",
+    },
+    {
+        label: "Visa - Mastercard",
+        value: "card",
+    },
+    {
+        label: "Illicocash",
+        value: "illico",
+    },
+
+]
 export default function WithdrawCash() {
     const navigation = useRouter();
     const { data } = useWallet();
     const [currentIndex, setCurrentIndex] = useState(0);
+    const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
+    const [selectedRaison, setSelectedRaison] = useState<DataType>({} as DataType);
+    const [showModal, setShowModal] = useState<boolean>(false);
     const {
         control,
         handleSubmit,
         formState: { errors, isValid },
         reset,
+        setValue,
     } = useForm({
         resolver: yupResolver(loginSchema),
         mode: "onSubmit",
@@ -40,6 +65,10 @@ export default function WithdrawCash() {
         setCurrentIndex(index);
     };
 
+    const handleChangeList = (data: DataType) => {
+        setSelectedRaison(data)
+        setValue("raison", data.label)
+    }
     return <Wrapper>
         <Header
             right={
@@ -63,6 +92,42 @@ export default function WithdrawCash() {
             handleMomentumScrollEnd={handleMomentumScrollEnd}
         />
         <SmartKeyboardAvoidView>
+            <Controller
+                control={control}
+                name="raison"
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <Input
+                        label="Mode de Retrait"
+                        placeholder="Sélectionner un mode de retrait"
+                        type="dropdown"
+                        value={value}
+                        onBlur={onBlur}
+                        icon={<ChevronDown size={20} color={pallete.black}/>}
+                        error={errors.raison?.message}
+                        onPress={() => setShowModal(true)}
+                        // editable={!register.isPending}
+                    />
+                )}
+            />
+            <Controller
+                control={control}
+                name="phone"
+                render={({ field: { onChange, onBlur, value } }) => (
+                    <View style={{ marginBottom: 10 }}>
+                        <PhoneInput
+                            title="Numéro du Bénéficiare"
+                            rest={{
+                                onChangeSelectedCountry: (country) =>
+                                    setSelectedCountry(country),
+                                value,
+                                selectedCountry,
+                                onChangePhoneNumber: (phone) => onChange(phone),
+                                onBlur,
+                            }}
+                        />
+                    </View>
+                )}
+            />
         <Controller
             control={control}
             name="initialAmount"
@@ -82,6 +147,7 @@ export default function WithdrawCash() {
         />
         </SmartKeyboardAvoidView>
         <SmartButton title="Retirer" onPress={()=> navigation.dismissTo("/(dashboard)/children")}  style={styles.floating} />
+        <SelectBoxModal data={dropDownData} isOpen={showModal} onClose={()=> setShowModal(false)} title="Liste des raisons" currentChoose={selectedRaison} onChangeCurrentChoose={(item: DataType) =>handleChangeList(item)}/>
 
     </Wrapper>
 }

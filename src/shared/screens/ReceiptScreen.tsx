@@ -9,6 +9,7 @@ import {useLocalSearchParams, useRouter} from "expo-router";
 import CreateChildConfirm from "../../features/children/components/organisms/CreateChildConfirm";
 import {ListDetail} from "@/src/shared/components/organims";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
+import {typeTransaction} from "@/src/utils/method";
 
 type ParamsType = {
     data: string
@@ -16,13 +17,13 @@ type ParamsType = {
     transactionType: string
 }
 
-export default  function ReceiptScreen(){
+export default function ReceiptScreen() {
 
     const {data, type, transactionType} = useLocalSearchParams<ParamsType>();
     const navigation = useRouter()
     const parsedForm = JSON.parse(data)
     const currency = parsedForm?.currency === "USD" ? "$" : "Fc";
-    const dataDisplaying = [
+    const CreateChildReceipt = [
         {
             label: "Réference",
             value: parsedForm?.referenceNumber,
@@ -54,6 +55,60 @@ export default  function ReceiptScreen(){
         },
 
     ]
+
+    const LoadWalletReceipt = [
+        {
+            label: "Réference",
+            value: parsedForm?.referenceNumber,
+        },
+        {
+            label: "Type de transaction",
+            value: transactionType
+        },
+        {
+            label: "Depuis",
+            value: parsedForm?.mode
+        },
+
+        {
+            label: "A mon portemonnaie",
+            value: parsedForm?.currency || "USD"
+        },
+        {
+            label: "Montant",
+            value: `${parseFloat(parsedForm?.balance).toFixed(2)} ${currency}`
+        },
+        {
+            label: "Frais de transaction",
+            value: `${parseFloat(parsedForm?.feeMonney)?.toFixed(2)} ${currency}`
+        },
+        {
+            label: "Total payé",
+            value: `${parseFloat(parsedForm?.total).toFixed(2)} ${currency}`
+        },
+
+    ]
+
+    const handleBack = () => {
+        switch (transactionType) {
+            case  typeTransaction.createChild:
+                return navigation.dismissTo("/(dashboard)/children")
+            case typeTransaction.loadWallet:
+                return navigation.dismissTo("/")
+            default:
+                return navigation.dismissTo("/")
+        }
+    }
+    const displayReceipt = () => {
+        switch (transactionType) {
+            case  typeTransaction.createChild:
+                return CreateChildReceipt
+            case typeTransaction.loadWallet:
+                return LoadWalletReceipt
+            default:
+                return []
+        }
+    }
     return (
         <Wrapper>
             <Header title="Récu transaction"/>
@@ -64,8 +119,9 @@ export default  function ReceiptScreen(){
             <SmartText style={styles.title}>Opération Réussie</SmartText>
             <SmartText
                 style={styles.subTitle}>{type === "createChild" ? "Création dépendant" : "transaction"}</SmartText>
-            <ListDetail data={dataDisplaying}/>
-            <SmartButton title="Retourner à l'acceuil" onPress={()=> navigation.dismissTo("/(dashboard)/children")}  style={{marginTop: 20, position: 'absolute', bottom: 50, width: '90%', left: '5%'}} />
+            <ListDetail data={displayReceipt()}/>
+            <SmartButton title="Retourner à l'acceuil" onPress={() => handleBack()}
+                         style={{marginTop: 20, position: 'absolute', bottom: 50, width: '90%', left: '5%'}}/>
         </Wrapper>
     )
 }
@@ -76,14 +132,14 @@ const styles = StyleSheet.create({
         height: 100,
         alignSelf: "center",
     },
-    title:{
+    title: {
         alignSelf: "center",
         color: pallete.success,
         fontWeight: "700",
         fontSize: 18,
         marginBottom: 5,
     },
-    subTitle:{
+    subTitle: {
         alignSelf: "center",
         color: pallete.black,
     }

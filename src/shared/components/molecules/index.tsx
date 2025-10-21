@@ -11,3 +11,4 @@ export { default as WalletCardItem } from "./WalletCardItem.molecule";
 export {default as DetailField} from "./DetailField.molecule"
 export {default as TabButton} from "./TabButton";
 export {default as GrafView} from "./GrafView";
+export {default as RadioButton} from "./RadioButton.molecule"
