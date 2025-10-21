@@ -6,7 +6,7 @@ import {Banknote, ChevronDown, ChevronLeft} from "lucide-react-native";
 import {pallete} from "@/src/utils/pallete";
 import React, {useState} from "react";
 import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View} from "react-native";
-import { useRouter} from "expo-router";
+import {useRouter} from "expo-router";
 import {useWallet} from "@/src/entities/dashboard/hook/useWallet";
 import {SelectBoxModal, WalletCarousel} from "@/src/shared/components/organims";
 import {Controller, useForm} from "react-hook-form";
@@ -20,7 +20,7 @@ interface DataType {
     value: string;
 }
 
-const dropDownData= [
+const dropDownData = [
     {
         label: "Mobile Money",
         value: "mobil",
@@ -37,7 +37,7 @@ const dropDownData= [
 ]
 export default function WithdrawCash() {
     const navigation = useRouter();
-    const { data } = useWallet();
+    const {data} = useWallet();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
     const [selectedRaison, setSelectedRaison] = useState<DataType>({} as DataType);
@@ -45,7 +45,7 @@ export default function WithdrawCash() {
     const {
         control,
         handleSubmit,
-        formState: { errors, isValid },
+        formState: {errors, isValid},
         reset,
         setValue,
     } = useForm({
@@ -69,6 +69,12 @@ export default function WithdrawCash() {
         setSelectedRaison(data)
         setValue("raison", data.label)
     }
+
+    const onSubmit = (datas: any) => {
+
+
+    };
+
     return <Wrapper>
         <Header
             right={
@@ -79,7 +85,7 @@ export default function WithdrawCash() {
             }
             left={
                 <IconButton
-                    icon={<ChevronLeft size={24} color={pallete.grey} />}
+                    icon={<ChevronLeft size={24} color={pallete.grey}/>}
                     onPress={() => navigation.back()}
                     size="medium"
                 />
@@ -95,7 +101,7 @@ export default function WithdrawCash() {
             <Controller
                 control={control}
                 name="raison"
-                render={({ field: { onChange, onBlur, value } }) => (
+                render={({field: {onChange, onBlur, value}}) => (
                     <Input
                         label="Mode de Retrait"
                         placeholder="Sélectionner un mode de retrait"
@@ -112,8 +118,8 @@ export default function WithdrawCash() {
             <Controller
                 control={control}
                 name="phone"
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <View style={{ marginBottom: 10 }}>
+                render={({field: {onChange, onBlur, value}}) => (
+                    <View style={{marginBottom: 10}}>
                         <PhoneInput
                             title="Numéro du Bénéficiare"
                             rest={{
@@ -128,26 +134,36 @@ export default function WithdrawCash() {
                     </View>
                 )}
             />
-        <Controller
-            control={control}
-            name="initialAmount"
-            render={({ field: { onChange, onBlur, value } }) => (
-                <Input
-                    label="Montant"
-                    placeholder="0.00"
-                    value={value}
-                    keyboardType="numeric"
-                    onChangeText={onChange}
-                    onBlur={onBlur}
-                    icon={<Banknote size={20} color={pallete.black} />}
-                    error={errors.initialAmount?.message}
-                    // editable={!register.isPending}
-                />
-            )}
-        />
+            <Controller
+                control={control}
+                name="amount"
+                render={({field: {onChange, onBlur, value}}) => (
+                    <Input
+                        label="Montant"
+                        placeholder="0.00"
+                        value={value}
+                        keyboardType="numeric"
+                        onChangeText={onChange}
+                        onBlur={onBlur}
+                        icon={<Banknote size={20} color={pallete.black}/>}
+                        error={errors.amount?.message}
+                        // editable={!register.isPending}
+                    />
+                )}
+            />
         </SmartKeyboardAvoidView>
-        <SmartButton title="Retirer" onPress={()=> navigation.dismissTo("/(dashboard)/children")}  style={styles.floating} />
-        <SelectBoxModal data={dropDownData} isOpen={showModal} onClose={()=> setShowModal(false)} title="Liste des raisons" currentChoose={selectedRaison} onChangeCurrentChoose={(item: DataType) =>handleChangeList(item)}/>
+        <SmartButton
+            title="Retirer"
+            onPress={handleSubmit(onSubmit)}
+            style={styles.floating}
+        />
+        <SelectBoxModal
+            data={dropDownData}
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+            title="Liste des raisons" currentChoose={selectedRaison}
+            onChangeCurrentChoose={(item: DataType) => handleChangeList(item)}
+        />
 
     </Wrapper>
 }
