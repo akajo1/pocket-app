@@ -1,11 +1,12 @@
 import {height, ParamsType, width} from "@/src/utils/method";
 import {feeResponse} from "@/src/shared/services/feeApi";
 import {StyleSheet, View} from "react-native";
-import {Phone, WalletIcon} from "lucide-react-native";
+import {WalletIcon} from "lucide-react-native";
 import {pallete} from "@/src/utils/pallete";
 import {SmartText} from "@/src/shared/components/atoms";
 import React from "react";
 import {TransactionFooter} from "@/src/shared/components";
+import ListDetail from "../../../shared/components/organims/ListDetail.organisms";
 
 
 type Props = {
@@ -14,44 +15,41 @@ type Props = {
     isLoading: boolean
     onSubmit: () => void
 }
-export default function LoadConfirmation({formData, fee, isLoading, onSubmit}: Props) {
+export default function WalletToWalletConfirmation({formData, fee, isLoading, onSubmit}: Props) {
     const currency = formData.currency === "USD" ? "$" : "Fc";
     const feeAmount = (parseFloat(formData?.amount.toString()) * parseFloat(fee?.percentage?.toString())) / 100
     const total = parseFloat(formData?.amount.toString()) + feeAmount
-
-    const currencyDisplay = (icon: any, subTitle: string, title: string) => {
+    console.log(formData)
+    const currencyDisplay = () => {
         return <View style={styles.from}>
             <View style={{flexDirection: "row"}}>
-                {icon}
-                <SmartText style={{fontSize: 14, color: pallete.black, marginLeft: 8}}>
-                    {subTitle}
+                <WalletIcon size={20} color={pallete.dollars}/>
+                <SmartText style={{fontSize: 14, color: pallete.white, marginLeft: 8}}>
+                    Depuis le Portemonnaie
                 </SmartText>
             </View>
-            <SmartText style={styles.wallet}>{title}</SmartText>
+            <SmartText style={styles.wallet}>{formData.currency}</SmartText>
         </View>
     }
-
+    const dataList = [
+        {
+            label: "Nom du bénéficiaire",
+            value: formData.beneficiaryInfo?.first_name + " " + formData.beneficiaryInfo?.last_name
+        },
+        {
+            label: "Téléphone",
+            value: formData.phone
+        },
+        {
+            label: "Raison",
+            value: formData.raison.label
+        }
+    ]
     return <>
-        {currencyDisplay(
-            <Phone size={20} color={pallete.blue}/>,
-            "Depuis",
-            formData?.mode
-        )}
-
-        {currencyDisplay(
-            <WalletIcon size={20} color={pallete.dollars}/>,
-            "A mon Portemonaie",
-            formData?.currency
-        )}
-
-        <TransactionFooter
-            currency={currency}
-            isLoading={isLoading}
-            transactionType="Appro Wallet"
-            feeAmount={feeAmount}
-            onSubmit={onSubmit} totalAmount={total}
-        />
-
+        {currencyDisplay()}
+        <ListDetail data={dataList} title="Bénéficiaire"/>
+        <TransactionFooter currency={currency} isLoading={isLoading} transactionType="Envoi d'argent"
+                           feeAmount={feeAmount} onSubmit={onSubmit} totalAmount={total}/>
     </>
 }
 
@@ -97,17 +95,16 @@ const styles = StyleSheet.create({
     type: {},
     wallet: {
         fontSize: 32,
-        color: pallete.black,
+        color: pallete.gray,
         fontWeight: "900",
         marginLeft: 28,
     },
     from: {
-        backgroundColor: pallete.white,
+        backgroundColor: pallete.grey,
         height: height / 10,
         width: width - 25,
         marginHorizontal: "auto",
         borderRadius: 20,
         padding: 20,
-        marginVertical: 10
     },
 })

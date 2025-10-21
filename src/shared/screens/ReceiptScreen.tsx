@@ -6,7 +6,6 @@ import React from "react";
 import {StyleSheet} from "react-native"
 import {pallete} from "@/src/utils/pallete";
 import {useLocalSearchParams, useRouter} from "expo-router";
-import CreateChildConfirm from "../../features/children/components/organisms/CreateChildConfirm";
 import {ListDetail} from "@/src/shared/components/organims";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
 import {typeTransaction} from "@/src/utils/method";
@@ -88,6 +87,41 @@ export default function ReceiptScreen() {
         },
 
     ]
+    const w2wReceipt = [
+        {
+            label: "Réference",
+            value: parsedForm?.referenceNumber,
+        },
+        {
+            label: "Type de transaction",
+            value: transactionType
+        },
+
+        {
+            label: "Depuis mon portemonnaie",
+            value: parsedForm?.currency || "USD"
+        },
+        {
+            label: "Nom du bénéficiaire",
+            value: parsedForm?.beneficiaryInfo?.fullName,
+        },
+        {
+            label: "Numéro de téléphone bénéficiaire",
+            value: parsedForm?.beneficiaryInfo?.phone,
+        },
+        {
+            label: "Montant",
+            value: `${parseFloat(parsedForm?.amount).toFixed(2)} ${currency}`
+        },
+        {
+            label: "Frais de transaction",
+            value: `${parseFloat(parsedForm?.feeMonney)?.toFixed(2)} ${currency}`
+        },
+        {
+            label: "Total payé",
+            value: `${parseFloat(parsedForm?.total).toFixed(2)} ${currency}`
+        },
+    ]
 
     const handleBack = () => {
         switch (transactionType) {
@@ -105,6 +139,8 @@ export default function ReceiptScreen() {
                 return CreateChildReceipt
             case typeTransaction.loadWallet:
                 return LoadWalletReceipt
+            case typeTransaction.walletToWallet:
+                return w2wReceipt
             default:
                 return []
         }

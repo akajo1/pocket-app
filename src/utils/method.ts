@@ -1,10 +1,11 @@
-import { Dimensions } from "react-native";
+import {Dimensions} from "react-native";
 
-export const { width, height } = Dimensions.get("screen");
+export const {width, height} = Dimensions.get("screen");
 
 export const typeTransaction = {
     createChild: "CREATE_CHILD",
     loadWallet: "LOAD_WALLET",
+    walletToWallet: "W2W",
 }
 
 export const queryKey = {
@@ -13,6 +14,7 @@ export const queryKey = {
     transaction: "transaction",
     fee_type: "fee_type",
     wallet: "wallet",
+    raison: "raison",
 }
 
 

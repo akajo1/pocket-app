@@ -12,31 +12,35 @@ import useCreateChild from "@/src/features/children/hook/useCreateChild";
 import {useFee} from "@/src/shared/hooks/useFee";
 import moment from "moment";
 import {ChildConfirmation} from "@/src/features/children/screens";
-import {LoadConfirmation} from "@/src/features/sendmoney/screens";
+import {LoadConfirmation, WalletToWalletConfirmation} from "@/src/features/sendmoney/screens";
 import useLoadWallet from "@/src/features/sendmoney/hooks/useLoadWallet";
-
+import useSendMoneyToWallet from "@/src/features/sendmoney/hooks/useSendMoneyToWallet";
+import {useConfirmationUserInfo} from "@/src/shared/hooks/useConfirmationUserInfo";
 
 
 function ConfirmationScreen() {
     const {form, type, transactionType} = useLocalSearchParams<ParamsType>();
+    const parsedForm = JSON.parse(form)
     const createChildMutate = useCreateChild()
-    const loadWalletMutate =  useLoadWallet()
+    const loadWalletMutate = useLoadWallet()
+    const sendMoneyToWalletMutate = useSendMoneyToWallet()
+    const {data: beneficiaryInfo, isLoading: beneficiaryLoading} = useConfirmationUserInfo(parsedForm?.phone)
 
     const navigation = useRouter()
-    const parsedForm = JSON.parse(form)
-    const {data: fee, isLoading} = useFee(  {
+
+    const {data: fee, isLoading} = useFee({
         type,
-        currency:parsedForm?.currency?.toLowerCase()
+        currency: parsedForm?.currency?.toLowerCase()
     })
-
-
 
     const handleConfirmationClick = () => {
         switch (transactionType) {
             case typeTransaction.createChild:
-                return  createChildMutate.mutate({...parsedForm, age: moment(parsedForm?.age)?.format("YYYY-MM-DD")})
+                return createChildMutate.mutate({...parsedForm, age: moment(parsedForm?.age)?.format("YYYY-MM-DD")})
             case typeTransaction.loadWallet:
                 return loadWalletMutate.mutate(parsedForm)
+            case typeTransaction.walletToWallet:
+                return sendMoneyToWalletMutate.mutate({...parsedForm, raison: parsedForm?.raison.value})
             default:
                 return
 
@@ -49,31 +53,38 @@ function ConfirmationScreen() {
                 return <ChildConfirmation
                     formData={parsedForm}
                     fee={fee}
-                    isLoading={createChildMutate.isPending  || isLoading}
-                    onSubmit={() =>handleConfirmationClick()}
+                    isLoading={createChildMutate.isPending || isLoading}
+                    onSubmit={() => handleConfirmationClick()}
                 />
             case typeTransaction.loadWallet:
                 return <LoadConfirmation
                     formData={parsedForm}
                     fee={fee}
-                    isLoading={loadWalletMutate.isPending  || isLoading}
-                    onSubmit={() =>handleConfirmationClick()}
-                    />
+                    isLoading={loadWalletMutate.isPending || isLoading}
+                    onSubmit={() => handleConfirmationClick()}
+                />
+            case typeTransaction.walletToWallet:
+                return <WalletToWalletConfirmation
+                    formData={{...parsedForm, beneficiaryInfo}}
+                    fee={fee}
+                    isLoading={sendMoneyToWalletMutate.isPending || isLoading}
+                    onSubmit={() => handleConfirmationClick()}
+                />
             default:
-               return <></>
+                return <></>
 
         }
     };
 
-if(isLoading){
-    return <View style={{flex:1,  alignItems:"center", justifyContent:"center"}}>
-        <SmartImage
-            source={images.fullLogo}
-            containerStyle={{...styles.containerLogo, width: 200, height: 200}}
-        />
-        <ActivityIndicator size="large"/>
-    </View>
-}
+    if (isLoading || beneficiaryLoading) {
+        return <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
+            <SmartImage
+                source={images.fullLogo}
+                containerStyle={{...styles.containerLogo, width: 200, height: 200}}
+            />
+            <ActivityIndicator size="large"/>
+        </View>
+    }
 
     return <Wrapper>
         <Header
@@ -105,26 +116,26 @@ const styles = StyleSheet.create({
         width: 40,
         height: 40,
     },
-    contentContainer:{
-        flex:1
+    contentContainer: {
+        flex: 1
     },
-    container:{
+    container: {
         width: width - 50,
         marginHorizontal: "auto",
         paddingVertical: 20
     },
-    title:{
+    title: {
         fontSize: 24,
         marginBottom: 10,
         fontWeight: "600",
         color: pallete.blue,
     },
 
-    text:{
+    text: {
         fontSize: 14,
         color: pallete.black
     },
-    subTitle:{
+    subTitle: {
         fontSize: 15,
         fontWeight: "600",
         marginBottom: 3,
@@ -139,9 +150,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         justifyContent: "space-between",
     },
-    type:{
-
-    },
+    type: {},
     wallet: {
         fontSize: 32,
         color: pallete.gray,

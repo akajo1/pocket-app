@@ -2,46 +2,48 @@ import {Wrapper} from "@/src/shared/components";
 import {Header, Input, PhoneInput} from "@/src/shared/components/molecules";
 import {IconButton, SmartImage, SmartKeyboardAvoidView} from "@/src/shared/components/atoms";
 import images from "@/src/assets/images";
-import {Banknote, ChevronDown, ChevronLeft, CurrencyIcon} from "lucide-react-native";
+import {Banknote, ChevronDown, ChevronLeft} from "lucide-react-native";
 import {pallete} from "@/src/utils/pallete";
 import React, {useState} from "react";
 import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View} from "react-native";
-import { useRouter} from "expo-router";
+import {useRouter} from "expo-router";
 import {useWallet} from "@/src/entities/dashboard/hook/useWallet";
 import {SelectBoxModal, WalletCarousel} from "@/src/shared/components/organims";
 import {Controller, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {loginSchema} from "@/src/entities/auth/services/schema";
 import {ICountry} from "react-native-international-phone-number";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
 import {w2WSchema} from "@/src/features/sendmoney/services/schema";
+import {useRaison} from "@/src/shared/hooks/useRaison";
+import {sendMoneyType, typeTransaction} from "@/src/utils/method";
+import {useAuthManager} from "@/src/entities/auth/hook/useAuthManager";
+import {useAlert} from "@/src/shared/provider/AlertProvider";
 
 interface DataType {
     label: string;
     value: string;
 }
-export default function SendMoneyToWallet(){
+
+export default function SendMoneyToWallet() {
+    const {user} = useAuthManager()
     const navigation = useRouter();
-    const { data } = useWallet();
+    const {data} = useWallet();
+    const message = useAlert();
     const [currentIndex, setCurrentIndex] = useState(0);
-    const dropDownData= [
-        {
-            label: "Dette",
-            value: "dette",
-        },
-        {
-            label: "recharge argent",
-            value: "rechargeargent",
-        },
-    ]
+    const {data: raisonList, isLoading: raisonLoading} = useRaison()
+
+    const dropDownData = raisonList?.length ? raisonList.map(item => ({
+        label: item.label,
+        value: item.id
+    })) : []
+
     const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
     const [selectedRaison, setSelectedRaison] = useState<DataType>({} as DataType);
     const [showModal, setShowModal] = useState<boolean>(false);
     const {
         control,
         handleSubmit,
-        formState: { errors, isValid },
-        reset,
+        formState: {errors, isValid},
         setValue
     } = useForm({
         resolver: yupResolver(w2WSchema),
@@ -62,18 +64,55 @@ export default function SendMoneyToWallet(){
         setCurrentIndex(index);
     };
 
-    const onSubmit = (data: any) => {
-        const phone = `${selectedCountry?.idd?.root}${data.phone.replaceAll(
+    const handleCloseModal = () =>
+        message.setAlertMessage({
+            visible: false,
+            message: "",
+            title: "",
+            type: "info",
+            onPress: () => {
+            },
+            btnText: "",
+        });
+
+
+    const onSubmit = (datas: any) => {
+        const phone = `${selectedCountry?.idd?.root}${datas.phone.replaceAll(
             " ",
             ""
         )}`;
 
+        if (user?.phone === phone) {
+            message?.setAlertMessage({
+                visible: true,
+                message: "Vous ne pouvez pas vous envoyer a vous-meme!",
+                title: "Envoi d'argent",
+                type: "warning",
+                onPress: () => handleCloseModal(),
+                btnText: "D'accord",
+            });
+            return
+        }
+
+        const currency = data?.wallets[currentIndex].currency
+        const walletId = data?.wallets[currentIndex].id
+        const currentData = {...datas, phone, currency, walletId, raison: selectedRaison};
+
+        navigation.navigate({
+            pathname: "/(transactions)/confirmationScreen",
+            params: {
+                form: JSON.stringify(currentData),
+                transactionType: typeTransaction.walletToWallet,
+                type: sendMoneyType.w2w
+            }
+        })
+
     };
 
-const handleChangeList = (data: DataType) => {
-    setSelectedRaison(data)
-    setValue("raison", data.label)
-}
+    const handleChangeList = (data: DataType) => {
+        setSelectedRaison(data)
+        setValue("raison", data.label)
+    }
     return <Wrapper>
         <Header
             right={
@@ -84,7 +123,7 @@ const handleChangeList = (data: DataType) => {
             }
             left={
                 <IconButton
-                    icon={<ChevronLeft size={24} color={pallete.grey} />}
+                    icon={<ChevronLeft size={24} color={pallete.grey}/>}
                     onPress={() => navigation.back()}
                     size="medium"
                 />
@@ -100,8 +139,8 @@ const handleChangeList = (data: DataType) => {
             <Controller
                 control={control}
                 name="phone"
-                render={({ field: { onChange, onBlur, value } }) => (
-                    <View style={{ marginBottom: 10 }}>
+                render={({field: {onChange, onBlur, value}}) => (
+                    <View style={{marginBottom: 10}}>
                         <PhoneInput
                             title="Numéro du Bénéficiare"
                             rest={{
@@ -119,7 +158,7 @@ const handleChangeList = (data: DataType) => {
             <Controller
                 control={control}
                 name="amount"
-                render={({ field: { onChange, onBlur, value } }) => (
+                render={({field: {onChange, onBlur, value}}) => (
                     <Input
                         label="Montant"
                         placeholder="0.00"
@@ -127,7 +166,7 @@ const handleChangeList = (data: DataType) => {
                         keyboardType="numeric"
                         onChangeText={onChange}
                         onBlur={onBlur}
-                        icon={<Banknote size={20} color={pallete.black} />}
+                        icon={<Banknote size={20} color={pallete.black}/>}
                         error={errors.amount?.message}
                         // editable={!register.isPending}
                     />
@@ -136,7 +175,7 @@ const handleChangeList = (data: DataType) => {
             <Controller
                 control={control}
                 name="raison"
-                render={({ field: { onChange, onBlur, value } }) => (
+                render={({field: {onChange, onBlur, value}}) => (
                     <Input
                         label="Raison"
                         placeholder="Sélectionner une raison"
@@ -151,8 +190,19 @@ const handleChangeList = (data: DataType) => {
                 )}
             />
         </SmartKeyboardAvoidView>
-        <SmartButton title="Envoyer" onPress={()=> navigation.dismissTo("/(dashboard)/children")}  style={styles.floating} />
-    <SelectBoxModal data={dropDownData} isOpen={showModal} onClose={()=> setShowModal(false)} title="Liste des raisons" currentChoose={selectedRaison} onChangeCurrentChoose={(item: DataType) =>handleChangeList(item)}/>
+        <SmartButton
+            title="Envoyer"
+            onPress={handleSubmit(onSubmit)}
+            disabled={raisonLoading}
+            style={styles.floating}
+        />
+        <SelectBoxModal
+            data={dropDownData}
+            isOpen={showModal}
+            onClose={() => setShowModal(false)}
+            title="Liste des raisons" currentChoose={selectedRaison}
+            onChangeCurrentChoose={(item: DataType) => handleChangeList(item)}
+        />
     </Wrapper>
 }
 
