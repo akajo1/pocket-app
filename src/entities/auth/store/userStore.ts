@@ -12,6 +12,11 @@ export interface User {
     token: string;
 }
 
+export interface Loginresponse {
+    userId: string
+    token: string
+}
+
 interface UserStore {
     user: User | null;
     rememberMe: boolean;
@@ -34,7 +39,6 @@ const useUserStore = create<PositionStore>()(
             setRememberMe: (rememberMe) => set({rememberMe}),
             setUser: (user) => set({user}),
             clearUser: () => {
-                console.log("--ici clear")
                 set({user: null})
                 queryClient.clear();
             },

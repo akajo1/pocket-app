@@ -1,7 +1,7 @@
 import {useAlert} from "@/src/shared/provider/AlertProvider";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {useRouter} from "expo-router";
-import {queryKey, sendMoneyType, typeTransaction} from "@/src/utils/method";
+import {sendMoneyType, typeTransaction} from "@/src/utils/method";
 import walletApi from "@/src/entities/dashboard/services/walletApi";
 
 const useLoadWallet = () => {
@@ -23,9 +23,7 @@ const useLoadWallet = () => {
     return useMutation<any, Error, any>({
         mutationFn: (body) => walletApi.loadWallets(body),
         onSuccess: (response) => {
-            queryClient.invalidateQueries({queryKey: [queryKey.wallet]});
-            queryClient.invalidateQueries({queryKey: [queryKey.transaction]});
-
+            queryClient.invalidateQueries();
             navigation.navigate({
                 pathname: "/(transactions)/receiptScreen",
                 params: {
