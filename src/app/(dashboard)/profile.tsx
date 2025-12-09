@@ -2,32 +2,17 @@ import {Wrapper} from "@/src/shared/components";
 import {Header} from "@/src/shared/components/molecules";
 import {IconButton, SmartImage, SmartText} from "@/src/shared/components/atoms";
 import images from "@/src/assets/images";
-import {
-    Bell, ChevronRight,
-    CreditCard,
-    Edit,
-    HelpCircle,
-    LogOut,
-    Mail,
-    Phone, Settings,
-    Shield,
-    Smartphone,
-    User,
-    Users
-} from "lucide-react-native";
+import {Bell, ChevronRight, Edit, HelpCircle, LogOut, Mail, Phone, Settings, Shield, User} from "lucide-react-native";
 import {pallete} from "@/src/utils/pallete";
-import React, {useContext} from "react";
+import React from "react";
 import {ScrollView, StyleSheet, TouchableOpacity, View} from "react-native";
 import {LinearGradient} from "expo-linear-gradient";
-import useUserStore from "@/src/entities/auth/store/userStore";
 import {router, useRouter} from "expo-router";
-import {AuthContext} from "@/src/shared/provider/AuthProvider";
-import {useQueryClient} from "@tanstack/react-query";
 import {useAuthManager} from "@/src/entities/auth/hook/useAuthManager";
 
 
 export default function Profile() {
-    const {user, logout} = useAuthManager()
+    const {logout, fetchUser: user} = useAuthManager()
     const navigation = useRouter()
     const menuItems = [
         {
@@ -73,7 +58,6 @@ export default function Profile() {
         },
     ];
 
-
     const handleMenuPress = (item: any) => {
         if (item.route) {
             router.push(item.route);
@@ -109,26 +93,26 @@ export default function Profile() {
             >
                 <View style={styles.avatarContainer}>
                     <SmartText style={styles.avatar}>
-                        {user?.firstName?.[0]}
-                        {user?.lastName?.[0]}
+                        {user?.first_name?.[0]}
+                        {user?.last_name?.[0]}
                     </SmartText>
                 </View>
                 <SmartText style={styles.userName}>
-                    {user?.firstName} {user?.lastName}
+                    {user?.first_name} {user?.last_name}
                 </SmartText>
-                <SmartText style={styles.userEmail}>{user?.email}</SmartText>
+                {user?.email && <SmartText style={styles.userEmail}>{user?.email}</SmartText>}
 
                 <View style={styles.contactInfo}>
                     <View style={styles.contactItem}>
                         <Mail size={16} color="#FFFFFF"/>
                         <SmartText style={styles.contactText}>
-                            {user?.isEmailVerified ? "Vérifiée" : "Non vérifiée"}
+                            {user?.email_verified_at ? "Vérifiée" : "Non vérifiée"}
                         </SmartText>
                     </View>
                     {user?.phone && (
                         <View style={styles.contactItem}>
                             <Phone size={16} color="#FFFFFF"/>
-                            <SmartText style={styles.contactText}>{user.phone}</SmartText>
+                            <SmartText style={styles.contactText}>{`+${user.phone.slice(2)}`}</SmartText>
                         </View>
                     )}
                 </View>

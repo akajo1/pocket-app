@@ -8,28 +8,27 @@ import {pallete} from "@/src/utils/pallete";
 import {Bell} from "lucide-react-native";
 import React, {useState} from "react";
 import {NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet,} from "react-native";
-import {useTransactions} from "../hook/useTransaction";
 import {useWallet} from "../hook/useWallet";
 import {quickActions} from "../services/mocks";
 import {useRouter} from "expo-router";
+import {useTransactions} from "@/src/entities/dashboard/hook/useTransaction";
 import TransactionsList from "@/src/shared/components/organims/TransactionsList";
 
 const Home = (props: Props) => {
     const {data, isLoading} = useWallet();
-    const [currentIndex, setCurrentIndex] = useState(0);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const navigation = useRouter()
     const [currentModal, setCurrentModal] = useState<{
         [key: string]: boolean;
     } | null>(null);
+
     const {data: transactions, isLoading: transactionLoading} = useTransactions({
-        walletId: currentIndex.toString(),
-        category: "",
-        endDate: "",
-        limit: 10,
-        page: 1,
-        type: "",
+        walletId: currentIndex,
+        pageSize: 3,
+
     });
+  
 
     const handleMomentumScrollEnd = (
         event: NativeSyntheticEvent<NativeScrollEvent>
@@ -49,6 +48,7 @@ const Home = (props: Props) => {
         setSelectedTransaction(transaction);
         setCurrentModal({transaction: true});
     };
+
     return (
         <Wrapper>
             <Header
@@ -68,7 +68,7 @@ const Home = (props: Props) => {
                 title="Portemonnaie"
             />
             <WalletCarousel
-                wallets={data?.wallets || []}
+                wallets={data || []}
                 currentIndex={currentIndex}
                 handleMomentumScrollEnd={handleMomentumScrollEnd}
             />
@@ -84,7 +84,7 @@ const Home = (props: Props) => {
                 <TransactionsList
                     isLoading={isLoading || transactionLoading}
                     title="Transactions Récentes"
-                    transactions={transactions?.transactions?.slice(0, 3) || []}
+                    transactions={transactions || []}
                     onTransactionPress={handleTransactionPress}
                     onViewAll={() => navigation.navigate("/allUserTransactions")}
                 />

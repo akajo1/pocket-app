@@ -8,15 +8,20 @@ import {GrafView} from "@/src/shared/components/molecules";
 import TransactionsList from "@/src/shared/components/organims/TransactionsList";
 import TransactionDetailModal from "@/src/shared/modals/TransactionDetailModal";
 
-export default function ChildTab(){
+export default function ChildTab() {
     const navigation = useRouter();
-    const { data: children, isLoading } = useChildren();
+    const {data: children, isLoading} = useChildren();
 
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
-    const { data: transactions } = useChildTransactions(
-        children?.children[currentIndex]?.id
-    );
+    const {data: transactions} = useChildTransactions({
+        childId: currentIndex,
+        type: "",
+        dateTo: "",
+        pageSize: 10,
+        page: 1,
+        dateFrom: "",
+    });
 
     const [currentModal, setCurrentModal] = useState<{
         [key: string]: boolean;
@@ -32,15 +37,15 @@ export default function ChildTab(){
     };
     const handleTransactionPress = (transaction: any) => {
         setSelectedTransaction(transaction);
-        setCurrentModal({ transaction: true });
+        setCurrentModal({transaction: true});
     };
     return <ScrollView showsVerticalScrollIndicator={false}>
         <ChildrenCarousel
-            children={children?.children || []}
+            children={children || []}
             currentIndex={currentIndex}
             handleMomentumScrollEnd={handleMomentumScrollEnd}
         />
-        <GrafView />
+        <GrafView/>
         <TransactionsList
             title="Transactions Récentes"
             transactions={transactions || []}

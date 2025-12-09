@@ -8,21 +8,21 @@ import {GrafView} from "@/src/shared/components/molecules";
 import TransactionDetailModal from "@/src/shared/modals/TransactionDetailModal";
 import TransactionsList from "@/src/shared/components/organims/TransactionsList";
 
-export default function ParentTab(){
-    const { data } = useWallet();
+export default function ParentTab() {
+    const {data} = useWallet();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const navigation = useRouter()
     const [currentModal, setCurrentModal] = useState<{
         [key: string]: boolean;
     } | null>(null);
-    const { data: transactions } = useTransactions({
+    const {data: transactions, isLoading: transactionLoading} = useTransactions({
         walletId: currentIndex.toString(),
-        category: "",
-        endDate: "",
-        limit: 10,
-        page: 1,
         type: "",
+        dateTo: "",
+        pageSize: 10,
+        page: 1,
+        dateFrom: "",
     });
 
     const handleMomentumScrollEnd = (
@@ -36,21 +36,23 @@ export default function ParentTab(){
 
     const handleTransactionPress = (transaction: any) => {
         setSelectedTransaction(transaction);
-        setCurrentModal({ transaction: true });
+        setCurrentModal({transaction: true});
     };
 
     return <ScrollView showsVerticalScrollIndicator={false}>
         <WalletCarousel
-            wallets={data?.wallets || []}
+            wallets={data || []}
             currentIndex={currentIndex}
             handleMomentumScrollEnd={handleMomentumScrollEnd}
+
         />
-        <GrafView />
+        <GrafView/>
         <TransactionsList
             title="Transactions Récentes"
-            transactions={transactions?.transactions || []}
+            transactions={transactions || []}
             onTransactionPress={handleTransactionPress}
             onViewAll={() => navigation.navigate("/allUserTransactions")}
+            isLoading={transactionLoading}
         />
         <TransactionDetailModal
             visible={currentModal?.transaction ? true : false}

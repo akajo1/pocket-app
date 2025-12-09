@@ -32,14 +32,15 @@ interface TransactionType {
 
 export const useTransactions = (params: transactionsParams) => {
     const {data: walletData} = useWallet();
+
     const currentParams = {
         ...params,
-        walletId: walletData?.wallets[params.walletId].id,
+        walletId: walletData?.length && walletData[params.walletId]?.id as string,
     };
+
     return useQuery<any, Error, TransactionType[]>({
         queryKey: ["transactions", currentParams],
         queryFn: () => transactionApi.fetchTransactions(currentParams),
-        enabled: !!walletData?.wallets[params.walletId]?.id,
-
+        enabled: !!walletData?.length
     });
 };

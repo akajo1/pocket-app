@@ -39,10 +39,8 @@ export const useAuthManager = () => {
             const {userId, token} = response;
 
             setUser({
-                user: {
-                    userId,
-                }
-            }, token);
+                id: userId, token
+            });
             navigation.replace("/(dashboard)");
         },
         onError: (error) => {
@@ -73,6 +71,7 @@ export const useAuthManager = () => {
         logout: () => clearUser(),
         login,
         user,
+        fetchUser: fetchUser.data,
         loading: fetchUser.isLoading || loginMutation.isPending,
     }
 }

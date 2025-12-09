@@ -1,21 +1,6 @@
-import {
-    Calendar,
-    Camera, ChevronLeft,
-    Mail,
-    MapPin,
-    Phone,
-    User,
-} from "lucide-react-native";
-import React, { useState } from "react";
-import {
-    Alert,
-    ScrollView,
-    StyleSheet,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    View,
-} from "react-native";
+import {ChevronLeft, Mail, Phone, User,} from "lucide-react-native";
+import React, {useState} from "react";
+import {Alert, ScrollView, StyleSheet, Text, TextInput, View,} from "react-native";
 import {Header} from "@/src/shared/components/molecules";
 import {IconButton, SmartImage} from "@/src/shared/components/atoms";
 import images from "@/src/assets/images";
@@ -25,9 +10,9 @@ import {useRouter} from "expo-router";
 import {useAuthManager} from "@/src/entities/auth/hook/useAuthManager";
 
 export default function PersonalInfoScreen() {
-    const navigation= useRouter()
+    const navigation = useRouter()
     const [isEditing, setIsEditing] = useState(false);
-    const {user: userInfo} = useAuthManager()
+    const {fetchUser: userInfo} = useAuthManager()
 
     const handleSave = () => {
         setIsEditing(false);
@@ -47,16 +32,16 @@ export default function PersonalInfoScreen() {
                     key: "firstName",
                     label: "Prénom",
                     icon: User,
-                    value: userInfo.firstName,
+                    value: userInfo.first_name,
                 },
-                { key: "lastName", label: "Nom", icon: User, value: userInfo.lastName },
+                {key: "lastName", label: "Nom", icon: User, value: userInfo.last_name},
 
             ],
         },
         {
             title: "Contact",
             items: [
-                { key: "email", label: "Email", icon: Mail, value: userInfo.email },
+                {key: "email", label: "Email", icon: Mail, value: userInfo.email},
                 {
                     key: "phone",
                     label: "Téléphone",
@@ -80,7 +65,7 @@ export default function PersonalInfoScreen() {
                 }
                 left={
                     <IconButton
-                        icon={<ChevronLeft size={24} color={pallete.grey} />}
+                        icon={<ChevronLeft size={24} color={pallete.grey}/>}
                         onPress={() => navigation.back()}
                         size="medium"
                     />
@@ -99,7 +84,7 @@ export default function PersonalInfoScreen() {
                                 <View key={item.key} style={styles.infoItem}>
                                     <View style={styles.infoItemLeft}>
                                         <View style={styles.infoIcon}>
-                                            <item.icon size={20} color="#6B7280" />
+                                            <item.icon size={20} color="#6B7280"/>
                                         </View>
                                         <Text style={styles.infoLabel}>{item.label}</Text>
                                     </View>
@@ -108,7 +93,7 @@ export default function PersonalInfoScreen() {
                                             style={styles.editInput}
                                             value={userInfo[item.key]}
                                             onChangeText={(text) =>
-                                                setUserInfo((prev) => ({ ...prev, [item.key]: text }))
+                                                setUserInfo((prev) => ({...prev, [item.key]: text}))
                                             }
                                             placeholder={item.label}
                                         />
@@ -127,25 +112,25 @@ export default function PersonalInfoScreen() {
                     <View style={styles.statusCard}>
                         <View style={styles.statusItem}>
                             <View
-                                style={[styles.statusDot, { backgroundColor: "#059669" }]}
+                                style={[styles.statusDot, {backgroundColor: "#059669"}]}
                             />
                             <Text style={styles.statusText}>Email vérifié</Text>
                         </View>
                         <View style={styles.statusItem}>
                             <View
-                                style={[styles.statusDot, { backgroundColor: "#059669" }]}
+                                style={[styles.statusDot, {backgroundColor: "#059669"}]}
                             />
                             <Text style={styles.statusText}>Téléphone vérifié</Text>
                         </View>
                         <View style={styles.statusItem}>
                             <View
-                                style={[styles.statusDot, { backgroundColor: "#059669" }]}
+                                style={[styles.statusDot, {backgroundColor: "#059669"}]}
                             />
                             <Text style={styles.statusText}>Identité vérifiée</Text>
                         </View>
                         <View style={styles.statusItem}>
                             <View
-                                style={[styles.statusDot, { backgroundColor: "#F59E0B" }]}
+                                style={[styles.statusDot, {backgroundColor: "#F59E0B"}]}
                             />
                             <Text style={styles.statusText}>
                                 Adresse en attente de vérification
@@ -237,7 +222,7 @@ const styles = StyleSheet.create({
     },
     editButton: {
         shadowColor: "#4F46E5",
-        shadowOffset: { width: 0, height: 4 },
+        shadowOffset: {width: 0, height: 4},
         shadowOpacity: 0.3,
         shadowRadius: 8,
         elevation: 6,
@@ -265,7 +250,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         borderRadius: 16,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,
@@ -320,7 +305,7 @@ const styles = StyleSheet.create({
         borderRadius: 16,
         padding: 20,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,
@@ -348,7 +333,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         borderRadius: 16,
         shadowColor: "#000",
-        shadowOffset: { width: 0, height: 2 },
+        shadowOffset: {width: 0, height: 2},
         shadowOpacity: 0.1,
         shadowRadius: 4,
         elevation: 3,

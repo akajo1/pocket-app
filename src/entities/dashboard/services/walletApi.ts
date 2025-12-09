@@ -1,10 +1,16 @@
 import ApiClient from "@/src/services/apiClient";
 
 export interface Wallet {
-    id: string;
-    balance: string;
-    is_active: boolean;
-    created_at: string;
+    "id": string,
+    "user_id": string,
+    "wallet_number": string,
+    "currency": string,
+    "ledger_balance": string,
+    "available_balance": string,
+    "hold_amount": string,
+    "status": string,
+    "tier": string,
+    "created_at": string
 }
 
 const walletInstance = new ApiClient<any, Wallet[]>("/wallets");
