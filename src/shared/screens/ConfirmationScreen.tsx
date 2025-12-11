@@ -16,9 +16,11 @@ import {LoadConfirmation, WalletToWalletConfirmation} from "@/src/features/sendm
 import useLoadWallet from "@/src/features/sendmoney/hooks/useLoadWallet";
 import useSendMoneyToWallet from "@/src/features/sendmoney/hooks/useSendMoneyToWallet";
 import {useConfirmationUserInfo} from "@/src/shared/hooks/useConfirmationUserInfo";
+import {useAuthManager} from "@/src/entities/auth/hook/useAuthManager";
 
 
 function ConfirmationScreen() {
+    const {user} = useAuthManager()
     const {form, type, transactionType} = useLocalSearchParams<ParamsType>();
     const parsedForm = JSON.parse(form)
     const createChildMutate = useCreateChild()
@@ -29,8 +31,9 @@ function ConfirmationScreen() {
     const navigation = useRouter()
 
     const {data: fee, isLoading} = useFee({
-        type,
-        currency: parsedForm?.currency?.toLowerCase()
+        type: transactionType,
+        method: type,
+        currency: parsedForm?.currency
     })
 
     const handleConfirmationClick = () => {
@@ -40,7 +43,12 @@ function ConfirmationScreen() {
             case typeTransaction.loadWallet:
                 return loadWalletMutate.mutate(parsedForm)
             case typeTransaction.walletToWallet:
-                return sendMoneyToWalletMutate.mutate({...parsedForm, raison: parsedForm?.raison.value})
+                return sendMoneyToWalletMutate.mutate({
+                    ...parsedForm,
+                    userId: user?.id,
+                    raison: parsedForm?.raison.value,
+                    paymentMethod: type
+                })
             default:
                 return
 
@@ -71,7 +79,7 @@ function ConfirmationScreen() {
                     onSubmit={() => handleConfirmationClick()}
                 />
             default:
-                return <></>
+                return null
 
         }
     };

@@ -7,21 +7,26 @@ import TransactionDetailModal from "@/src/shared/modals/TransactionDetailModal";
 import {pallete} from "@/src/utils/pallete";
 import {useRouter} from "expo-router";
 import {PlusIcon} from "lucide-react-native";
-import React, {useState} from "react";
+import React, {useCallback, useState} from "react";
 import {NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet,} from "react-native";
 import {EmptyChildWalletScreen} from "../components/molecules";
 import {ChildrenCarousel} from "../components/organisms";
 import {useChildren} from "../hook/useChildren";
 import {useChildTransactions} from "../hook/useChildTransactions";
 import {quickActionsChild} from "../services/menu";
+import {useFocusEffect} from "@react-navigation/native";
 
 function ChildrenScreen() {
     const navigation = useRouter();
-    const {data: children, isLoading} = useChildren();
-
+    const {data: children, isLoading: loadingChildren, refetch: refetchChildren} = useChildren();
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
-    const {data: transactions, isLoading: transactionLoading} = useChildTransactions({childId: currentIndex});
+    const childId = children?.[currentIndex]?.id;
+    const {
+        data: transactions,
+        isLoading: loadingTransactions,
+        refetch: refetchTransactions,
+    } = useChildTransactions({childId});
 
     const [currentModal, setCurrentModal] = useState<{
         [key: string]: boolean;
@@ -47,6 +52,17 @@ function ChildrenScreen() {
         setCurrentModal({transaction: true});
     };
 
+    useFocusEffect(
+        useCallback(() => {
+            // on rafraîchit la liste des enfants
+            refetchChildren();
+
+            // et si un enfant est sélectionné, on rafraîchit aussi ses transactions
+            if (childId) {
+                refetchTransactions();
+            }
+        }, [refetchChildren, refetchTransactions, childId])
+    );
     const displayChildren = () => {
         if (!children?.length)
             return (
@@ -70,7 +86,7 @@ function ChildrenScreen() {
                         actions={quickActionsWithHandlers}
                         // title="Actions Rapides"
                         isChild
-                        isLoading={isLoading}
+                        isLoading={loadingChildren}
                     />
                     <SmartText
                         style={styles.tag}
@@ -82,7 +98,7 @@ function ChildrenScreen() {
                         transactions={transactions?.slice(0, 3) || []}
                         onTransactionPress={handleTransactionPress}
                         onViewAll={() => navigation.navigate("/(transactions)/allChildTransactions")}
-                        isLoading={transactionLoading}
+                        isLoading={loadingChildren || loadingTransactions}
                     />
                 </ScrollView>
                 <TransactionDetailModal

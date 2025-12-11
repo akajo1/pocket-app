@@ -30,7 +30,10 @@ export default function SendMoneyToWallet() {
     const {data} = useWallet();
     const message = useAlert();
     const [currentIndex, setCurrentIndex] = useState(0);
-    const {data: raisonList, isLoading: raisonLoading} = useRaison()
+    const {data: raisonList, isLoading: raisonLoading} = useRaison({
+        typeReason: "TRANSFER",
+        onlyActives: 1
+    })
 
     const dropDownData = raisonList?.length ? raisonList.map(item => ({
         label: item.label,
@@ -77,7 +80,7 @@ export default function SendMoneyToWallet() {
 
 
     const onSubmit = (datas: any) => {
-        const phone = `${selectedCountry?.idd?.root}${datas.phone.replaceAll(
+        const phone = `${selectedCountry?.idd?.root.replace("+", "00")}${datas.phone.replaceAll(
             " ",
             ""
         )}`;
@@ -94,8 +97,8 @@ export default function SendMoneyToWallet() {
             return
         }
 
-        const currency = data?.wallets[currentIndex].currency
-        const walletId = data?.wallets[currentIndex].id
+        const currency = data[currentIndex].currency
+        const walletId = data[currentIndex].id
         const currentData = {...datas, phone, currency, walletId, raison: selectedRaison};
 
         navigation.navigate({
@@ -131,7 +134,7 @@ export default function SendMoneyToWallet() {
             title="Envoi d'argent"
         />
         <WalletCarousel
-            wallets={data?.wallets || []}
+            wallets={data || []}
             currentIndex={currentIndex}
             handleMomentumScrollEnd={handleMomentumScrollEnd}
         />

@@ -1,11 +1,12 @@
 import {Dimensions} from "react-native";
+import images from "@/src/assets/images";
 
 export const {width, height} = Dimensions.get("screen");
 
 export const typeTransaction = {
     createChild: "CREATE_CHILD",
-    loadWallet: "LOAD_WALLET",
-    walletToWallet: "W2W",
+    loadWallet: "TRANSFER_IN",
+    walletToWallet: "TRANSFER_OUT",
 }
 
 export const queryKey = {
@@ -29,3 +30,63 @@ export type ParamsType = {
     type: string
     transactionType: string
 }
+
+
+export const dropDownData = [
+    {
+
+        label: "Mobile Money",
+        value: "MOBILE_MONEY",
+    },
+    {
+        label: "Visa - Mastercard",
+        value: "CARD",
+    },
+    {
+        label: "Illicocash",
+        value: "ILLICO",
+    },
+
+]
+export const MobilMoneyBrand = [
+    {
+        icon: images.airtelmoneyIcon,
+        value: "airtelMoney",
+        label: "Airtel Money",
+    },
+    {
+        icon: images.mpesaIcon,
+        value: "mPesa",
+        label: "MPesa",
+    },
+    {
+        icon: images.afriMoneyIcon,
+        value: "afriMoney",
+        label: "AfriMoney",
+    },
+    {
+        icon: images.orangeMoneyIcon,
+        value: "orangeMoney",
+        label: "Orange Money",
+    }
+]
+
+export const cardBrand = [
+    {
+        icon: images.visaIcon,
+        value: "visa",
+        label: "Visa",
+    },
+    {
+        icon: images.mastercardIcon,
+        value: "mastercard",
+        label: "Mastercard",
+    }
+]
+export const illicoBrand = [
+    {
+        icon: images.illicoIcon,
+        value: "illicocash",
+        label: "illicocash",
+    },
+]

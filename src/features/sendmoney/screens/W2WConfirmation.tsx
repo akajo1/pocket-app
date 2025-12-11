@@ -17,9 +17,9 @@ type Props = {
 }
 export default function WalletToWalletConfirmation({formData, fee, isLoading, onSubmit}: Props) {
     const currency = formData.currency === "USD" ? "$" : "Fc";
-    const feeAmount = (parseFloat(formData?.amount.toString()) * parseFloat(fee?.percentage?.toString())) / 100
-    const total = parseFloat(formData?.amount.toString()) + feeAmount
-    console.log(formData)
+    const feeAmount = Number((formData?.amount) * fee?.percentage).toFixed(2)
+    const total = Number(+formData?.amount + +feeAmount).toFixed(2)
+   
     const currencyDisplay = () => {
         return <View style={styles.from}>
             <View style={{flexDirection: "row"}}>

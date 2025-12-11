@@ -8,5 +8,6 @@ export const useWallet = () => {
         queryKey: ["wallet"],
         queryFn: walletApi.fetchWallets,
         enabled: !!user,
+        keepPreviousData: true,
     });
 };

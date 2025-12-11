@@ -24,5 +24,6 @@ const authApi = {
     fetchUser: async () => await authInstance.fetch(null, "/user-info/"),
     register: async (data: RegisterFormType): Promise<any> =>
         await authInstance.post(data, "/register"),
+    fetchByPhone: async (phone: string) => await authInstance.fetch(null, `/by-phone/${phone}`),
 };
 export default authApi;

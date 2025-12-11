@@ -22,8 +22,16 @@ const walletApi = {
         return await walletInstance.post(currentData, `/${data.walletId.toString()}`,)
     },
     sendMoneyW2W: async (data: any) => {
-        const currentData = {...data, walletId: null}
-        return await walletInstance.post(currentData, `/sendmoneytowallet/${data.walletId.toString()}`)
+        console.log("--data>>", data)
+        const currentData = {
+            fromWalletId: data.walletId,
+            toPhoneNumber: data.phone,
+            amount: data.amount,
+            raisonId: data.raison.toString(),
+            description: "Envoi d'argent",
+            paymentMethod: data.paymentMethod,
+        }
+        return await walletInstance.post(currentData, `/sendmoneytowallet/${data.userId.toString()}`)
     },
 };
 export default walletApi;

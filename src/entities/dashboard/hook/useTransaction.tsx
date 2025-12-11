@@ -1,6 +1,5 @@
 import {useQuery} from "@tanstack/react-query";
 import transactionApi, {transactionsParams} from "../services/transactionApi";
-import {useWallet} from "./useWallet";
 
 interface TransactionType {
     id: string;
@@ -31,16 +30,10 @@ interface TransactionType {
 }
 
 export const useTransactions = (params: transactionsParams) => {
-    const {data: walletData} = useWallet();
-
-    const currentParams = {
-        ...params,
-        walletId: walletData?.length && walletData[params.walletId]?.id as string,
-    };
-
+    const {walletId} = params
     return useQuery<any, Error, TransactionType[]>({
-        queryKey: ["transactions", currentParams],
-        queryFn: () => transactionApi.fetchTransactions(currentParams),
-        enabled: !!walletData?.length
+        queryKey: ["transactions", params],
+        queryFn: () => transactionApi.fetchTransactions(params),
+        enabled: !!walletId,
     });
 };

@@ -5,9 +5,9 @@ export interface helperResponse {
     data: any
 }
 
-const helperInstance = new ApiClient<any, helperResponse>("/helper");
+const helperInstance = new ApiClient<any, helperResponse>("/reasons");
 const helperApi = {
-    fetchRaisons: async () => await helperInstance.fetch(null, `/raison`),
+    fetchRaisons: async (params: any) => await helperInstance.fetch(params, `/`),
     fetchConfirmationUserInfo: async (body: any) => await helperInstance.fetch(null, `/userinfo/${body.phone}`),
 };
 export default helperApi;

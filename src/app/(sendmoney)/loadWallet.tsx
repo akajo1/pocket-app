@@ -2,19 +2,27 @@ import {Wrapper} from "@/src/shared/components";
 import {Header, Input, PhoneInput} from "@/src/shared/components/molecules";
 import {IconButton, SmartImage, SmartKeyboardAvoidView} from "@/src/shared/components/atoms";
 import images from "@/src/assets/images";
-import {Banknote, ChevronDown, ChevronLeft} from "lucide-react-native";
+import {Banknote, ChevronDown, ChevronLeft, CreditCard} from "lucide-react-native";
 import {pallete} from "@/src/utils/pallete";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, View} from "react-native";
-import { useRouter} from "expo-router";
+import {useRouter} from "expo-router";
 import {useWallet} from "@/src/entities/dashboard/hook/useWallet";
-import {SelectBoxModal, WalletCarousel} from "@/src/shared/components/organims";
+import {BrandList, SelectBoxModal, WalletCarousel} from "@/src/shared/components/organims";
 import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {loadSchema} from "@/src/features/sendmoney/services/schema";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
 import {ICountry} from "react-native-international-phone-number";
-import {sendMoneyType, typeTransaction} from "@/src/utils/method";
+import {
+    cardBrand,
+    dropDownData,
+    illicoBrand,
+    MobilMoneyBrand,
+    sendMoneyType,
+    typeTransaction
+} from "@/src/utils/method";
+import {useFocusEffect} from "@react-navigation/native";
 
 interface DataType {
     label: string;
@@ -26,28 +34,18 @@ type FormTypeData = {
     mode: string
     amount: number
 }
-const dropDownData= [
-    {
-        label: "Mobile Money",
-        value: "mobil",
-    },
-    {
-        label: "Visa - Mastercard",
-        value: "card",
-    },
-    {
-        label: "Illicocash",
-        value: "illico",
-    },
 
-]
 export default function LoadToWallet(){
     const navigation = useRouter();
-    const { data } = useWallet();
+    const {
+        data: walletsData,
+        isLoading: walletsLoading,
+        refetch: refetchWallets,
+    } = useWallet();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
-
-
+    const [currentBrand, setCurrentBrand] = useState(null);
+    const [currentBrandList, setCurrentBrandList] = useState<any[]>([])
     const [selectedRaison, setSelectedRaison] = useState<DataType>({} as DataType);
     const [showModal, setShowModal] = useState<boolean>(false);
     const handleMomentumScrollEnd = (
@@ -76,9 +74,47 @@ export default function LoadToWallet(){
             mode: "",
         },
     });
+
+    useFocusEffect(() => {
+        refetchWallets();
+    })
+
+    useEffect(() => {
+        setSelectedRaison(dropDownData[0])
+        setValue("mode", dropDownData[0].label)
+    }, []);
+
+    useEffect(() => {
+        if (selectedRaison) {
+            onSelectedRaisonBrand(selectedRaison.value)
+        }
+    }, [selectedRaison]);
+
+
+    const onSelectedRaisonBrand = (value: string) => {
+
+        switch (selectedRaison.value) {
+            case "MOBILE_MONEY":
+                setCurrentBrandList(MobilMoneyBrand)
+                setCurrentBrand(MobilMoneyBrand[0].value)
+                break
+            case "CARD":
+                setCurrentBrandList(cardBrand)
+                setCurrentBrand(cardBrand[0].value)
+                break
+            case "ILLICO":
+                setCurrentBrandList(illicoBrand)
+                setCurrentBrand(illicoBrand[0].value)
+                break
+            default:
+                setCurrentBrandList(null)
+                setCurrentBrand(null)
+                break
+        }
+    }
     const onSubmit = (datas: SubmitHandler<FormTypeData>) => {
-        const currency = data?.wallets[currentIndex].currency
-        const walletId = data?.wallets[currentIndex].id
+        const currency = walletsData[currentIndex].currency
+        const walletId = walletsData[currentIndex].id
         const currentData = {...datas, currency, walletId};
 
         navigation.navigate({
@@ -90,6 +126,8 @@ export default function LoadToWallet(){
             }
         })
     }
+
+
     return <Wrapper>
         <Header
             right={
@@ -109,7 +147,6 @@ export default function LoadToWallet(){
         />
        <ScrollView style={{paddingVertical: 20}}>
            <SmartKeyboardAvoidView>
-
                <Controller
                    control={control}
                    name="mode"
@@ -127,26 +164,50 @@ export default function LoadToWallet(){
                        />
                    )}
                />
-
-               <Controller
-                   control={control}
-                   name="phone"
-                   render={({ field: { onChange, onBlur, value } }) => (
-                       <View style={{ marginBottom: 10 }}>
-                           <PhoneInput
-                               title="Numéro du Bénéficiare"
-                               rest={{
-                                   onChangeSelectedCountry: (country) =>
-                                       setSelectedCountry(country),
-                                   value,
-                                   selectedCountry,
-                                   onChangePhoneNumber: (phone) => onChange(phone),
-                                   onBlur,
-                               }}
+               {
+                   currentBrandList?.length && <BrandList
+                   brands={currentBrandList}
+                   currenBrandSelected={currentBrand}
+                   onCurrentBrandSelected={setCurrentBrand}
+                 />
+               }
+               {
+                   selectedRaison.value !== "CARD" ? <Controller
+                       control={control}
+                       name="phone"
+                       render={({field: {onChange, onBlur, value}}) => (
+                           <View style={{marginBottom: 10}}>
+                               <PhoneInput
+                                   title="Numéro du Bénéficiare"
+                                   rest={{
+                                       onChangeSelectedCountry: (country) =>
+                                           setSelectedCountry(country),
+                                       value,
+                                       selectedCountry,
+                                       onChangePhoneNumber: (phone) => onChange(phone),
+                                       onBlur,
+                                   }}
+                               />
+                           </View>
+                       )}
+                   /> : <Controller
+                       control={control}
+                       name="phone"
+                       render={({field: {onChange, onBlur, value}}) => (
+                           <Input
+                               label={`Numéro carte du Bénéficiare`}
+                               placeholder="XXXX XXXX XXXX XXXX"
+                               value={value}
+                               keyboardType="numeric"
+                               onChangeText={onChange}
+                               onBlur={onBlur}
+                               icon={<CreditCard size={20} color={pallete.black}/>}
+                               error={errors.phone?.message}
+                               // editable={!register.isPending}
                            />
-                       </View>
-                   )}
-               />
+                       )}
+                   />
+               }
                <Controller
                    control={control}
                    name="amount"
@@ -154,6 +215,7 @@ export default function LoadToWallet(){
                        <Input
                            label="Montant"
                            placeholder="0.00"
+
                            value={value}
                            keyboardType="numeric"
                            onChangeText={onChange}
@@ -169,9 +231,10 @@ export default function LoadToWallet(){
            </SmartKeyboardAvoidView>
            <WalletCarousel
                title="Sélectionnez le PorteMonnaie"
-               wallets={data?.wallets || []}
+               wallets={walletsData}
                currentIndex={currentIndex}
                handleMomentumScrollEnd={handleMomentumScrollEnd}
+
            />
 
        </ScrollView>

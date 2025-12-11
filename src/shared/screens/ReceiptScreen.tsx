@@ -42,15 +42,15 @@ export default function ReceiptScreen() {
         },
         {
             label: "Montant",
-            value: `${parseFloat(parsedForm?.balance).toFixed(2)} ${currency}`
+            value: `${parseFloat(parsedForm?.amount).toFixed(2)} ${currency}`
         },
         {
             label: "Frais de transaction",
-            value: `${parseFloat(parsedForm?.feeMonney)?.toFixed(2)} ${currency}`
+            value: `${parseFloat(parsedForm?.fee)?.toFixed(2)} ${currency}`
         },
         {
             label: "Total payé",
-            value: `${parseFloat(parsedForm?.total).toFixed(2)} ${currency}`
+            value: `${parseFloat(parsedForm?.totalDebit).toFixed(2)} ${currency}`
         },
 
     ]
@@ -75,26 +75,26 @@ export default function ReceiptScreen() {
         },
         {
             label: "Montant",
-            value: `${parseFloat(parsedForm?.balance).toFixed(2)} ${currency}`
+            value: `${parseFloat(parsedForm?.amount).toFixed(2)} ${currency}`
         },
         {
             label: "Frais de transaction",
-            value: `${parseFloat(parsedForm?.feeMonney)?.toFixed(2)} ${currency}`
+            value: `${parseFloat(parsedForm?.fee)?.toFixed(2)} ${currency}`
         },
         {
             label: "Total payé",
-            value: `${parseFloat(parsedForm?.total).toFixed(2)} ${currency}`
+            value: `${parseFloat(parsedForm?.totalDebit).toFixed(2)} ${currency}`
         },
 
     ]
     const w2wReceipt = [
         {
             label: "Réference",
-            value: parsedForm?.referenceNumber,
+            value: parsedForm?.reference,
         },
         {
             label: "Type de transaction",
-            value: transactionType
+            value: "W2W"
         },
 
         {
@@ -103,11 +103,11 @@ export default function ReceiptScreen() {
         },
         {
             label: "Nom du bénéficiaire",
-            value: parsedForm?.beneficiaryInfo?.fullName,
+            value: `${parsedForm?.beneficiaryData?.first_name} ${parsedForm?.beneficiaryData?.last_name}`,
         },
         {
-            label: "Numéro de téléphone bénéficiaire",
-            value: parsedForm?.beneficiaryInfo?.phone,
+            label: "Numéro du bénéficiaire",
+            value: parsedForm?.beneficiaryData?.phone,
         },
         {
             label: "Montant",
@@ -115,11 +115,11 @@ export default function ReceiptScreen() {
         },
         {
             label: "Frais de transaction",
-            value: `${parseFloat(parsedForm?.feeMonney)?.toFixed(2)} ${currency}`
+            value: `${parseFloat(parsedForm?.fee)?.toFixed(2)} ${currency}`
         },
         {
             label: "Total payé",
-            value: `${parseFloat(parsedForm?.total).toFixed(2)} ${currency}`
+            value: `${parseFloat(parsedForm?.totalDebit).toFixed(2)} ${currency}`
         },
     ]
 

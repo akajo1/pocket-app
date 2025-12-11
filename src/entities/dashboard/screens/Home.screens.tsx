@@ -13,20 +13,29 @@ import {quickActions} from "../services/mocks";
 import {useRouter} from "expo-router";
 import {useTransactions} from "@/src/entities/dashboard/hook/useTransaction";
 import TransactionsList from "@/src/shared/components/organims/TransactionsList";
+import {useFocusEffect} from "@react-navigation/native";
 
-const Home = (props: Props) => {
-    const {data, isLoading} = useWallet();
+const Home = () => {
+    const {
+        data: walletsData,
+        isLoading: walletsLoading,
+        refetch: refetchWallets,
+    } = useWallet();
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
-    const navigation = useRouter()
-    const [currentModal, setCurrentModal] = useState<{
-        [key: string]: boolean;
-    } | null>(null);
+    const navigation = useRouter();
+    const [currentModal, setCurrentModal] = useState<{ [key: string]: boolean } | null>(null);
 
-    const {data: transactions, isLoading: transactionLoading} = useTransactions({
-        walletId: currentIndex,
+    const wallets = walletsData ?? []; // adapte selon ta structure
+    const walletId = wallets?.[currentIndex]?.id;
+
+    const {
+        data: transactions,
+        isLoading: transactionLoading,
+        refetch: refetchTransactions,
+    } = useTransactions({
+        walletId,       // 👉 plus currentIndex, mais le vrai id
         pageSize: 3,
-
     });
   
 
@@ -49,6 +58,15 @@ const Home = (props: Props) => {
         setCurrentModal({transaction: true});
     };
 
+
+    useFocusEffect(() => {
+            refetchWallets();
+            if (walletId) {
+                refetchTransactions();
+            }
+        }
+    );
+    console.log("--trans>>", transactions)
     return (
         <Wrapper>
             <Header
@@ -68,7 +86,7 @@ const Home = (props: Props) => {
                 title="Portemonnaie"
             />
             <WalletCarousel
-                wallets={data || []}
+                wallets={walletsData}
                 currentIndex={currentIndex}
                 handleMomentumScrollEnd={handleMomentumScrollEnd}
             />
@@ -78,13 +96,13 @@ const Home = (props: Props) => {
                     title="Actions Rapides"
                     actions={quickActionsWithHandlers}
                     currentIndex={currentIndex}
-                    isLoading={isLoading}
+                    isLoading={walletsLoading}
                 />
 
                 <TransactionsList
-                    isLoading={isLoading || transactionLoading}
+                    isLoading={walletsLoading || transactionLoading}
                     title="Transactions Récentes"
-                    transactions={transactions || []}
+                    transactions={transactions}
                     onTransactionPress={handleTransactionPress}
                     onViewAll={() => navigation.navigate("/allUserTransactions")}
                 />
