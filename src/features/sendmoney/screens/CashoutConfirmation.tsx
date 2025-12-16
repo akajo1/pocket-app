@@ -15,7 +15,7 @@ type Props = {
     onSubmit: () => void
 
 }
-export default function LoadConfirmation({formData, fee, isLoading, onSubmit}: Props) {
+export default function CashoutConfirmation({formData, fee, isLoading, onSubmit}: Props) {
     const currency = formData.currency === "USD" ? "$" : "Fc";
     const feeAmount = Number(+formData?.amount * +fee?.percentage).toFixed(2)
     const total = Number(+formData?.amount + +feeAmount).toFixed(2)
@@ -36,20 +36,20 @@ export default function LoadConfirmation({formData, fee, isLoading, onSubmit}: P
     return <>
         {currencyDisplay(
             <Phone size={20} color={pallete.blue}/>,
-            "Depuis",
-            formData?.mode
+            "Depuis mon portemonnaie",
+            formData?.currency
         )}
 
         {currencyDisplay(
             <WalletIcon size={20} color={pallete.dollars}/>,
-            "A mon Portemonaie",
-            formData?.currency
+            "A mon compte",
+            formData?.brand
         )}
 
         <TransactionFooter
             currency={currency}
             isLoading={isLoading}
-            transactionType="Approvisionnement"
+            transactionType="Retrait"
             feeAmount={feeAmount}
             onSubmit={onSubmit} totalAmount={total}
         />

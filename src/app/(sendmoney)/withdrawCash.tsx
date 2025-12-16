@@ -2,45 +2,50 @@ import {Wrapper} from "@/src/shared/components";
 import {Header, Input, PhoneInput} from "@/src/shared/components/molecules";
 import {IconButton, SmartImage, SmartKeyboardAvoidView} from "@/src/shared/components/atoms";
 import images from "@/src/assets/images";
-import {Banknote, ChevronDown, ChevronLeft} from "lucide-react-native";
+import {Banknote, ChevronDown, ChevronLeft, CreditCard} from "lucide-react-native";
 import {pallete} from "@/src/utils/pallete";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View} from "react-native";
 import {useRouter} from "expo-router";
 import {useWallet} from "@/src/entities/dashboard/hook/useWallet";
-import {SelectBoxModal, WalletCarousel} from "@/src/shared/components/organims";
-import {Controller, useForm} from "react-hook-form";
+import {BrandList, SelectBoxModal, WalletCarousel} from "@/src/shared/components/organims";
+import {Controller, SubmitHandler, useForm} from "react-hook-form";
 import {yupResolver} from "@hookform/resolvers/yup";
-import {loginSchema} from "@/src/entities/auth/services/schema";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
 import {ICountry} from "react-native-international-phone-number";
+import {useFocusEffect} from "@react-navigation/native";
+import {cashoutSchema} from "@/src/features/sendmoney/services/schema";
+import {
+    cardBrand,
+    dropDownData,
+    illicoBrand,
+    MobilMoneyBrand,
+    sendMoneyType,
+    typeTransaction
+} from "@/src/utils/method";
 
 interface DataType {
     label: string;
     value: string;
 }
 
-const dropDownData = [
-    {
-        label: "Mobile Money",
-        value: "mobil",
-    },
-    {
-        label: "Visa - Mastercard",
-        value: "card",
-    },
-    {
-        label: "Illicocash",
-        value: "illico",
-    },
-
-]
+type FormTypeData = {
+    phone: string
+    mode: string
+    amount: number
+}
 export default function WithdrawCash() {
     const navigation = useRouter();
-    const {data} = useWallet();
+    const {
+        data: walletsData,
+        isLoading: walletsLoading,
+        refetch: refetchWallets,
+    } = useWallet();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
     const [selectedRaison, setSelectedRaison] = useState<DataType>({} as DataType);
+    const [currentBrand, setCurrentBrand] = useState(null);
+    const [currentBrandList, setCurrentBrandList] = useState<any[]>([])
     const [showModal, setShowModal] = useState<boolean>(false);
     const {
         control,
@@ -49,13 +54,30 @@ export default function WithdrawCash() {
         reset,
         setValue,
     } = useForm({
-        resolver: yupResolver(loginSchema),
+        resolver: yupResolver(cashoutSchema),
         mode: "onSubmit",
         defaultValues: {
             phone: "",
-            password: "",
+            amount: 0,
+            mode: ""
         },
     });
+
+    useFocusEffect(() => {
+        refetchWallets();
+    })
+
+    useEffect(() => {
+        handleChangeList(dropDownData[0])
+
+    }, []);
+
+    useEffect(() => {
+        if (selectedRaison) {
+            onSelectedRaisonBrand(selectedRaison.value)
+        }
+    }, [selectedRaison]);
+
     const handleMomentumScrollEnd = (
         event: NativeSyntheticEvent<NativeScrollEvent>
     ) => {
@@ -67,13 +89,49 @@ export default function WithdrawCash() {
 
     const handleChangeList = (data: DataType) => {
         setSelectedRaison(data)
-        setValue("raison", data.label)
+        setValue("mode", data.label)
     }
 
-    const onSubmit = (datas: any) => {
+    const onSelectedRaisonBrand = (selectedRaison: string) => {
+        switch (selectedRaison) {
+            case "MOBILE_MONEY":
+                setCurrentBrandList(MobilMoneyBrand)
+                setCurrentBrand(MobilMoneyBrand[0].value)
+                break
+            case "CARD":
+                setCurrentBrandList(cardBrand)
+                setCurrentBrand(cardBrand[0].value)
+                break
+            case "ILLICO":
+                setCurrentBrandList(illicoBrand)
+                setCurrentBrand(illicoBrand[0].value)
+                break
+            default:
+                setCurrentBrandList(null)
+                setCurrentBrand(null)
+                break
+        }
+    }
 
+    const onSubmit = (datas: SubmitHandler<FormTypeData>) => {
+        const phone = selectedRaison.value !== "CARD" ? `${selectedCountry?.idd?.root.replace("+", "00")}${datas.phone.replaceAll(
+            " ",
+            ""
+        )}` : datas.phone;
 
-    };
+        const currency = walletsData[currentIndex].currency
+        const walletId = walletsData[currentIndex].id
+        const currentData = {...datas, currency, phone, walletId, mode: selectedRaison.value, brand: currentBrand};
+
+        navigation.navigate({
+            pathname: "/(transactions)/confirmationScreen",
+            params: {
+                form: JSON.stringify(currentData),
+                transactionType: typeTransaction.cashout,
+                type: sendMoneyType.out
+            }
+        })
+    }
 
     return <Wrapper>
         <Header
@@ -93,14 +151,14 @@ export default function WithdrawCash() {
             title="Retrait"
         />
         <WalletCarousel
-            wallets={data?.wallets || []}
+            wallets={walletsData || []}
             currentIndex={currentIndex}
             handleMomentumScrollEnd={handleMomentumScrollEnd}
         />
         <SmartKeyboardAvoidView>
             <Controller
                 control={control}
-                name="raison"
+                name="mode"
                 render={({field: {onChange, onBlur, value}}) => (
                     <Input
                         label="Mode de Retrait"
@@ -109,31 +167,58 @@ export default function WithdrawCash() {
                         value={value}
                         onBlur={onBlur}
                         icon={<ChevronDown size={20} color={pallete.black}/>}
-                        error={errors.raison?.message}
+                        error={errors.mode?.message}
                         onPress={() => setShowModal(true)}
                         // editable={!register.isPending}
                     />
                 )}
             />
-            <Controller
-                control={control}
-                name="phone"
-                render={({field: {onChange, onBlur, value}}) => (
-                    <View style={{marginBottom: 10}}>
-                        <PhoneInput
-                            title="Numéro du Bénéficiare"
-                            rest={{
-                                onChangeSelectedCountry: (country) =>
-                                    setSelectedCountry(country),
-                                value,
-                                selectedCountry,
-                                onChangePhoneNumber: (phone) => onChange(phone),
-                                onBlur,
-                            }}
+
+            {
+                currentBrandList?.length && <BrandList
+                brands={currentBrandList}
+                currenBrandSelected={currentBrand}
+                onCurrentBrandSelected={setCurrentBrand}
+              />
+            }
+            {
+                selectedRaison.value !== "CARD" ? <Controller
+                    control={control}
+                    name="phone"
+                    render={({field: {onChange, onBlur, value}}) => (
+                        <View style={{marginBottom: 10}}>
+                            <PhoneInput
+                                title="Numéro du Bénéficiare"
+                                rest={{
+                                    onChangeSelectedCountry: (country) =>
+                                        setSelectedCountry(country),
+                                    value,
+                                    selectedCountry,
+                                    onChangePhoneNumber: (phone) => onChange(phone),
+                                    onBlur,
+                                }}
+                            />
+                        </View>
+                    )}
+                /> : <Controller
+                    control={control}
+                    name="phone"
+                    render={({field: {onChange, onBlur, value}}) => (
+                        <Input
+                            label={`Numéro carte du Bénéficiare`}
+                            placeholder="XXXX XXXX XXXX XXXX"
+                            value={value}
+                            keyboardType="numeric"
+                            onChangeText={onChange}
+                            onBlur={onBlur}
+                            icon={<CreditCard size={20} color={pallete.black}/>}
+                            error={errors.phone?.message}
+                            // editable={!register.isPending}
                         />
-                    </View>
-                )}
-            />
+                    )}
+                />
+            }
+
             <Controller
                 control={control}
                 name="amount"

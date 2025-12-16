@@ -18,11 +18,29 @@ const walletInstance = new ApiClient<any, Wallet[]>("/wallets");
 const walletApi = {
     fetchWallets: async () => await walletInstance.fetch(null, "/"),
     loadWallets: async (data: any) => {
-        const currentData = {...data, walletId: null}
-        return await walletInstance.post(currentData, `/${data.walletId.toString()}`,)
+        const currentData = {
+            "walletId": data.walletId,
+            "amount": data.amount,
+            "description": `APPRO-${data.brand.toUpperCase()}`,
+            "paymentMethod": `LOD-${data.mode.toUpperCase()}`,
+            "brandSelected": data.brand,
+            "brandNumber": data.phone
+        }
+        return await walletInstance.post(currentData, "/")
+    },
+    cashout: async (data: any) => {
+        const currentData = {
+            "walletId": data.walletId,
+            "amount": data.amount,
+            "description": `RETRAIT-${data.brand.toUpperCase()}`,
+            "paymentMethod": `CASHOUT-${data.mode.toUpperCase()}`,
+            "brandSelected": data.brand,
+            "brandNumber": data.phone
+        }
+        return await walletInstance.post(currentData, "/withdraw")
     },
     sendMoneyW2W: async (data: any) => {
-        console.log("--data>>", data)
+
         const currentData = {
             fromWalletId: data.walletId,
             toPhoneNumber: data.phone,

@@ -12,11 +12,12 @@ import useCreateChild from "@/src/features/children/hook/useCreateChild";
 import {useFee} from "@/src/shared/hooks/useFee";
 import moment from "moment";
 import {ChildConfirmation} from "@/src/features/children/screens";
-import {LoadConfirmation, WalletToWalletConfirmation} from "@/src/features/sendmoney/screens";
+import {CashoutConfirmation, LoadConfirmation, WalletToWalletConfirmation} from "@/src/features/sendmoney/screens";
 import useLoadWallet from "@/src/features/sendmoney/hooks/useLoadWallet";
 import useSendMoneyToWallet from "@/src/features/sendmoney/hooks/useSendMoneyToWallet";
 import {useConfirmationUserInfo} from "@/src/shared/hooks/useConfirmationUserInfo";
 import {useAuthManager} from "@/src/entities/auth/hook/useAuthManager";
+import useCashout from "@/src/features/sendmoney/hooks/useCashout";
 
 
 function ConfirmationScreen() {
@@ -25,8 +26,12 @@ function ConfirmationScreen() {
     const parsedForm = JSON.parse(form)
     const createChildMutate = useCreateChild()
     const loadWalletMutate = useLoadWallet()
+    const cashoutMutate = useCashout()
     const sendMoneyToWalletMutate = useSendMoneyToWallet()
-    const {data: beneficiaryInfo, isLoading: beneficiaryLoading} = useConfirmationUserInfo(parsedForm?.phone)
+    const {
+        data: beneficiaryInfo,
+        isLoading: beneficiaryLoading
+    } = useConfirmationUserInfo(transactionType === typeTransaction.walletToWallet ? parsedForm?.phone : "")
 
     const navigation = useRouter()
 
@@ -35,6 +40,7 @@ function ConfirmationScreen() {
         method: type,
         currency: parsedForm?.currency
     })
+ 
 
     const handleConfirmationClick = () => {
         switch (transactionType) {
@@ -42,6 +48,8 @@ function ConfirmationScreen() {
                 return createChildMutate.mutate({...parsedForm, age: moment(parsedForm?.age)?.format("YYYY-MM-DD")})
             case typeTransaction.loadWallet:
                 return loadWalletMutate.mutate(parsedForm)
+            case typeTransaction.cashout:
+                return cashoutMutate.mutate(parsedForm)
             case typeTransaction.walletToWallet:
                 return sendMoneyToWalletMutate.mutate({
                     ...parsedForm,
@@ -49,6 +57,7 @@ function ConfirmationScreen() {
                     raison: parsedForm?.raison.value,
                     paymentMethod: type
                 })
+
             default:
                 return
 
@@ -76,6 +85,13 @@ function ConfirmationScreen() {
                     formData={{...parsedForm, beneficiaryInfo}}
                     fee={fee}
                     isLoading={sendMoneyToWalletMutate.isPending || isLoading}
+                    onSubmit={() => handleConfirmationClick()}
+                />
+            case typeTransaction.cashout:
+                return <CashoutConfirmation
+                    formData={parsedForm}
+                    fee={fee}
+                    isLoading={cashoutMutate.isPending || isLoading}
                     onSubmit={() => handleConfirmationClick()}
                 />
             default:
@@ -110,7 +126,7 @@ function ConfirmationScreen() {
                     containerStyle={styles.containerLogo}
                 />
             }
-            title="Confirmatez la transaction"
+            title="Confirmez la transaction"
         />
         <ScrollView contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
             {displayTransactionDetails()}

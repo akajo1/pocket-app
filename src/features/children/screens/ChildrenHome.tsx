@@ -105,7 +105,6 @@ function ChildrenScreen() {
                     visible={currentModal?.transaction ? true : false}
                     onClose={() => setCurrentModal(null)}
                     transaction={selectedTransaction}
-
                 />
             </>
         );

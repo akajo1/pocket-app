@@ -5,8 +5,9 @@ export const {width, height} = Dimensions.get("screen");
 
 export const typeTransaction = {
     createChild: "CREATE_CHILD",
-    loadWallet: "TRANSFER_IN",
+    loadWallet: "DEPOSIT",
     walletToWallet: "TRANSFER_OUT",
+    cashout: "WITHDRAWAL"
 }
 
 export const queryKey = {
@@ -22,7 +23,8 @@ export const queryKey = {
 export const sendMoneyType = {
     w2w: "W2W",
     w2c: "W2C",
-    load: "load"
+    load: "LOD",
+    out: "CASHOUT"
 }
 
 export type ParamsType = {
@@ -34,7 +36,6 @@ export type ParamsType = {
 
 export const dropDownData = [
     {
-
         label: "Mobile Money",
         value: "MOBILE_MONEY",
     },

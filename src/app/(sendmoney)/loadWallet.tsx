@@ -113,9 +113,14 @@ export default function LoadToWallet(){
         }
     }
     const onSubmit = (datas: SubmitHandler<FormTypeData>) => {
+        const phone = selectedRaison.value !== "CARD" ? `${selectedCountry?.idd?.root.replace("+", "00")}${datas.phone.replaceAll(
+            " ",
+            ""
+        )}` : datas.phone;
+  
         const currency = walletsData[currentIndex].currency
         const walletId = walletsData[currentIndex].id
-        const currentData = {...datas, currency, walletId};
+        const currentData = {...datas, currency, phone, walletId, mode: selectedRaison.value, brand: currentBrand};
 
         navigation.navigate({
             pathname: "/(transactions)/confirmationScreen",

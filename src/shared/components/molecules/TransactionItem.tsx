@@ -104,7 +104,7 @@ export default function TransactionItem({
 
             <View style={{justifyContent: "center"}}>
                 <Text style={[styles.amount, {color: getAmountColor()}]}>
-                    {getAmountPrefix()}${parseFloat(amount?.toString())?.toFixed(2)}
+                    {`${getAmountPrefix()} ${parseFloat(amount?.toString())?.toFixed(2)} ${transaction.wallet_currency === "USD" ? "$" : "Fc"}`}
                 </Text>
                 <Text style={[styles.time, {alignSelf: "flex-end", marginRight: 0}]}>
                     {displayPay()}

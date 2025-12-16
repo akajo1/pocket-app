@@ -1,19 +1,19 @@
-import { width } from "@/src/utils/method";
-import { pallete } from "@/src/utils/pallete";
-import { LinearGradient } from "expo-linear-gradient";
-import { Lock, Unlock } from "lucide-react-native";
+import {width} from "@/src/utils/method";
+import {pallete} from "@/src/utils/pallete";
+import {LinearGradient} from "expo-linear-gradient";
+import {Lock, Unlock} from "lucide-react-native";
 import moment from "moment";
 import React from "react";
-import { StyleSheet, Text, View } from "react-native";
-import { Children } from "../../services/api";
+import {StyleSheet, Text, View} from "react-native";
+import {Children} from "../../services/api";
 
 type Props = {
   child: Children;
 };
 
 const ChildCard = ({ child }: Props) => {
-  console.log(child);
-  return (
+
+    return (
     <View key={child?.id} style={styles.carouselCard}>
       <LinearGradient
         colors={

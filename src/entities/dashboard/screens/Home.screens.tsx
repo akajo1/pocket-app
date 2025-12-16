@@ -66,7 +66,7 @@ const Home = () => {
             }
         }
     );
-    console.log("--trans>>", transactions)
+
     return (
         <Wrapper>
             <Header

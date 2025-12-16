@@ -58,15 +58,15 @@ export default function ReceiptScreen() {
     const LoadWalletReceipt = [
         {
             label: "Réference",
-            value: parsedForm?.referenceNumber,
+            value: parsedForm?.reference,
         },
         {
             label: "Type de transaction",
-            value: transactionType
+            value: "Approvisionnement"
         },
         {
             label: "Depuis",
-            value: parsedForm?.mode
+            value: `${parsedForm?.description.split("-")[1].replace("_", " ").toLowerCase()} `
         },
 
         {
@@ -82,7 +82,39 @@ export default function ReceiptScreen() {
             value: `${parseFloat(parsedForm?.fee)?.toFixed(2)} ${currency}`
         },
         {
-            label: "Total payé",
+            label: "Total reçu",
+            value: `${parseFloat(parsedForm?.totalDebit).toFixed(2)} ${currency}`
+        },
+
+    ]
+    const cashoutReceipt = [
+        {
+            label: "Réference",
+            value: parsedForm?.reference,
+        },
+        {
+            label: "Type de transaction",
+            value: "Retrait"
+        },
+        {
+            label: "Depuis mon portemonnaie",
+            value: parsedForm?.currency || "USD"
+        },
+
+        {
+            label: "Au compte",
+            value: `${parsedForm?.description.split("-")[1].replace("_", " ").toLowerCase()} `
+        },
+        {
+            label: "Montant",
+            value: `${parseFloat(parsedForm?.amount ?? 0).toFixed(2)}  ${currency}`
+        },
+        {
+            label: "Frais de transaction",
+            value: `${parseFloat(parsedForm?.fee)?.toFixed(2)} ${currency}`
+        },
+        {
+            label: "Retrait total",
             value: `${parseFloat(parsedForm?.totalDebit).toFixed(2)} ${currency}`
         },
 
@@ -141,6 +173,8 @@ export default function ReceiptScreen() {
                 return LoadWalletReceipt
             case typeTransaction.walletToWallet:
                 return w2wReceipt
+            case typeTransaction.cashout:
+                return cashoutReceipt
             default:
                 return []
         }
