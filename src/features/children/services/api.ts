@@ -26,9 +26,19 @@ const childrenInstance = new ApiClient<any, Children[]>("/children");
 
 const childrenApi = {
   fetchChildren: async () => await childrenInstance.fetch(null, "/"),
-  fetchTransaction: async (childId: string) =>
-    await childrenInstance.fetch(null, `/${childId}/transactions`),
-    createChild: async (body:CreateChildren)=>await childrenInstance.post(body),
+    createChild: async (body: CreateChildren) => {
+
+        const currentBody = {
+            walletId: body.walletId,
+            "name": body.name,
+            "birthDate": body.age,
+            "initial_balance": body.initialAmount,
+            "weekly_limit": body.weeklyLimit,
+            "daily_limit": body.dailyLimit,
+
+        }
+        return await childrenInstance.post(currentBody)
+    },
 };
 export default childrenApi;
 

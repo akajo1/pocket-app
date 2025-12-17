@@ -1,37 +1,18 @@
 import images from "@/src/assets/images";
-import { useWallet } from "@/src/entities/dashboard/hook/useWallet";
-import { Wrapper } from "@/src/shared/components";
-import {
-  IconButton,
-  SmartImage,
-  SmartKeyboardAvoidView,
-  SmartText,
-} from "@/src/shared/components/atoms";
+import {useWallet} from "@/src/entities/dashboard/hook/useWallet";
+import {Wrapper} from "@/src/shared/components";
+import {IconButton, SmartImage, SmartKeyboardAvoidView, SmartText,} from "@/src/shared/components/atoms";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
-import {
-  Header,
-  Input,
-  SmartDatePicker,
-} from "@/src/shared/components/molecules";
-import { WalletCarousel } from "@/src/shared/components/organims";
-import { pallete } from "@/src/utils/pallete";
-import { yupResolver } from "@hookform/resolvers/yup";
-import { useRouter } from "expo-router";
-import {
-  Banknote,
-  Calendar,
-  ChevronLeft,
-  CurrencyIcon,
-  User,
-} from "lucide-react-native";
-import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import {
-  NativeScrollEvent,
-  NativeSyntheticEvent,
-  StyleSheet,
-} from "react-native";
-import { childrenSchema } from "../services/schema";
+import {Header, Input, SmartDatePicker,} from "@/src/shared/components/molecules";
+import {WalletCarousel} from "@/src/shared/components/organims";
+import {pallete} from "@/src/utils/pallete";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {useRouter} from "expo-router";
+import {Banknote, Calendar, ChevronLeft, CurrencyIcon, User,} from "lucide-react-native";
+import React, {useEffect, useState} from "react";
+import {Controller, useForm} from "react-hook-form";
+import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet,} from "react-native";
+import {childrenSchema} from "../services/schema";
 import {useAlert} from "@/src/shared/provider/AlertProvider";
 import {sendMoneyType, typeTransaction} from "@/src/utils/method";
 
@@ -39,7 +20,11 @@ const CreateChild = () => {
   const navigation = useRouter();
     const message = useAlert();
 
-    const { data } = useWallet();
+    const {
+        data: walletsData,
+        isLoading: walletsLoading,
+        refetch: refetchWallets,
+    } = useWallet();
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isShownAge, setIsShownAge] = useState<boolean>(false);
   const [currentDate, setCurrentDate] = useState();
@@ -66,7 +51,7 @@ const CreateChild = () => {
     const width = event.nativeEvent.layoutMeasurement.width;
     const index = Math.round(offsetX / width);
     setCurrentIndex(index);
-    setValue("currency", data?.wallets[index]?.currency);
+      setValue("currency", walletsData[index]?.currency);
   };
   const handleChangeDate = (date: any) => {
       setCurrentDate(date)
@@ -74,7 +59,7 @@ const CreateChild = () => {
       setValue("age", date)
   }
   useEffect(() => {
-    setValue("currency", data?.wallets[currentIndex]?.currency);
+      setValue("currency", walletsData[currentIndex]?.currency);
   }, [currentIndex]);
 
     const handleCloseModal = () =>
@@ -88,7 +73,7 @@ const CreateChild = () => {
         });
 
     const onSubmit = (dataForm: any) => {
-        const currentBalance: number = parseFloat(data?.wallets[currentIndex]?.balance).toFixed(2);
+        const currentBalance: number = parseFloat(walletsData[currentIndex]?.balance).toFixed(2);
         if (dataForm.initialAmount >= currentBalance) {
             message?.setAlertMessage({
                 visible: true,
@@ -102,7 +87,7 @@ const CreateChild = () => {
         }
         navigation.navigate({
             pathname: "/(transactions)/confirmationScreen", params: {
-                form: JSON.stringify({...dataForm, walletId: data?.wallets[currentIndex]?.id}),
+                form: JSON.stringify({...dataForm, walletId: walletsData[currentIndex]?.id}),
                 transactionType: typeTransaction.createChild,
                 type: sendMoneyType.w2c
             }
@@ -131,7 +116,7 @@ const CreateChild = () => {
 
       <WalletCarousel
         title="Depuis le portemonnaie"
-        wallets={data?.wallets || []}
+        wallets={walletsData || []}
         currentIndex={currentIndex}
         handleMomentumScrollEnd={handleMomentumScrollEnd}
       />

@@ -17,8 +17,8 @@ type Props = {
 }
 export default function ChildConfirmation({formData, fee, isLoading, onSubmit}: Props) {
     const currency = formData.currency === "USD" ? "$" : "Fc";
-    const feeAmount = (parseFloat(formData?.initialAmount.toString()) * parseFloat(fee?.percentage?.toString()))/ 100
-    const total = parseFloat(formData?.initialAmount.toString()) + feeAmount
+    const feeAmount = Number(+formData?.initialAmount * +fee?.percentage).toFixed(2)
+    const total = Number(+formData?.initialAmount + +feeAmount).toFixed(2)
 
     const currencyDisplay = () => {
         return <View style={styles.from}>

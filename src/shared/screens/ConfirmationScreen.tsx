@@ -34,13 +34,13 @@ function ConfirmationScreen() {
     } = useConfirmationUserInfo(transactionType === typeTransaction.walletToWallet ? parsedForm?.phone : "")
 
     const navigation = useRouter()
-
+    console.log(parsedForm)
     const {data: fee, isLoading} = useFee({
         type: transactionType,
         method: type,
         currency: parsedForm?.currency
     })
- 
+
 
     const handleConfirmationClick = () => {
         switch (transactionType) {

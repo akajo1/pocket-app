@@ -4,7 +4,7 @@ import images from "@/src/assets/images";
 export const {width, height} = Dimensions.get("screen");
 
 export const typeTransaction = {
-    createChild: "CREATE_CHILD",
+    createChild: "TRANSFER_IN",
     loadWallet: "DEPOSIT",
     walletToWallet: "TRANSFER_OUT",
     cashout: "WITHDRAWAL"

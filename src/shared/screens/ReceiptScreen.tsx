@@ -25,7 +25,7 @@ export default function ReceiptScreen() {
     const CreateChildReceipt = [
         {
             label: "Réference",
-            value: parsedForm?.referenceNumber,
+            value: parsedForm?.reference,
         },
         {
             label: "Type de transaction",
@@ -38,7 +38,7 @@ export default function ReceiptScreen() {
         },
         {
             label: "Nom du bénéficiaire",
-            value: parsedForm?.name
+            value: parsedForm?.beneficiaryData?.name
         },
         {
             label: "Montant",
@@ -66,7 +66,7 @@ export default function ReceiptScreen() {
         },
         {
             label: "Depuis",
-            value: `${parsedForm?.description.split("-")[1].replace("_", " ").toLowerCase()} `
+            value: `${parsedForm?.description?.split("-")[1].replace("_", " ").toLowerCase()} `
         },
 
         {
@@ -103,7 +103,7 @@ export default function ReceiptScreen() {
 
         {
             label: "Au compte",
-            value: `${parsedForm?.description.split("-")[1].replace("_", " ").toLowerCase()} `
+            value: `${parsedForm?.description?.split("-")[1].replace("_", " ").toLowerCase()} `
         },
         {
             label: "Montant",
