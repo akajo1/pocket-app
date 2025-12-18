@@ -31,6 +31,7 @@ export type ParamsType = {
     form: string
     type: string
     transactionType: string
+    direct?: string
 }
 
 

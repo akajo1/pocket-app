@@ -14,11 +14,12 @@ type ParamsType = {
     data: string
     type: string
     transactionType: string
+    direct?: string
 }
 
 export default function ReceiptScreen() {
 
-    const {data, type, transactionType} = useLocalSearchParams<ParamsType>();
+    const {data, type, transactionType, direct} = useLocalSearchParams<ParamsType>();
     const navigation = useRouter()
     const parsedForm = JSON.parse(data)
     const currency = parsedForm?.currency === "USD" ? "$" : "Fc";
@@ -29,7 +30,39 @@ export default function ReceiptScreen() {
         },
         {
             label: "Type de transaction",
-            value: transactionType
+            value: "Création dépendant"
+        },
+
+        {
+            label: "Depuis le portemonnaie",
+            value: parsedForm?.currency || "USD"
+        },
+        {
+            label: "Nom du bénéficiaire",
+            value: parsedForm?.beneficiaryData?.name
+        },
+        {
+            label: "Montant",
+            value: `${parseFloat(parsedForm?.amount).toFixed(2)} ${currency}`
+        },
+        {
+            label: "Frais de transaction",
+            value: `${parseFloat(parsedForm?.fee)?.toFixed(2)} ${currency}`
+        },
+        {
+            label: "Total payé",
+            value: `${parseFloat(parsedForm?.totalDebit).toFixed(2)} ${currency}`
+        },
+
+    ]
+    const LoadChildReceipt = [
+        {
+            label: "Réference",
+            value: parsedForm?.reference,
+        },
+        {
+            label: "Type de transaction",
+            value: "Appro. dépendant"
         },
 
         {
@@ -168,6 +201,9 @@ export default function ReceiptScreen() {
     const displayReceipt = () => {
         switch (transactionType) {
             case  typeTransaction.createChild:
+                if (direct === "loadChild")
+                    return LoadChildReceipt
+
                 return CreateChildReceipt
             case typeTransaction.loadWallet:
                 return LoadWalletReceipt

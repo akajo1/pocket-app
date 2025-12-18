@@ -14,3 +14,11 @@ export const childrenSchema = yup.object().shape({
   weeklyLimit: yup.number().min(1, "Limite hebdomadaire invalide").required(),
   dailyLimit: yup.number().min(1, "Limite quotidienne invalide").required(),
 });
+
+
+export const approChild = yup.object().shape({
+    amount: yup
+        .number()
+        .min(1, "Montant initial invalide")
+        .required("Montant initial requis"),
+})

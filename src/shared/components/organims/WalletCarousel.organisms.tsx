@@ -72,20 +72,23 @@ const WalletCarousel = ({
                 showsHorizontalScrollIndicator={false}
                 onMomentumScrollEnd={handleMomentumScrollEnd}
             />
-            <View style={styles.dotContainer}>
-                {wallets.map((_, index) => (
-                    <View
-                        key={index}
-                        style={[
-                            styles.dot,
-                            currentIndex === index && {
-                                ...styles.activeDot,
-                                backgroundColor: index === 0 ? pallete.dollars : pallete.green,
-                            },
-                        ]}
-                    />
-                ))}
-            </View>
+            {
+                wallets.length > 1 ? <View style={styles.dotContainer}>
+                    {wallets.map((_, index) => (
+                        <View
+                            key={index}
+                            style={[
+                                styles.dot,
+                                currentIndex === index && {
+                                    ...styles.activeDot,
+                                    backgroundColor: index === 0 ? pallete.dollars : pallete.green,
+                                },
+                            ]}
+                        />
+                    ))}
+                </View> : null
+            }
+
         </View>
     );
 };

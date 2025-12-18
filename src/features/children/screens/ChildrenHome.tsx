@@ -15,6 +15,7 @@ import {useChildren} from "../hook/useChildren";
 import {useChildTransactions} from "../hook/useChildTransactions";
 import {quickActionsChild} from "../services/menu";
 import {useFocusEffect} from "@react-navigation/native";
+import {sendMoneyType, typeTransaction} from "@/src/utils/method";
 
 function ChildrenScreen() {
     const navigation = useRouter();
@@ -44,6 +45,32 @@ function ChildrenScreen() {
     const quickActionsWithHandlers = quickActionsChild?.map((action) => ({
         ...action,
         onPress: () => {
+            switch (action.key) {
+                case "charger":
+                    return navigation.navigate({
+                            pathname: "/(children)/loadChild",
+                            params: {
+                                childId: children[currentIndex]?.id,
+                                currency: children[currentIndex]?.currency,
+                                transactionType: typeTransaction.createChild,
+                                type: sendMoneyType.w2c
+                            }
+                        }
+                    )
+                case "unload":
+                    return navigation.navigate({
+                            pathname: "/(children)/unloadChild",
+                            params: {
+                                childId: children[currentIndex]?.id,
+                                currency: children[currentIndex]?.currency,
+                                transactionType: typeTransaction.createChild,
+                                type: sendMoneyType.w2c
+                            }
+                        }
+                    )
+                default:
+                    return
+            }
         },
     }));
 

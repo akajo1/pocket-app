@@ -29,7 +29,6 @@ export default function TransactionItem({
                                             transaction,
                                             onPress,
                                         }: TransactionItemProps) {
-    console.log(transaction)
     const getIconColor = () => {
         return transaction?.direction === "CREDIT"
             ? pallete.green

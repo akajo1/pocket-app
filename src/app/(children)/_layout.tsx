@@ -1,4 +1,4 @@
-import { Stack } from "expo-router/stack";
+import {Stack} from "expo-router/stack";
 
 export default function ChildrenLayout() {
   return (
@@ -10,6 +10,20 @@ export default function ChildrenLayout() {
           headerShown: false,
         }}
       />
+        <Stack.Screen
+            name="loadChild"
+            options={{
+                title: "Appro. dependant",
+                headerShown: false,
+            }}
+        />
+        <Stack.Screen
+            name="unloadChild"
+            options={{
+                title: "Appro. portemonnaie",
+                headerShown: false,
+            }}
+        />
     </Stack>
   );
 }

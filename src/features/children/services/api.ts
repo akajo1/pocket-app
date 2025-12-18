@@ -22,6 +22,13 @@ export interface CreateChildren{
     dailyLimit: number;
     weeklyLimit: number;
 }
+
+export interface LoadChildParams {
+    parentWalletId: string;
+    amount: number;
+    childId: string;
+
+}
 const childrenInstance = new ApiClient<any, Children[]>("/children");
 
 const childrenApi = {
@@ -39,6 +46,14 @@ const childrenApi = {
         }
         return await childrenInstance.post(currentBody)
     },
+    loadChild: async (body: LoadChildParams) => {
+        const currentBody = {
+            ...body,
+            childId: null,
+            name: null
+        }
+        return await childrenInstance.post(currentBody, `/${body.childId}/fund`)
+    }
 };
 export default childrenApi;
 
