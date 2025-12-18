@@ -14,7 +14,7 @@ type Props = {
     isLoading: boolean
     onSubmit: () => void
 }
-export default function ChildConfirmation({formData, fee, isLoading, onSubmit}: Props) {
+export default function LoadChildConfirmation({formData, fee, isLoading, onSubmit}: Props) {
     const currency = formData.currency === "USD" ? "$" : "Fc";
     const feeAmount = Number(+formData?.amount * +fee?.percentage).toFixed(2)
     const total = Number(+formData?.amount + +feeAmount).toFixed(2)

@@ -1,6 +1,6 @@
-import { pallete } from "@/src/utils/pallete";
-import { Tabs } from "expo-router";
-import { HistoryIcon, User, Users, Wallet } from "lucide-react-native";
+import {pallete} from "@/src/utils/pallete";
+import {Tabs} from "expo-router";
+import {HomeIcon, User, Users, WalletIcon} from "lucide-react-native";
 
 export default function DashboardNavigation() {
   return (
@@ -26,10 +26,19 @@ export default function DashboardNavigation() {
       <Tabs.Screen
         name="index"
         options={{
-          title: "Portemonnaie",
-          tabBarIcon: ({ size, color }) => <Wallet size={size} color={color} />,
+            title: "Acceuil",
+            tabBarIcon: ({size, color}) => <HomeIcon size={size} color={color}/>,
         }}
       />
+        <Tabs.Screen
+            name="wallets"
+            options={{
+                title: "Portemonnaie",
+                tabBarIcon: ({size, color}) => (
+                    <WalletIcon size={size} color={color}/>
+                ),
+            }}
+        />
       <Tabs.Screen
         name="children"
         options={{
@@ -37,17 +46,9 @@ export default function DashboardNavigation() {
           tabBarIcon: ({ size, color }) => <Users size={size} color={color} />,
         }}
       />
-      <Tabs.Screen
-        name="transactions"
-        options={{
-          title: "Mes depenses",
-          tabBarIcon: ({ size, color }) => (
-            <HistoryIcon size={size} color={color} />
-          ),
-        }}
-      />
 
-      <Tabs.Screen
+
+        <Tabs.Screen
         name="profile"
         options={{
           title: "Profil",

@@ -5,3 +5,4 @@ export {default as ChildConfirmation} from "./ChildConfirmation";
 export {default as LoadChild} from "./LoadChild";
 export {default as UnloadChild} from "./UnloadChild";
 export {default as LoadChildConfirmation} from "./LoadChildConfirmation";
+export {default as UnloadChildConfirmation} from "./UnloadConfirmation"

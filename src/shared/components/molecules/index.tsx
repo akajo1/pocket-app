@@ -13,3 +13,4 @@ export {default as TabButton} from "./TabButton";
 export {default as GrafView} from "./GrafView";
 export {default as RadioButton} from "./RadioButton.molecule"
 export {default as BrandItem} from "./BrandItem.molecule"
+export {default as CurrencyDisplay} from "./CurrencyDisplay.molecule"

@@ -11,7 +11,7 @@ import {height, ParamsType, typeTransaction, width} from "@/src/utils/method";
 import useCreateChild from "@/src/features/children/hook/useCreateChild";
 import {useFee} from "@/src/shared/hooks/useFee";
 import moment from "moment";
-import {ChildConfirmation, LoadChildConfirmation} from "@/src/features/children/screens";
+import {ChildConfirmation, LoadChildConfirmation, UnloadChildConfirmation} from "@/src/features/children/screens";
 import {CashoutConfirmation, LoadConfirmation, WalletToWalletConfirmation} from "@/src/features/sendmoney/screens";
 import useLoadWallet from "@/src/features/sendmoney/hooks/useLoadWallet";
 import useSendMoneyToWallet from "@/src/features/sendmoney/hooks/useSendMoneyToWallet";
@@ -47,9 +47,10 @@ function ConfirmationScreen() {
     const handleConfirmationClick = () => {
         switch (transactionType) {
             case typeTransaction.createChild:
-                if (direct === "loadChild") {
-                    return loadChildMutate.mutate(parsedForm)
-                }
+                if (direct === "loadChild") return loadChildMutate.mutate(parsedForm)
+
+                if (direct === "unloadChild") return
+
                 return createChildMutate.mutate({...parsedForm, age: moment(parsedForm?.age)?.format("YYYY-MM-DD")})
             case typeTransaction.loadWallet:
                 return loadWalletMutate.mutate(parsedForm)
@@ -80,6 +81,16 @@ function ConfirmationScreen() {
                         onSubmit={() => handleConfirmationClick()}
                     />
                 }
+
+                if (direct === "unloadChild") {
+                    return <UnloadChildConfirmation
+                        formData={parsedForm}
+                        fee={fee}
+                        isLoading={loadChildMutate.isPending || isLoading}
+                        onSubmit={() => handleConfirmationClick()}
+                    />
+                }
+
                 return <ChildConfirmation
                     formData={parsedForm}
                     fee={fee}

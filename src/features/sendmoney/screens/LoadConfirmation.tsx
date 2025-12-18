@@ -6,6 +6,7 @@ import {pallete} from "@/src/utils/pallete";
 import {SmartText} from "@/src/shared/components/atoms";
 import React from "react";
 import {TransactionFooter} from "@/src/shared/components";
+import {CurrencyDisplay} from "@/src/shared/components/molecules";
 
 
 type Props = {
@@ -34,17 +35,16 @@ export default function LoadConfirmation({formData, fee, isLoading, onSubmit}: P
     }
 
     return <>
-        {currencyDisplay(
-            <Phone size={20} color={pallete.blue}/>,
-            "Depuis",
-            formData?.mode
-        )}
-
-        {currencyDisplay(
-            <WalletIcon size={20} color={pallete.dollars}/>,
-            "A mon Portemonaie",
-            formData?.currency
-        )}
+        <CurrencyDisplay
+            icon={<Phone size={20} color={pallete.blue}/>}
+            subTitle={"Depuis"}
+            title={formData?.mode}
+        />
+        <CurrencyDisplay
+            icon={<WalletIcon size={20} color={pallete.dollars}/>}
+            subTitle={"A mon Portemonaie"}
+            title={formData?.currency}
+        />
 
         <TransactionFooter
             currency={currency}

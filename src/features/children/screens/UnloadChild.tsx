@@ -15,6 +15,7 @@ import {useChildren} from "@/src/features/children/hook/useChildren";
 import {ChildrenCarousel} from "@/src/features/children/components/organisms";
 import {yupResolver} from "@hookform/resolvers/yup";
 import {approChild} from "@/src/features/children/services/schema";
+import {sendMoneyType, typeTransaction} from "@/src/utils/method";
 
 type UnloadChildProps = {
     currency: string;
@@ -45,8 +46,21 @@ function UnloadChild() {
         },
     });
 
-    const onSubmit = () => {
-        return
+    const onSubmit = (datas) => {
+        const parentWalletId = walletList[0].id
+        const childId = childrenList[0].id
+        const name = childrenList[0].name
+        const currentData = {...datas, currency, parentWalletId, childId, name};
+
+        navigation.navigate({
+            pathname: "/(transactions)/confirmationScreen",
+            params: {
+                form: JSON.stringify(currentData),
+                transactionType: typeTransaction.createChild,
+                type: sendMoneyType.c2w,
+                direct: "unloadChild",
+            }
+        })
     }
     return <Wrapper>
         <Header

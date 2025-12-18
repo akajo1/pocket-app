@@ -23,6 +23,7 @@ export const queryKey = {
 export const sendMoneyType = {
     w2w: "W2W",
     w2c: "W2C",
+    c2w: "C2W",
     load: "LOD",
     out: "CASHOUT"
 }
