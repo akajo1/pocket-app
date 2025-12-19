@@ -47,7 +47,7 @@ const WalletCarousel = ({
         </View>
     </SkeletonLoading>
 
-    if (!wallets.length) return null;
+    if (!wallets?.length) return null;
 
     return (
         <View

@@ -89,7 +89,7 @@ export default function TransactionsList({
         <View style={styles.container}>
             <Text style={styles.title}>{title}</Text>
 
-            {!transactions.length ? (
+            {!transactions?.length ? (
                 <NoData
                     icon={<FontAwesome5 name="history" size={44} color="black"/>}
                     description="Vous n’avez effectué aucune transaction pour le moment"

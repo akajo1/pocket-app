@@ -7,11 +7,11 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		02CBFE0B013DE370E8DB7238 /* libPods-smartPocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6D9BB672E66DA22816B7DCA9 /* libPods-smartPocket.a */; };
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
-		2359A42403088C2C85EEFBF5 /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 3015FBC2E8DC101F6E817BC5 /* PrivacyInfo.xcprivacy */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
-		422A64FA13A69D42D86C5930 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = D4973429277B425E6553E952 /* ExpoModulesProvider.swift */; };
-		6E6DB95E79DAF26C33C2A40A /* libPods-smartPocket.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 63FA7461C50D7E0187D0780D /* libPods-smartPocket.a */; };
+		A1A555B81D644BEF5BF0837F /* PrivacyInfo.xcprivacy in Resources */ = {isa = PBXBuildFile; fileRef = 549D0EE567B82DE73EC1D421 /* PrivacyInfo.xcprivacy */; };
+		AA998CAF19CAC2E803A8B295 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 67F66ED955EE508DEEDFBFFA /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = F11748412D0307B40044C1D9 /* AppDelegate.swift */; };
 /* End PBXBuildFile section */
@@ -20,14 +20,14 @@
 		13B07F961A680F5B00A75B9A /* smartPocket.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = smartPocket.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = smartPocket/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = smartPocket/Info.plist; sourceTree = "<group>"; };
-		2646B827C8C888002A82C1D1 /* Pods-smartPocket.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smartPocket.release.xcconfig"; path = "Target Support Files/Pods-smartPocket/Pods-smartPocket.release.xcconfig"; sourceTree = "<group>"; };
-		3015FBC2E8DC101F6E817BC5 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = smartPocket/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
-		63FA7461C50D7E0187D0780D /* libPods-smartPocket.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-smartPocket.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		78854E5A895FB717F4FB5359 /* Pods-smartPocket.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smartPocket.debug.xcconfig"; path = "Target Support Files/Pods-smartPocket/Pods-smartPocket.debug.xcconfig"; sourceTree = "<group>"; };
+		549D0EE567B82DE73EC1D421 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; includeInIndex = 1; name = PrivacyInfo.xcprivacy; path = smartPocket/PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
+		67F66ED955EE508DEEDFBFFA /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-smartPocket/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		6D9BB672E66DA22816B7DCA9 /* libPods-smartPocket.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-smartPocket.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = SplashScreen.storyboard; path = smartPocket/SplashScreen.storyboard; sourceTree = "<group>"; };
 		BB2F792C24A3F905000567C9 /* Expo.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Expo.plist; sourceTree = "<group>"; };
-		D4973429277B425E6553E952 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-smartPocket/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
+		C09F07A0F4C75DF615073977 /* Pods-smartPocket.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smartPocket.release.xcconfig"; path = "Target Support Files/Pods-smartPocket/Pods-smartPocket.release.xcconfig"; sourceTree = "<group>"; };
 		ED297162215061F000B7C4FE /* JavaScriptCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JavaScriptCore.framework; path = System/Library/Frameworks/JavaScriptCore.framework; sourceTree = SDKROOT; };
+		F0B3037930FB1CF500EAC29D /* Pods-smartPocket.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-smartPocket.debug.xcconfig"; path = "Target Support Files/Pods-smartPocket/Pods-smartPocket.debug.xcconfig"; sourceTree = "<group>"; };
 		F11748412D0307B40044C1D9 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AppDelegate.swift; path = smartPocket/AppDelegate.swift; sourceTree = "<group>"; };
 		F11748442D0722820044C1D9 /* smartPocket-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "smartPocket-Bridging-Header.h"; path = "smartPocket/smartPocket-Bridging-Header.h"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -37,7 +37,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6E6DB95E79DAF26C33C2A40A /* libPods-smartPocket.a in Frameworks */,
+				02CBFE0B013DE370E8DB7238 /* libPods-smartPocket.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -53,7 +53,7 @@
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
 				AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */,
-				3015FBC2E8DC101F6E817BC5 /* PrivacyInfo.xcprivacy */,
+				549D0EE567B82DE73EC1D421 /* PrivacyInfo.xcprivacy */,
 			);
 			name = smartPocket;
 			sourceTree = "<group>";
@@ -62,9 +62,27 @@
 			isa = PBXGroup;
 			children = (
 				ED297162215061F000B7C4FE /* JavaScriptCore.framework */,
-				63FA7461C50D7E0187D0780D /* libPods-smartPocket.a */,
+				6D9BB672E66DA22816B7DCA9 /* libPods-smartPocket.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		5C0203CCB898283F32553F05 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				F0B3037930FB1CF500EAC29D /* Pods-smartPocket.debug.xcconfig */,
+				C09F07A0F4C75DF615073977 /* Pods-smartPocket.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
+			sourceTree = "<group>";
+		};
+		7DEDC8A93FD3E4932B38DD99 /* ExpoModulesProviders */ = {
+			isa = PBXGroup;
+			children = (
+				BCCFCB3EB810C0FE528FDBED /* smartPocket */,
+			);
+			name = ExpoModulesProviders;
 			sourceTree = "<group>";
 		};
 		832341AE1AAA6A7D00B99B32 /* Libraries */ = {
@@ -81,8 +99,8 @@
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
-				9271FC61F8551AAF69E2B325 /* Pods */,
-				927EF4D25E0480D014934DAD /* ExpoModulesProviders */,
+				5C0203CCB898283F32553F05 /* Pods */,
+				7DEDC8A93FD3E4932B38DD99 /* ExpoModulesProviders */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";
@@ -97,32 +115,6 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		9271FC61F8551AAF69E2B325 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				78854E5A895FB717F4FB5359 /* Pods-smartPocket.debug.xcconfig */,
-				2646B827C8C888002A82C1D1 /* Pods-smartPocket.release.xcconfig */,
-			);
-			name = Pods;
-			path = Pods;
-			sourceTree = "<group>";
-		};
-		927EF4D25E0480D014934DAD /* ExpoModulesProviders */ = {
-			isa = PBXGroup;
-			children = (
-				A08541B32DE0274FEA493233 /* smartPocket */,
-			);
-			name = ExpoModulesProviders;
-			sourceTree = "<group>";
-		};
-		A08541B32DE0274FEA493233 /* smartPocket */ = {
-			isa = PBXGroup;
-			children = (
-				D4973429277B425E6553E952 /* ExpoModulesProvider.swift */,
-			);
-			name = smartPocket;
-			sourceTree = "<group>";
-		};
 		BB2F792B24A3F905000567C9 /* Supporting */ = {
 			isa = PBXGroup;
 			children = (
@@ -130,6 +122,14 @@
 			);
 			name = Supporting;
 			path = smartPocket/Supporting;
+			sourceTree = "<group>";
+		};
+		BCCFCB3EB810C0FE528FDBED /* smartPocket */ = {
+			isa = PBXGroup;
+			children = (
+				67F66ED955EE508DEEDFBFFA /* ExpoModulesProvider.swift */,
+			);
+			name = smartPocket;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -140,13 +140,13 @@
 			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "smartPocket" */;
 			buildPhases = (
 				08A4A3CD28434E44B6B9DE2E /* [CP] Check Pods Manifest.lock */,
-				92D97764F84F923409C0A49A /* [Expo] Configure project */,
+				F7D357F6AA0BBD390CCED417 /* [Expo] Configure project */,
 				13B07F871A680F5B00A75B9A /* Sources */,
 				13B07F8C1A680F5B00A75B9A /* Frameworks */,
 				13B07F8E1A680F5B00A75B9A /* Resources */,
 				00DD1BFF1BD5951E006B06BC /* Bundle React Native code and images */,
 				800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */,
-				89BB7D102A03B744A6C00B2A /* [CP] Embed Pods Frameworks */,
+				573FFA6B8EC3F510385C8569 /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -196,7 +196,7 @@
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-				2359A42403088C2C85EEFBF5 /* PrivacyInfo.xcprivacy in Resources */,
+				A1A555B81D644BEF5BF0837F /* PrivacyInfo.xcprivacy in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -238,6 +238,24 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		573FFA6B8EC3F510385C8569 /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-smartPocket/Pods-smartPocket-frameworks.sh",
+				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-smartPocket/Pods-smartPocket-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		800E24972A6A228C8D4807E9 /* [CP] Copy Pods Resources */ = {
@@ -322,25 +340,7 @@
 			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-smartPocket/Pods-smartPocket-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		89BB7D102A03B744A6C00B2A /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-smartPocket/Pods-smartPocket-frameworks.sh",
-				"${PODS_XCFRAMEWORKS_BUILD_DIR}/hermes-engine/Pre-built/hermes.framework/hermes",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/hermes.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-smartPocket/Pods-smartPocket-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		92D97764F84F923409C0A49A /* [Expo] Configure project */ = {
+		F7D357F6AA0BBD390CCED417 /* [Expo] Configure project */ = {
 			isa = PBXShellScriptBuildPhase;
 			alwaysOutOfDate = 1;
 			buildActionMask = 2147483647;
@@ -367,7 +367,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				F11748422D0307B40044C1D9 /* AppDelegate.swift in Sources */,
-				422A64FA13A69D42D86C5930 /* ExpoModulesProvider.swift in Sources */,
+				AA998CAF19CAC2E803A8B295 /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,7 +376,7 @@
 /* Begin XCBuildConfiguration section */
 		13B07F941A680F5B00A75B9A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 78854E5A895FB717F4FB5359 /* Pods-smartPocket.debug.xcconfig */;
+			baseConfigurationReference = F0B3037930FB1CF500EAC29D /* Pods-smartPocket.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
@@ -412,7 +412,7 @@
 		};
 		13B07F951A680F5B00A75B9A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 2646B827C8C888002A82C1D1 /* Pods-smartPocket.release.xcconfig */;
+			baseConfigurationReference = C09F07A0F4C75DF615073977 /* Pods-smartPocket.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
