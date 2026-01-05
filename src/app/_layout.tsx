@@ -1,70 +1,36 @@
-import { AuthProvider } from "@/src/components/contexts/AuthContext";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { Stack } from "expo-router";
-import { StatusBar } from "expo-status-bar";
-import React from "react";
-import { ActivityIndicator, StyleSheet, Text, View } from "react-native";
-import AlertModal from "../components/modals/AlertModal";
-import AuthModal from "../components/modals/AuthModal";
-import { AlertProvider, useAlert } from "../lib/context/AlertContext";
-import { useAuth } from "../lib/hooks/useAuth";
+import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
+import {ReactQueryDevtools} from "@tanstack/react-query-devtools";
 
-// Création du client React Query
+import React from "react";
+import {Platform} from "react-native";
+import ToastManager from "toastify-react-native";
+import {KeyboardProvider} from "react-native-keyboard-controller";
+import {AlertModal} from "../shared/components/organims";
+import {AlertProvider, AuthProvider} from "../shared/provider";
+import {LayoutContent} from "@/src/shared/guards";
+
 const queryClient = new QueryClient();
 
-function LayoutContent() {
-  const { isAuthenticated, isLoading } = useAuth();
-  const { alertMessage } = useAlert();
-
-  if (isLoading) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator size="large" color="#4F46E5" />
-        <Text style={styles.loadingText}>Chargement...</Text>
-      </View>
-    );
-  }
-
-  const displayScreen = () => {
-    if (!isAuthenticated) return <AuthModal />;
-    return (
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-    );
-  };
-  return (
-    <>
-      <StatusBar style="auto" />
-      {alertMessage.visible && <AlertModal />}
-      {displayScreen()}
-    </>
-  );
-}
-
 export default function RootLayout() {
-  return (
-    <AlertProvider>
-      <QueryClientProvider client={queryClient}>
-        <AuthProvider>
-          <LayoutContent />
-        </AuthProvider>
-      </QueryClientProvider>
-    </AlertProvider>
-  );
-}
 
-const styles = StyleSheet.create({
-  loadingContainer: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F8FAFC",
-  },
-  loadingText: {
-    marginTop: 16,
-    fontSize: 16,
-    color: "#6B7280",
-  },
-});
+    return (
+        <>
+
+            <AlertProvider>
+                <ToastManager/>
+                <QueryClientProvider client={queryClient}>
+                    <KeyboardProvider>
+                        <AuthProvider>
+                            <LayoutContent/>
+                        </AuthProvider>
+
+                        <AlertModal/>
+                        {Platform.OS === "web" && (
+                            <ReactQueryDevtools initialIsOpen={false}/>
+                        )}
+                    </KeyboardProvider>
+                </QueryClientProvider>
+            </AlertProvider>
+        </>
+    );
+}
