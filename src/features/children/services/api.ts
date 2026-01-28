@@ -53,6 +53,13 @@ const childrenApi = {
             name: null
         }
         return await childrenInstance.post(currentBody, `/${body.childId}/fund`)
+    },
+    unloadChild: async (body: LoadChildParams) => {
+        const currentBody = {
+            ...body,
+            childId: null,
+        }
+        return await childrenInstance.post(currentBody, `/${body.childId}/refund`)
     }
 };
 export default childrenApi;

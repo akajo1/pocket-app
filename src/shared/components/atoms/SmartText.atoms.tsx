@@ -13,7 +13,7 @@ const SmartText = ({ children,containerStyle, style = {}, isPressable, onPress }
   if (isPressable) {
     return (
       <Pressable onPress={onPress} style={containerStyle}>
-        <Text style={style}>{children}</Text>
+        <Text style={style} >{children}</Text>
       </Pressable>
     );
   }

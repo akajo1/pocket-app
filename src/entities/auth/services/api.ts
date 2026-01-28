@@ -21,6 +21,7 @@ const authApi = {
         identifier: data.phone,
         password: data.password
     }, "/login"),
+    logout: async () => await authInstance.post(null, "/logout"),
     fetchUser: async () => await authInstance.fetch(null, "/user-info/"),
     register: async (data: RegisterFormType): Promise<any> =>
         await authInstance.post(data, "/register"),

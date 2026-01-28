@@ -85,7 +85,7 @@ export default function SendMoneyToWallet() {
             ""
         )}`;
 
-        if (user?.phone === phone) {
+        if (user?.user?.phone === phone) {
             message?.setAlertMessage({
                 visible: true,
                 message: "Vous ne pouvez pas vous envoyer a vous-meme!",

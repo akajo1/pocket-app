@@ -1,0 +1,1 @@
+export {default as PinScreen} from "./Pin.screen"

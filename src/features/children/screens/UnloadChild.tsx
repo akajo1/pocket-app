@@ -31,8 +31,8 @@ function UnloadChild() {
         refetch: refetchWallets,
     } = useWallet();
     const {data: children, isLoading: loadingChildren, refetch: refetchChildren} = useChildren();
-    const walletList = walletsData.filter((wallet) => wallet.currency === currency)
-    const childrenList = children.filter((child) => child.id === childId)
+    const walletList = walletsData?.filter((wallet) => wallet.currency === currency)
+    const childrenList = children?.filter((child) => child.id === childId)
 
     const {
         control,
@@ -49,14 +49,13 @@ function UnloadChild() {
     const onSubmit = (datas) => {
         const parentWalletId = walletList[0].id
         const childId = childrenList[0].id
-        const name = childrenList[0].name
-        const currentData = {...datas, currency, parentWalletId, childId, name};
+        const currentData = {...datas, currency, parentWalletId, childId};
 
         navigation.navigate({
             pathname: "/(transactions)/confirmationScreen",
             params: {
                 form: JSON.stringify(currentData),
-                transactionType: typeTransaction.createChild,
+                transactionType: typeTransaction.unloadChild,
                 type: sendMoneyType.c2w,
                 direct: "unloadChild",
             }

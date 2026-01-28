@@ -16,9 +16,9 @@ type Props = {
 
 }
 export default function CashoutConfirmation({formData, fee, isLoading, onSubmit}: Props) {
-    const currency = formData.currency === "USD" ? "$" : "Fc";
-    const feeAmount = Number(+formData?.amount * +fee?.percentage).toFixed(2)
-    const total = Number(+formData?.amount + +feeAmount).toFixed(2)
+    const currency = formData.currency;
+    const feeAmount = Number(+formData?.amount * +fee?.percentage)
+    const total = Number(+formData?.amount + +feeAmount)
 
 
     const currencyDisplay = (icon: any, subTitle: string, title: string) => {
@@ -37,7 +37,7 @@ export default function CashoutConfirmation({formData, fee, isLoading, onSubmit}
         {currencyDisplay(
             <Phone size={20} color={pallete.blue}/>,
             "Depuis mon portemonnaie",
-            formData?.currency
+           currency
         )}
 
         {currencyDisplay(

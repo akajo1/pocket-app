@@ -16,13 +16,15 @@ import {pallete} from "@/src/utils/pallete";
 
 export default function ChildTransactions() {
     const navigation = useRouter();
-    const {data: children, isLoading} = useChildren();
-
+    const {data: children, isLoading: loadingChildren, refetch: refetchChildren} = useChildren();
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
-    const {data: transactions} = useChildTransactions(
-        children?.children[currentIndex]?.id
-    );
+    const childId = children?.[currentIndex]?.id;
+    const {
+        data: transactions,
+        isLoading: loadingTransactions,
+        refetch: refetchTransactions,
+    } = useChildTransactions({childId});
 
     const [currentModal, setCurrentModal] = useState<{
         [key: string]: boolean;
@@ -58,12 +60,13 @@ export default function ChildTransactions() {
             title="Transactions Dépendant"
         />
         <ChildrenCarousel
-            children={children?.children}
+            children={children}
             currentIndex={currentIndex}
             handleMomentumScrollEnd={handleMomentumScrollEnd}
         />
         <View style={styles.transactions}>
             <TransactionsList
+                isLoading={loadingChildren || loadingTransactions}
                 title="Toute les Transactions"
                 transactions={transactions || []}
                 onTransactionPress={handleTransactionPress}

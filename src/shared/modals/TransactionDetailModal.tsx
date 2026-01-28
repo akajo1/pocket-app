@@ -1,6 +1,7 @@
 import {Calendar, Clock, Hash, User2Icon, X} from "lucide-react-native";
 import React from "react";
 import {Modal, ScrollView, StyleSheet, Text, TouchableOpacity, View,} from "react-native";
+import {numberFormat} from "@/src/utils/method";
 
 interface Transaction {
     id: number;
@@ -101,8 +102,7 @@ export default function TransactionDetailModal({
                     <View style={styles.amountSection}>
                         <Text style={[styles.amount, {color}]}>
                             {transaction.type !== "transfer" ? "+" : "-"}
-                            {transaction?.wallet_currency === "USD" ? "$" : "Fc"}
-                            {parseFloat(amount.toString()).toFixed(2)}
+                            {numberFormat(parseFloat(amount.toString()), transaction?.wallet_currency)}
                         </Text>
                         <Text style={styles.transactionType}>
                             {getTransactionTypeLabel(transaction.typeTransaction)}

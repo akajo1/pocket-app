@@ -3,8 +3,7 @@ import {useCallback} from "react";
 import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import {useAlert} from "@/src/shared/provider/AlertProvider";
 import {useRouter} from "expo-router";
-import {LoginFormType} from "@/src/entities/auth/services/api";
-import authApi from "../services/api";
+import authApi, {LoginFormType} from "@/src/entities/auth/services/api";
 
 
 export const useAuthManager = () => {
@@ -36,10 +35,10 @@ export const useAuthManager = () => {
         mutationFn: authApi.login,
         onSuccess: (response) => {
             queryClient.invalidateQueries()
-            const {userId, token} = response;
+            const {user, token} = response;
 
             setUser({
-                id: userId, token
+                user, token
             });
             navigation.replace("/(dashboard)");
         },
@@ -68,7 +67,10 @@ export const useAuthManager = () => {
     );
 
     return {
-        logout: () => clearUser(),
+        logout: () => {
+            authApi.logout()
+            clearUser()
+        },
         login,
         user,
         fetchUser: fetchUser.data,

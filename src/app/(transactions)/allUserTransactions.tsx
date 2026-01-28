@@ -6,7 +6,7 @@ import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View} from "react-n
 import {Header} from "@/src/shared/components/molecules";
 import {IconButton, SmartImage} from "@/src/shared/components/atoms";
 import images from "@/src/assets/images";
-import { ChevronLeft} from "lucide-react-native";
+import {ChevronLeft} from "lucide-react-native";
 import {pallete} from "@/src/utils/pallete";
 import {WalletCarousel} from "@/src/shared/components/organims";
 import TransactionsList from "@/src/shared/components/organims/TransactionsList";
@@ -16,20 +16,28 @@ import {useRouter} from "expo-router";
 
 
 export default function AllUserTransactions() {
-    const { data } = useWallet();
+    const {
+        data: walletsData,
+        isLoading: walletsLoading,
+        refetch: refetchWallets,
+    } = useWallet();
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
-const navigation = useRouter()
+    const walletId = walletsData?.[currentIndex]?.id;
+
+
+    const navigation = useRouter()
     const [currentModal, setCurrentModal] = useState<{
         [key: string]: boolean;
     } | null>(null);
-    const { data: transactions } = useTransactions({
-        walletId: currentIndex.toString(),
-        category: "",
-        endDate: "",
-        limit: 10,
-        page: 1,
-        type: "",
+
+    const {
+        data: transactions,
+        isLoading: transactionLoading,
+        refetch: refetchTransactions,
+    } = useTransactions({
+        walletId,      
+        pageSize: 20,
     });
 
     const handleMomentumScrollEnd = (
@@ -43,7 +51,7 @@ const navigation = useRouter()
 
     const handleTransactionPress = (transaction: any) => {
         setSelectedTransaction(transaction);
-        setCurrentModal({ transaction: true });
+        setCurrentModal({transaction: true});
     };
     return <Wrapper>
         <Header
@@ -55,7 +63,7 @@ const navigation = useRouter()
             }
             left={
                 <IconButton
-                    icon={<ChevronLeft size={24} color={pallete.grey} />}
+                    icon={<ChevronLeft size={24} color={pallete.grey}/>}
                     onPress={() => navigation.back()}
                     size="medium"
                 />
@@ -63,18 +71,19 @@ const navigation = useRouter()
             title="Transactions"
         />
         <WalletCarousel
-            wallets={data?.wallets || []}
+            wallets={walletsData || []}
             currentIndex={currentIndex}
             handleMomentumScrollEnd={handleMomentumScrollEnd}
         />
-       <View style={styles.transactions}>
-           <TransactionsList
-               title="Toutes les Transactions"
-               transactions={transactions?.transactions || []}
-               onTransactionPress={handleTransactionPress}
-               showViewAll={false}
-           />
-       </View>
+        <View style={styles.transactions}>
+            <TransactionsList
+                isLoading={walletsLoading || transactionLoading}
+                title="Toutes les Transactions"
+                transactions={transactions || []}
+                onTransactionPress={handleTransactionPress}
+                showViewAll={false}
+            />
+        </View>
         <TransactionDetailModal
             visible={currentModal?.transaction ? true : false}
             onClose={() => setCurrentModal(null)}
@@ -88,7 +97,7 @@ const styles = StyleSheet.create({
         height: 40,
         alignSelf: "center",
     },
-    transactions:{
+    transactions: {
         height: height / 1.8
     }
 });

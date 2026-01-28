@@ -8,7 +8,7 @@ import {pallete} from "@/src/utils/pallete";
 import {useLocalSearchParams, useRouter} from "expo-router";
 import {ListDetail} from "@/src/shared/components/organims";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
-import {typeTransaction} from "@/src/utils/method";
+import {numberFormat, typeTransaction} from "@/src/utils/method";
 
 type ParamsType = {
     data: string
@@ -21,8 +21,10 @@ export default function ReceiptScreen() {
 
     const {data, type, transactionType, direct} = useLocalSearchParams<ParamsType>();
     const navigation = useRouter()
-    const parsedForm = JSON.parse(data)
-    const currency = parsedForm?.currency === "USD" ? "$" : "Fc";
+    const payload = JSON.parse(data)
+    const parsedForm = payload?.data
+    const currency = parsedForm?.currency;
+
     const CreateChildReceipt = [
         {
             label: "Réference",
@@ -35,7 +37,7 @@ export default function ReceiptScreen() {
 
         {
             label: "Depuis le portemonnaie",
-            value: parsedForm?.currency || "USD"
+            value: currency || "USD"
         },
         {
             label: "Nom du bénéficiaire",
@@ -43,15 +45,15 @@ export default function ReceiptScreen() {
         },
         {
             label: "Montant",
-            value: `${parseFloat(parsedForm?.amount).toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.amount), currency) }`
         },
         {
             label: "Frais de transaction",
-            value: `${parseFloat(parsedForm?.fee)?.toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.fee), currency)}`
         },
         {
             label: "Total payé",
-            value: `${parseFloat(parsedForm?.totalDebit).toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.totalDebit), currency)}`
         },
 
     ]
@@ -67,7 +69,7 @@ export default function ReceiptScreen() {
 
         {
             label: "Depuis le portemonnaie",
-            value: parsedForm?.currency || "USD"
+            value: currency || "USD"
         },
         {
             label: "Nom du bénéficiaire",
@@ -75,15 +77,15 @@ export default function ReceiptScreen() {
         },
         {
             label: "Montant",
-            value: `${parseFloat(parsedForm?.amount).toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.amount), currency)}`
         },
         {
             label: "Frais de transaction",
-            value: `${parseFloat(parsedForm?.fee)?.toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.fee), currency)}`
         },
         {
             label: "Total payé",
-            value: `${parseFloat(parsedForm?.totalDebit).toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.totalDebit), currency)}`
         },
 
     ]
@@ -104,19 +106,19 @@ export default function ReceiptScreen() {
 
         {
             label: "A mon portemonnaie",
-            value: parsedForm?.currency || "USD"
+            value: currency || "USD"
         },
         {
             label: "Montant",
-            value: `${parseFloat(parsedForm?.amount).toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.amount), currency)}`
         },
         {
             label: "Frais de transaction",
-            value: `${parseFloat(parsedForm?.fee)?.toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.fee), currency)}`
         },
         {
             label: "Total reçu",
-            value: `${parseFloat(parsedForm?.totalDebit).toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.totalDebit), currency)}`
         },
 
     ]
@@ -131,7 +133,7 @@ export default function ReceiptScreen() {
         },
         {
             label: "Depuis mon portemonnaie",
-            value: parsedForm?.currency || "USD"
+            value: currency || "USD"
         },
 
         {
@@ -144,11 +146,11 @@ export default function ReceiptScreen() {
         },
         {
             label: "Frais de transaction",
-            value: `${parseFloat(parsedForm?.fee)?.toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.fee), currency)}`
         },
         {
             label: "Retrait total",
-            value: `${parseFloat(parsedForm?.totalDebit).toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.amount), currency)}`
         },
 
     ]
@@ -164,7 +166,7 @@ export default function ReceiptScreen() {
 
         {
             label: "Depuis mon portemonnaie",
-            value: parsedForm?.currency || "USD"
+            value: currency || "USD"
         },
         {
             label: "Nom du bénéficiaire",
@@ -176,15 +178,15 @@ export default function ReceiptScreen() {
         },
         {
             label: "Montant",
-            value: `${parseFloat(parsedForm?.amount).toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.amount), currency)}`
         },
         {
             label: "Frais de transaction",
-            value: `${parseFloat(parsedForm?.fee)?.toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.fee), currency)}`
         },
         {
             label: "Total payé",
-            value: `${parseFloat(parsedForm?.totalDebit).toFixed(2)} ${currency}`
+            value: `${numberFormat(parseFloat(parsedForm?.totalDebit), currency)}`
         },
     ]
 

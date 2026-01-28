@@ -2,13 +2,14 @@ import {StyleSheet, View} from "react-native";
 import {SmartText} from "@/src/shared/components/atoms";
 import moment from "moment/moment";
 import React from "react";
-import { width} from "@/src/utils/method";
+import {numberFormat, width} from "@/src/utils/method";
 import {pallete} from "@/src/utils/pallete";
 type Props = {
     data: any;
 }
 export default function CreateChildConfirm({data}: Props) {
-    const currency = data.currency === "USD" ? "$" : "Fc";
+
+    const currency = data.currency;
         return  <View
             style={styles.container}
         >
@@ -30,21 +31,21 @@ export default function CreateChildConfirm({data}: Props) {
         <View style={styles.containerText}>
             <SmartText style={styles.subTitle}>Montant</SmartText>
             <SmartText style={styles.text}>
-                {parseFloat(data?.initialAmount?.toString())?.toFixed(2)} {currency}
+                {numberFormat(parseFloat(data?.initialAmount?.toString()) || 0, currency)}
             </SmartText>
         </View>
 
         <View style={styles.containerText}>
             <SmartText style={styles.subTitle}>Limite/jour</SmartText>
             <SmartText style={styles.text}>
-                {parseFloat(data?.dailyLimit?.toString())?.toFixed(2)} {currency}
+                {numberFormat(parseFloat(data?.dailyLimit) || 0, currency)}
             </SmartText>
         </View>
 
         <View style={styles.containerText}>
             <SmartText style={styles.subTitle}>Limite/hebdomadaire</SmartText>
             <SmartText style={styles.text}>
-                {parseFloat(data?.weeklyLimit?.toString())?.toFixed(2)} {currency}
+                {numberFormat(parseFloat(data?.weeklyLimit?.toString()) || 0, currency)}
             </SmartText>
         </View>
     </View>
