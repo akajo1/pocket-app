@@ -42,7 +42,7 @@ function ChildrenScreen() {
     const [currentModal, setCurrentModal] = useState<{
         [key: string]: boolean;
     } | null>(null);
-console.log("--transactions>>", transactions)
+
     // Simuler des appareils NFC liés
     const [linkedNFCDevices, setLinkedNFCDevices] = useState({
         1: [

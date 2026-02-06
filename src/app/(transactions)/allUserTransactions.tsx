@@ -49,7 +49,7 @@ export default function AllUserTransactions() {
         isFetchingNextPage,
     } = useTransactions({
         walletId,      
-        pageSize: 15,
+        pageSize: 10,
         dateFrom: currentFromDate,
         dateTo: currentToDate
        /* type: string;
