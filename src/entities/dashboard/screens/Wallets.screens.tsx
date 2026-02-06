@@ -11,33 +11,34 @@ import {NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet,} from "
 import {useWallet} from "../hook/useWallet";
 import {quickActions} from "../services/mocks";
 import {useRouter} from "expo-router";
-import {useTransactions} from "@/src/entities/dashboard/hook/useTransaction";
+import {useTransactions, useWalletLimitedTransactions} from "@/src/entities/dashboard/hook/useTransaction";
 import TransactionsList from "@/src/shared/components/organims/TransactionsList";
 import {useFocusEffect} from "@react-navigation/native";
 
 const Wallets = () => {
     const {
-        data: walletsData,
+        data: walletList,
         isLoading: walletsLoading,
         refetch: refetchWallets,
     } = useWallet();
+    const walletsData = walletList?.data || []
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [selectedTransaction, setSelectedTransaction] = useState(null);
     const navigation = useRouter();
     const [currentModal, setCurrentModal] = useState<{ [key: string]: boolean } | null>(null);
 
-    const wallets = walletsData ?? []; // adapte selon ta structure
+    const wallets = walletsData ?? [];
     const walletId = wallets?.[currentIndex]?.id;
 
     const {
-        data: transactions,
+        data: transactionsList,
         isLoading: transactionLoading,
         refetch: refetchTransactions,
-    } = useTransactions({
-        walletId,       // 👉 plus currentIndex, mais le vrai id
+    } = useWalletLimitedTransactions({
+        walletId,
         pageSize: 3,
     });
-
+const transactions = transactionsList?.data || []
 
     const handleMomentumScrollEnd = (
         event: NativeSyntheticEvent<NativeScrollEvent>
@@ -48,10 +49,6 @@ const Wallets = () => {
         setCurrentIndex(index);
     };
 
-    const quickActionsWithHandlers = quickActions?.map((action) => ({
-        ...action,
-        onPress: () => navigation.navigate(`/${action.key}`),
-    }));
 
     const handleTransactionPress = (transaction: any) => {
         setSelectedTransaction(transaction);

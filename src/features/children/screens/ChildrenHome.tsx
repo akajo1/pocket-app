@@ -1,14 +1,14 @@
 import images from "@/src/assets/images";
 import {Wrapper} from "@/src/shared/components";
 import {IconButton, SmartImage, SmartText,} from "@/src/shared/components/atoms";
-import {Header, QuickActionsGrid} from "@/src/shared/components/molecules";
+import {Header, NFCDeviceCard, QuickActionsGrid} from "@/src/shared/components/molecules";
 import TransactionsList from "@/src/shared/components/organims/TransactionsList";
 import TransactionDetailModal from "@/src/shared/modals/TransactionDetailModal";
 import {pallete} from "@/src/utils/pallete";
 import {useRouter} from "expo-router";
-import {PlusIcon} from "lucide-react-native";
-import React, {useCallback, useState} from "react";
-import {NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet,} from "react-native";
+import {Plus, PlusIcon, Wifi} from "lucide-react-native";
+import React, {useCallback, useEffect, useState} from "react";
+import {NativeScrollEvent, NativeSyntheticEvent, ScrollView, StyleSheet, TouchableOpacity, View,} from "react-native";
 import {EmptyChildWalletScreen} from "../components/molecules";
 import {ChildrenCarousel} from "../components/organisms";
 import {useChildren} from "../hook/useChildren";
@@ -16,22 +16,56 @@ import {useChildTransactions} from "../hook/useChildTransactions";
 import {quickActionsChild} from "../services/menu";
 import {useFocusEffect} from "@react-navigation/native";
 import {sendMoneyType, typeTransaction} from "@/src/utils/method";
+import LimitModal from "@/src/shared/modals/LimitModal";
+import useLimit from "@/src/features/children/hook/useLimit";
+import NFCLinkingModal from "@/src/shared/modals/NFCLinkingModal";
+import {useNFC} from "@/src/shared/hooks/useNFC";
+import {NFCDevices} from "@/src/shared/components/organims";
 
 function ChildrenScreen() {
     const navigation = useRouter();
-    const {data: children, isLoading: loadingChildren, refetch: refetchChildren} = useChildren();
+    const {data: childrenList, isLoading: loadingChildren, refetch: refetchChildren} = useChildren();
+    const children = childrenList?.data || []
+    const limitMutation = useLimit()
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
+    const [limitVisible, setLimitVisible] = useState<boolean>(false);
     const childId = children?.[currentIndex]?.id;
+    const [showNFCModal, setShowNFCModal] = useState(false);
+    const { isNFCSupported, isNFCEnabled } = useNFC();
     const {
-        data: transactions,
+        data: transactionsList,
         isLoading: loadingTransactions,
         refetch: refetchTransactions,
     } = useChildTransactions({childId});
-
+    const transactions = transactionsList?.data || []
     const [currentModal, setCurrentModal] = useState<{
         [key: string]: boolean;
     } | null>(null);
+console.log("--transactions>>", transactions)
+    // Simuler des appareils NFC liés
+    const [linkedNFCDevices, setLinkedNFCDevices] = useState({
+        1: [
+            {
+                id: 'nfc_001',
+                type: 'bracelet',
+                name: 'Bracelet Emma',
+                linkedAt: '2024-01-10T10:30:00Z',
+                isActive: true,
+                lastUsed: '2024-01-15T14:30:00Z'
+            }
+        ],
+        2: [
+            {
+                id: 'nfc_002',
+                type: 'tag',
+                name: 'Tag Lucas',
+                linkedAt: '2024-01-12T09:15:00Z',
+                isActive: true,
+                lastUsed: '2024-01-15T10:15:00Z'
+            }
+        ]
+    });
 
     const handleMomentumScrollEnd = (
         event: NativeSyntheticEvent<NativeScrollEvent>
@@ -41,7 +75,18 @@ function ChildrenScreen() {
         const index = Math.round(offsetX / width);
         setCurrentIndex(index);
     };
-
+    const handleLimitNavigation = () => {
+        setLimitVisible(true)
+    }
+    const handleCloseLimit = ()=> {
+        setLimitVisible(false)
+    }
+    const handleConfirmChangeLimit = (data)=> {
+        limitMutation.mutate({
+            childId,
+            ...data,
+        })
+    }
     const quickActionsWithHandlers = quickActionsChild?.map((action) => ({
         ...action,
         onPress: () => {
@@ -50,7 +95,7 @@ function ChildrenScreen() {
                     return navigation.navigate({
                             pathname: "/(children)/loadChild",
                             params: {
-                                childId: children[currentIndex]?.id,
+                                childId: childId,
                                 currency: children[currentIndex]?.currency,
                                 transactionType: typeTransaction.createChild,
                                 type: sendMoneyType.w2c
@@ -61,13 +106,19 @@ function ChildrenScreen() {
                     return navigation.navigate({
                             pathname: "/(children)/unloadChild",
                             params: {
-                                childId: children[currentIndex]?.id,
+                                childId: childId,
                                 currency: children[currentIndex]?.currency,
                                 transactionType: typeTransaction.createChild,
                                 type: sendMoneyType.w2c
                             }
                         }
                     )
+                case 'limit':
+                    handleLimitNavigation()
+                    return
+                case "nfc":
+                    setShowNFCModal(true)
+                    return
                 default:
                     return
             }
@@ -79,6 +130,48 @@ function ChildrenScreen() {
         setCurrentModal({transaction: true});
     };
 
+    const handleNFCLink = (nfcId: string, deviceType: string) => {
+        const selectedChild = children?.[currentIndex];
+        if (selectedChild) {
+            const newDevice = {
+                id: nfcId,
+                type: deviceType,
+                name: `${deviceType === 'bracelet' ? 'Bracelet' : 'Tag'} ${selectedChild.name}`,
+                linkedAt: new Date().toISOString(),
+                isActive: true
+            };
+
+            setLinkedNFCDevices(prev => ({
+                ...prev,
+                [selectedChild.id]: [...(prev[selectedChild.id] || []), newDevice]
+            }));
+        }
+    };
+
+    const removeNFCDevice = (childId: number, deviceId: string) => {
+        setLinkedNFCDevices(prev => ({
+            ...prev,
+            [childId]: prev[childId]?.filter(device => device.id !== deviceId) || []
+        }));
+    };
+
+    const toggleNFCDeviceStatus = (childId: number, deviceId: string) => {
+        setLinkedNFCDevices(prev => ({
+            ...prev,
+            [childId]: prev[childId]?.map(device =>
+                device.id === deviceId
+                    ? { ...device, isActive: !device.isActive }
+                    : device
+            ) || []
+        }));
+    };
+
+
+    useEffect(() => {
+        if(limitMutation.isSuccess){
+            setLimitVisible(false)
+        }
+    },[limitMutation.isSuccess])
     useFocusEffect(
         useCallback(() => {
             // on rafraîchit la liste des enfants
@@ -115,11 +208,15 @@ function ChildrenScreen() {
                         isChild
                         isLoading={loadingChildren}
                     />
-                    <SmartText
-                        style={styles.tag}
-                    >
-                        Pas encore lié a un tag nfg
-                    </SmartText>
+
+                    {
+                        !isNFCSupported ?  <SmartText
+                            style={styles.tag}
+                        >
+                           NFC Non disponible
+                        </SmartText> :  null
+                    }
+
                     <TransactionsList
                         title="Transactions Récentes"
                         transactions={transactions?.slice(0, 3) || []}
@@ -127,12 +224,25 @@ function ChildrenScreen() {
                         onViewAll={() => navigation.navigate("/(transactions)/allChildTransactions")}
                         isLoading={loadingChildren || loadingTransactions}
                     />
+                    {
+                        isNFCSupported && <NFCDevices
+                        linkedNFCDevices={linkedNFCDevices}
+                        currentChild={childId}
+                        onRemoveNFCDevice={removeNFCDevice}
+                        onToggleNFCDeviceStatus={toggleNFCDeviceStatus}
+                        onShowNFCDevice={()=> {}}
+                      />
+                    }
+
                 </ScrollView>
                 <TransactionDetailModal
                     visible={currentModal?.transaction ? true : false}
                     onClose={() => setCurrentModal(null)}
                     transaction={selectedTransaction}
                 />
+                <NFCLinkingModal  visible={showNFCModal}
+                                  onClose={() => setShowNFCModal(false)} child={children?.[currentIndex]} onLinkSuccess={handleNFCLink} />
+                <LimitModal visible={limitVisible} child={children?.[currentIndex]} onClose={handleCloseLimit} onSubmit={handleConfirmChangeLimit} isPending={limitMutation.isPending}/>
             </>
         );
     };
@@ -177,3 +287,5 @@ const styles = StyleSheet.create({
         fontWeight: "600",
     }
 });
+
+

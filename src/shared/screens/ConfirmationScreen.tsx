@@ -33,17 +33,19 @@ function ConfirmationScreen() {
     const cashoutMutate = useCashout()
     const sendMoneyToWalletMutate = useSendMoneyToWallet()
     const {
-        data: beneficiaryInfo,
+        data: beneficiaryInfos,
         isLoading: beneficiaryLoading,
         error: beneficiaryError,
     } = useConfirmationUserInfo(transactionType === typeTransaction.walletToWallet ? parsedForm?.phone : "")
+    const beneficiaryInfo = beneficiaryInfos?.data || null
 
     const navigation = useRouter()
-    const {data: fee, isLoading, isError} = useFee({
+    const {data: feeList, isLoading, isError} = useFee({
         type: transactionType,
         method: type,
         currency: parsedForm?.currency
     })
+    const fee = feeList?.data || null
 
 
 

@@ -21,10 +21,11 @@ const CreateChild = () => {
     const message = useAlert();
 
     const {
-        data: walletsData,
+        data: walletsList,
         isLoading: walletsLoading,
         refetch: refetchWallets,
     } = useWallet();
+    const walletsData  = walletsList?.data || [];
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isShownAge, setIsShownAge] = useState<boolean>(false);
   const [currentDate, setCurrentDate] = useState();
@@ -56,6 +57,7 @@ const CreateChild = () => {
   const handleChangeDate = (date: any) => {
       setCurrentDate(date)
       setIsShownAge(false)
+
       setValue("age", date)
   }
   useEffect(() => {

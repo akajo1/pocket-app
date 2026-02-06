@@ -27,10 +27,13 @@ function UnloadChild() {
     const navigation = useRouter();
 
     const {
-        data: walletsData,
+        data: walletsLists,
         refetch: refetchWallets,
     } = useWallet();
-    const {data: children, isLoading: loadingChildren, refetch: refetchChildren} = useChildren();
+
+    const walletsData =  walletsLists?.data || []
+    const {data: childrenLists, isLoading: loadingChildren, refetch: refetchChildren} = useChildren();
+    const children = childrenLists?.data || [];
     const walletList = walletsData?.filter((wallet) => wallet.currency === currency)
     const childrenList = children?.filter((child) => child.id === childId)
 

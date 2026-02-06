@@ -1,22 +1,21 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TouchableOpacity, Alert } from 'react-native';
 import { Wifi, X, Smartphone, CreditCard } from 'lucide-react-native';
-import Button from '../atoms/Button';
-import { useNFC } from '../hooks/useNFC';
+import {useNFC} from "@/src/shared/hooks/useNFC";
+import SmartButton from "@/src/shared/components/atoms/SmartButton";
+
 
 interface NFCLinkingModalProps {
   visible: boolean;
   onClose: () => void;
-  childName: string;
-  childId: number;
+  child: any
   onLinkSuccess: (nfcId: string, deviceType: string) => void;
 }
 
 export default function NFCLinkingModal({
   visible,
   onClose,
-  childName,
-  childId,
+                                          child,
   onLinkSuccess
 }: NFCLinkingModalProps) {
   const [isScanning, setIsScanning] = useState(false);
@@ -59,7 +58,7 @@ export default function NFCLinkingModal({
         onClose();
         Alert.alert(
           'Succès',
-          `${deviceType === 'bracelet' ? 'Bracelet' : 'Tag'} NFC lié avec succès à ${childName}!`
+          `${deviceType === 'bracelet' ? 'Bracelet' : 'Tag'} NFC lié avec succès à ${child?.name}!`
         );
       } else {
         setIsScanning(false);
@@ -93,7 +92,7 @@ export default function NFCLinkingModal({
           </View>
 
           <Text style={styles.subtitle}>
-            Choisissez le type d'appareil à lier pour {childName}
+            Choisissez le type d'appareil à lier pour {child?.name}
           </Text>
 
           {!isScanning ? (
@@ -147,7 +146,7 @@ export default function NFCLinkingModal({
           </View>
 
           {isScanning && (
-            <Button
+            <SmartButton
               title="Annuler"
               onPress={handleClose}
               variant="secondary"

@@ -55,7 +55,8 @@ class ApiClient<T, D> {
             const response = await axiosInstance.get<D[] | D>(this.endpoint + route, {
                 params,
             });
-            return response.data;
+
+            return response;
         } catch (error) {
             throw error;
         }
@@ -73,6 +74,17 @@ class ApiClient<T, D> {
         try {
             const response = await axiosInstance.put<D>(
                 this.endpoint + route + `/${id}`,
+                data
+            );
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    };
+    updateOne =  async (id: string, data: T, route: string = ""): Promise<D> => {
+        try {
+            const response = await axiosInstance.patch<D>(
+                this.endpoint  + `/${id}`+ route,
                 data
             );
             return response.data;

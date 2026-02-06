@@ -16,7 +16,9 @@ interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
   icon?: React.ReactNode;
+  placeholder?: string;
   containerStyle?: any;
+  inputContainerStyle?: any;
   isSecure?: boolean;
   secureTextEntry?: boolean;
   type?: any;
@@ -29,12 +31,14 @@ export default function Input({
   error,
   icon,
   containerStyle,
+                                placeholder,
   style,
   isSecure,
   secureTextEntry = false,
   value,
   type,
   onPress,
+                                inputContainerStyle,
   ...props
 }: InputProps) {
   const [isVisible, setIsVisible] = useState(!secureTextEntry);
@@ -48,7 +52,7 @@ export default function Input({
             <SmartText
               style={[styles.input, icon && styles.inputWithIcon, style]}
             >
-              {value ? value : "Sélectionner une valeur"}
+              {value ? value : placeholder || "Sélectionner une valeur"}
             </SmartText>
           </View>
         </TouchableOpacity>
@@ -68,7 +72,7 @@ export default function Input({
             >
               {value
                 ? moment(value).format("DD/MM/YYYY")
-                : "Sélectionner une date"}
+                : placeholder || "Sélectionner une date"}
             </SmartText>
           </View>
         </TouchableOpacity>
@@ -79,11 +83,12 @@ export default function Input({
   return (
     <View style={[styles.container, containerStyle]}>
       {label && <SmartText style={styles.label}>{label}</SmartText>}
-      <View style={[styles.inputContainer, error && styles.errorContainer]}>
+      <View style={[styles.inputContainer,inputContainerStyle, error && styles.errorContainer]}>
         {icon && <View style={styles.iconContainer}>{icon}</View>}
         <TextInput
           style={[styles.input, icon && styles.inputWithIcon, style]}
           placeholderTextColor={pallete.gray}
+          placeholder={placeholder}
           {...props}
           secureTextEntry={!isVisible}
         />

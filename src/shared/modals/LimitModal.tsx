@@ -1,0 +1,608 @@
+import {Modal, TextInput, TouchableOpacity, View, StyleSheet, Text, ActivityIndicator} from "react-native";
+import {Controller, useForm} from "react-hook-form";
+import {Input} from "@/src/shared/components/molecules";
+import {Banknote} from "lucide-react-native";
+import {pallete} from "@/src/utils/pallete";
+import React, {useEffect} from "react";
+import {SmartKeyboardAvoidView} from "@/src/shared/components/atoms";
+import {yupResolver} from "@hookform/resolvers/yup";
+import { limitSchema} from "@/src/features/children/services/schema";
+
+interface LimitModalProps {
+    visible: boolean;
+    child: {[key: string]: any};
+    onClose: () => void;
+    onSubmit: (data: any) => void;
+    isPending: boolean
+}
+
+ const LimitModal = ({visible, child, onClose,onSubmit, isPending}: LimitModalProps) => {
+
+     const {
+         control,
+         handleSubmit,
+         reset,
+         formState: {errors, isValid},
+     } = useForm({
+         resolver: yupResolver(limitSchema),
+         mode: "onChange",
+         defaultValues: {
+             weekly_limit: parseFloat(child?.weekly_limit ) || 0,
+             daily_limit: parseFloat(child?.daily_limit) || 0
+         },
+     });
+
+     useEffect(() => {
+         if(visible){
+             reset()
+         }
+     },[visible])
+
+    return  <Modal
+        visible={visible}
+        animationType="slide"
+        transparent={true}>
+        <View style={styles.modalOverlay}>
+            <View style={styles.modalContent}>
+                <Text style={styles.modalTitle}>
+                    Gérer les limites - {child?.name}
+                </Text>
+
+                <SmartKeyboardAvoidView>
+                    <Controller
+                        control={control}
+                        name="weekly_limit"
+                        render={({field: {onChange, onBlur, value}}) => (
+                            <Input
+                                label="Limite hebdomadaire"
+                                placeholder="0.00"
+                                value={value}
+                                keyboardType="numeric"
+                                onChangeText={onChange}
+                                onBlur={onBlur}
+                                icon={<Banknote size={20} color={pallete.black}/>}
+                                error={errors.weekly_limit?.message}
+                                inputContainerStyle={{backgroundColor: pallete.gray}}
+                                defaultValue={child?.weekly_limit?.toString() || "0"}
+                                // editable={!register.isPending}
+                            />
+                        )}
+                    />
+
+                    <Controller
+                        control={control}
+                        name="daily_limit"
+                        render={({field: {onChange, onBlur, value}}) => (
+                            <Input
+                                label="Limite quotidienne"
+                                placeholder="0.00"
+                                value={value}
+                                keyboardType="numeric"
+                                onChangeText={onChange}
+                                onBlur={onBlur}
+                                icon={<Banknote size={20} color={pallete.black}/>}
+                                error={errors.daily_limit?.message}
+                                defaultValue={child?.daily_limit || "0"}
+                                inputContainerStyle={{backgroundColor: pallete.gray}}
+                                // editable={!register.isPending}
+                            />
+                        )}
+                    />
+                </SmartKeyboardAvoidView>
+
+                <View style={styles.modalButtons}>
+                    <TouchableOpacity
+                        style={styles.cancelButton}
+                        onPress={onClose}>
+                        <Text style={styles.cancelButtonText}>Annuler</Text>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+                        style={styles.createButton}
+                        onPress={handleSubmit(onSubmit)}>
+                        {
+                            isPending ? (
+                               <ActivityIndicator size={20} color={pallete.white} />
+                               ) : null
+                        }
+                        <Text style={styles.createButtonText}>Mettre à jour</Text>
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </View>
+    </Modal>
+}
+export default LimitModal;
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#F8FAFC',
+    },
+    header: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingHorizontal: 20,
+        paddingVertical: 16,
+    },
+    headerTitle: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: '#111827',
+    },
+    addButton: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 12,
+        padding: 8,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    summaryStats: {
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        paddingHorizontal: 20,
+        marginVertical: 16,
+    },
+    statCard: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 12,
+        padding: 16,
+        alignItems: 'center',
+        flex: 1,
+        marginHorizontal: 4,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    statValue: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#4F46E5',
+        marginBottom: 4,
+    },
+    statLabel: {
+        fontSize: 12,
+        color: '#6B7280',
+        textAlign: 'center',
+    },
+    childrenSection: {
+        marginVertical: 16,
+    },
+    sectionTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#111827',
+        marginBottom: 16,
+        paddingHorizontal: 20,
+    },
+    carouselContainer: {
+        paddingLeft: 20,
+    },
+    carouselContent: {
+        paddingRight: 20,
+    },
+    carouselCard: {
+        width: 300,
+        marginRight: 16,
+    },
+    childCard: {
+        width: '100%',
+    },
+    childCardGradient: {
+        borderRadius: 16,
+        padding: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 4 },
+        shadowOpacity: 0.2,
+        shadowRadius: 8,
+        elevation: 6,
+    },
+    carouselIndicators: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 16,
+        paddingHorizontal: 20,
+    },
+    indicator: {
+        width: 8,
+        height: 8,
+        borderRadius: 4,
+        marginHorizontal: 4,
+    },
+    childCardHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
+    childInfo: {
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    childAvatar: {
+        fontSize: 32,
+        marginRight: 12,
+    },
+    childName: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: '#FFFFFF',
+    },
+    childAge: {
+        fontSize: 14,
+        color: '#FFFFFF',
+        opacity: 0.8,
+    },
+    statusIndicator: {
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: 8,
+        padding: 4,
+    },
+    childBalance: {
+        fontSize: 28,
+        fontWeight: 'bold',
+        color: '#FFFFFF',
+        marginBottom: 16,
+    },
+    limitProgress: {
+        marginTop: 8,
+    },
+    limitInfo: {
+        marginBottom: 8,
+    },
+    limitText: {
+        fontSize: 14,
+        color: '#FFFFFF',
+        opacity: 0.9,
+    },
+    progressBar: {
+        height: 4,
+        backgroundColor: 'rgba(255, 255, 255, 0.3)',
+        borderRadius: 2,
+    },
+    progressFill: {
+        height: '100%',
+        backgroundColor: '#FFFFFF',
+        borderRadius: 2,
+    },
+    childDetails: {
+        backgroundColor: '#FFFFFF',
+        marginHorizontal: 20,
+        marginVertical: 16,
+        borderRadius: 16,
+        padding: 20,
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: 0.1,
+        shadowRadius: 4,
+        elevation: 3,
+    },
+    detailsHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 20,
+    },
+    detailsTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#111827',
+    },
+    closeButton: {
+        fontSize: 16,
+        color: '#4F46E5',
+        fontWeight: '600',
+    },
+    quickActionsGrid3x3: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
+        marginBottom: 24,
+    },
+    quickActionButton3x3: {
+        width: '30%',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
+    quickActionIcon3x3: {
+        width: 48,
+        height: 48,
+        borderRadius: 24,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    quickActionLabel3x3: {
+        fontSize: 12,
+        color: '#374151',
+        fontWeight: '600',
+        textAlign: 'center',
+    },
+    nfcUnavailableText: {
+        fontSize: 10,
+        color: '#F59E0B',
+        textAlign: 'center',
+        marginTop: 2,
+        fontStyle: 'italic',
+    },
+    nfcSection: {
+        marginBottom: 24,
+    },
+    sectionHeader: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 16,
+    },
+    noDevicesContainer: {
+        alignItems: 'center',
+        paddingVertical: 32,
+    },
+    noDevicesText: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#374151',
+        marginTop: 16,
+        marginBottom: 8,
+    },
+    noDevicesSubtext: {
+        fontSize: 14,
+        color: '#6B7280',
+        textAlign: 'center',
+        marginBottom: 24,
+        paddingHorizontal: 20,
+    },
+    addNFCButton: {
+        backgroundColor: '#4F46E5',
+        borderRadius: 12,
+        paddingHorizontal: 24,
+        paddingVertical: 12,
+    },
+    addNFCButtonText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#FFFFFF',
+    },
+    categoriesSection: {
+        marginBottom: 24,
+    },
+    categoryItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F3F4F6',
+    },
+    categoryName: {
+        fontSize: 16,
+        color: '#374151',
+    },
+    categoryAmount: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#4F46E5',
+    },
+    transactionsSection: {
+        marginBottom: 16,
+    },
+    transactionItem: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingVertical: 12,
+        borderBottomWidth: 1,
+        borderBottomColor: '#F3F4F6',
+    },
+    transactionIcon: {
+        width: 32,
+        height: 32,
+        borderRadius: 16,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginRight: 12,
+    },
+    transactionDetails: {
+        flex: 1,
+    },
+    transactionDescription: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#111827',
+    },
+    transactionDate: {
+        fontSize: 12,
+        color: '#6B7280',
+    },
+    transactionAmount: {
+        fontSize: 14,
+        fontWeight: 'bold',
+    },
+    modalOverlay: {
+        flex: 1,
+        backgroundColor: 'rgba(0, 0, 0, 0.5)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalContent: {
+        backgroundColor: '#FFFFFF',
+        borderRadius: 20,
+        padding: 24,
+        width: '90%',
+        maxHeight: '80%',
+    },
+    modalTitle: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: '#111827',
+        textAlign: 'center',
+        marginBottom: 24,
+    },
+    inputContainer: {
+        marginBottom: 16,
+    },
+    inputLabel: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#374151',
+        marginBottom: 8,
+    },
+    textInput: {
+        backgroundColor: '#F9FAFB',
+        borderRadius: 12,
+        paddingHorizontal: 16,
+        paddingVertical: 12,
+        fontSize: 16,
+        borderWidth: 1,
+        borderColor: '#E5E7EB',
+    },
+    limitOptions: {
+        marginVertical: 16,
+    },
+    optionLabel: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#374151',
+        marginBottom: 12,
+    },
+    categoryOption: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        paddingVertical: 12,
+    },
+    categoryOptionText: {
+        fontSize: 16,
+        color: '#374151',
+    },
+    checkbox: {
+        width: 20,
+        height: 20,
+        borderRadius: 4,
+        borderWidth: 2,
+        borderColor: '#4F46E5',
+        backgroundColor: '#4F46E5',
+    },
+    modalButtons: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginTop: 24,
+    },
+    cancelButton: {
+        flex: 1,
+        backgroundColor: '#F3F4F6',
+        borderRadius: 12,
+        paddingVertical: 16,
+        alignItems: 'center',
+        marginRight: 8,
+    },
+    cancelButtonText: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#6B7280',
+    },
+    createButton: {
+        flex: 1,
+        backgroundColor: '#4F46E5',
+        borderRadius: 12,
+        paddingVertical: 16,
+        alignItems: 'center',
+        marginLeft: 8,
+    },
+    createButtonText: {
+        fontSize: 16,
+        fontWeight: '600',
+        color: '#FFFFFF',
+    },
+    balanceInfo: {
+        backgroundColor: '#F9FAFB',
+        borderRadius: 12,
+        padding: 16,
+        marginBottom: 20,
+    },
+    balanceItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    balanceLabel: {
+        fontSize: 14,
+        color: '#6B7280',
+    },
+    balanceValue: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#111827',
+    },
+    quickAmountsContainer: {
+        marginBottom: 20,
+    },
+    quickAmounts: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    quickAmountButton: {
+        backgroundColor: '#F3F4F6',
+        borderRadius: 8,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        flex: 1,
+        marginHorizontal: 2,
+        alignItems: 'center',
+    },
+    quickAmountText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#4F46E5',
+    },
+    quickAmountsContainer: {
+        marginBottom: 20,
+    },
+    quickAmounts: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    quickAmountButton: {
+        backgroundColor: '#F3F4F6',
+        borderRadius: 8,
+        paddingHorizontal: 16,
+        paddingVertical: 8,
+        flex: 1,
+        marginHorizontal: 2,
+        alignItems: 'center',
+    },
+    quickAmountText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#4F46E5',
+    },
+    balanceInfo: {
+        backgroundColor: '#F9FAFB',
+        borderRadius: 12,
+        padding: 16,
+        marginBottom: 20,
+    },
+    balanceItem: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        marginBottom: 8,
+    },
+    balanceLabel: {
+        fontSize: 14,
+        color: '#6B7280',
+    },
+    balanceValue: {
+        fontSize: 16,
+        fontWeight: 'bold',
+        color: '#111827',
+    },
+    quickAmountsContainer: {
+        marginBottom: 20,
+    },
+});

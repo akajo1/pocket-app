@@ -29,6 +29,12 @@ export interface LoadChildParams {
     childId: string;
 
 }
+
+export interface LimitParams {
+    childId: string
+    "weekly_limit":string
+    "daily_limit": string
+}
 const childrenInstance = new ApiClient<any, Children[]>("/children");
 
 const childrenApi = {
@@ -60,6 +66,14 @@ const childrenApi = {
             childId: null,
         }
         return await childrenInstance.post(currentBody, `/${body.childId}/refund`)
+    },
+    fetchChildLimit: async (childId: string, body:{
+        childId?: string
+        weekly_limit: number,
+        daily_limit: number,
+    }) => {
+      delete body.childId
+       return await childrenInstance.updateOne(childId, body, `/limits`)
     }
 };
 export default childrenApi;
