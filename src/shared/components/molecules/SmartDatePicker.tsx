@@ -13,10 +13,11 @@ type Props = {
   onChange: (date: DateType) => void;
   value: DateType;
   onCloseModal: () => void;
+  typeDate?: "create" | "new"
 };
 
-const SmartDatePicker = ({ isShown, onChange, value, onCloseModal }: Props) => {
-  const defaultStyles = useDefaultStyles();
+const SmartDatePicker = ({ isShown, onChange, value, onCloseModal, typeDate ="create" }: Props) => {
+  const defaultStyles = useDefaultStyles("light");
 
   return (
     <Modal
@@ -29,23 +30,39 @@ const SmartDatePicker = ({ isShown, onChange, value, onCloseModal }: Props) => {
       }}
     >
       <View style={styles.containerDatePicker}>
-        <DateTimePicker
-          mode="single"
-          locale="fr-FR"
-          date={value}
-          initialView="year"
-          startDate={moment().subtract(18, "years").toDate()}
-         endDate={moment().subtract(3, "years").toDate()}
-          startYear={moment().subtract(18, "years").year()}
-          endYear={moment().subtract(3, "years").year()}
-          minDate={moment().subtract(18, "years").toDate()}
-          maxDate={moment().subtract(3, "years").toDate()}
-          onChange={({ date }) => {
-              onChange(date);
-          }}
-          styles={defaultStyles}
-          style={styles.datePicker}
-        />
+        {
+          typeDate === "create" ?  <DateTimePicker
+              mode="single"
+              locale="fr-FR"
+              date={value}
+              initialView="year"
+              startDate={moment().subtract(18, "years").toDate()}
+              endDate={moment().subtract(3, "years").toDate()}
+              startYear={moment().subtract(18, "years").year()}
+              endYear={moment().subtract(3, "years").year()}
+              minDate={moment().subtract(18, "years").toDate()}
+              maxDate={moment().subtract(3, "years").toDate()}
+              onChange={({ date }) => {
+                onChange(date);
+              }}
+              styles={{
+                ...defaultStyles,
+
+              }}
+              style={styles.datePicker}
+          />:  <DateTimePicker
+              mode="single"
+              locale="fr-FR"
+              date={value}
+              initialView="year"
+              onChange={({ date }) => {
+                onChange(date);
+              }}
+              styles={defaultStyles}
+              style={styles.datePicker}
+          />
+        }
+
       </View>
     </Modal>
   );

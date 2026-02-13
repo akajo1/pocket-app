@@ -1,28 +1,74 @@
 import {useRouter} from "expo-router";
 import {useChildren} from "@/src/features/children/hook/useChildren";
 import React, {useState} from "react";
-import {useChildTransactions} from "@/src/features/children/hook/useChildTransactions";
-import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet, View} from "react-native";
+import {
+    useChildTAllransactions,
+    useChildTAlltransactions,
+    useChildTransactions
+} from "@/src/features/children/hook/useChildTransactions";
+import {NativeScrollEvent, NativeSyntheticEvent, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {ChildrenCarousel} from "@/src/features/children/components/organisms";
 import TransactionsList from "@/src/shared/components/organims/TransactionsList";
 import TransactionDetailModal from "@/src/shared/modals/TransactionDetailModal";
 import {Wrapper} from "@/src/shared/components";
-import {height} from "@/src/utils/method";
-import {Header} from "@/src/shared/components/molecules";
-import {IconButton, SmartImage} from "@/src/shared/components/atoms";
+import {height, width} from "@/src/utils/method";
+import {Header, Input, SmartDatePicker} from "@/src/shared/components/molecules";
+import {IconButton, SmartImage, SmartText} from "@/src/shared/components/atoms";
 import images from "@/src/assets/images";
-import {ChevronLeft} from "lucide-react-native";
+import {Calendar, ChevronLeft} from "lucide-react-native";
 import {pallete} from "@/src/utils/pallete";
+import {useTransactions} from "@/src/entities/dashboard/hook/useTransaction";
+import {Controller, useForm} from "react-hook-form";
+import {yupResolver} from "@hookform/resolvers/yup";
+import {transactionFilterSchema} from "@/src/features/children/services/schema";
 
 export default function ChildTransactions() {
     const navigation = useRouter();
-    const {data: children, isLoading} = useChildren();
-
+    const {data: childrenList, isLoading: loadingChildren, refetch: refetchChildren} = useChildren();
+    const children = childrenList?.data || []
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [selectedTransaction, setSelectedTransaction] = useState<any>(null);
-    const {data: transactions} = useChildTransactions(
-        children?.children[currentIndex]?.id
-    );
+
+    const [isShowFromDate, setIsShowFromDate] = useState<boolean>(false);
+    const [currentFromDate, setCurrentFromDate] = useState<any>();
+
+    const [isShowToDate, setIsShowToDate] = useState<boolean>(false);
+    const [currentToDate, setCurrentToDate] = useState<any>();
+
+    const childId = children?.[currentIndex]?.id;
+
+    const {
+        data: transactionLists,
+        isLoading: loadingTransactions,
+        fetchNextPage,
+        hasNextPage,
+        isFetchingNextPage,
+    } = useChildTAlltransactions({
+        childId,
+        pageSize: 10,
+        dateFrom: currentFromDate,
+        dateTo: currentToDate
+    })
+
+    const transactions =  transactionLists?.pages.flatMap(p => p.data) || []
+
+    const {
+        control,
+        handleSubmit,
+        formState: { errors, isValid },
+        setValue,
+        reset
+    } = useForm({
+        resolver: yupResolver(transactionFilterSchema),
+        mode: "onChange",
+        defaultValues: {
+            dateFrom: "",
+            dateTo: "",
+            status: "",
+            type: "",
+            search: "",
+        },
+    });
 
     const [currentModal, setCurrentModal] = useState<{
         [key: string]: boolean;
@@ -40,6 +86,31 @@ export default function ChildTransactions() {
         setSelectedTransaction(transaction);
         setCurrentModal({transaction: true});
     };
+
+    const handleChangeDate = (date: any, currentDateType: "from" | "to") => {
+
+        if(currentDateType === "from") {
+            setCurrentFromDate(date);
+            setIsShowFromDate(false)
+            setValue("dateFrom", date)
+            return
+        }
+
+        setCurrentToDate(date);
+        setIsShowToDate(false)
+        setValue("dateTo", date)
+        return
+
+
+    }
+
+    const resetForm = () => {
+        reset()
+        setCurrentFromDate();
+        setCurrentToDate();
+        setValue("dateFrom", "")
+        setValue("dateTo", "")
+    }
     return <Wrapper>
         <Header
             right={
@@ -58,22 +129,97 @@ export default function ChildTransactions() {
             title="Transactions Dépendant"
         />
         <ChildrenCarousel
-            children={children?.children}
+            children={children}
             currentIndex={currentIndex}
             handleMomentumScrollEnd={handleMomentumScrollEnd}
         />
+
+        <View style={{paddingHorizontal: 20,borderWidth:1, borderColor: pallete.gray, paddingVertical: 20}}>
+            <SmartText style={{textAlign:"center", fontSize:16, fontWeight:700, marginBottom: 5}}>Filtre des transactions</SmartText>
+            <View style={{flexDirection:"row", justifyContent:"space-between"}}>
+                <Controller
+                    control={control}
+                    name="dateFrom"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <Input
+                            label="de"
+                            placeholder="--/--/----"
+                            type="date"
+                            value={value}
+                            onBlur={onBlur}
+                            containerStyle={{width: width/2.3}}
+                            icon={<Calendar size={20} color={pallete.black} />}
+                            error={errors.dateFrom?.message}
+                            onPress={() => {
+                                setIsShowFromDate(true)
+                                setIsShowToDate(false)
+                            }}
+                            // editable={!register.isPending}
+                        />
+                    )}
+                />
+
+                <Controller
+                    control={control}
+                    name="dateTo"
+                    render={({ field: { onChange, onBlur, value } }) => (
+                        <>
+                            <Input
+                                label="à"
+                                placeholder="--/--/----"
+                                type="date"
+                                value={value}
+                                onBlur={onBlur}
+                                containerStyle={{width: width/2.3}}
+                                icon={<Calendar size={20} color={pallete.black} />}
+                                error={errors.dateTo?.message}
+                                onPress={() => {
+                                    setIsShowToDate(true)
+                                    setIsShowFromDate(false)
+                                }}
+                                // editable={!register.isPending}
+                            />
+                        </>
+                    )}
+                />
+
+
+            </View>
+            <TouchableOpacity style={{alignItems:"center"}} onPress={resetForm}>
+                <Text style={{fontWeight: "600"}}>Effacer le filtre </Text>
+            </TouchableOpacity>
+        </View>
         <View style={styles.transactions}>
             <TransactionsList
+                isLoading={loadingChildren || loadingTransactions}
                 title="Toute les Transactions"
                 transactions={transactions || []}
                 onTransactionPress={handleTransactionPress}
-                showViewAll={false}
+                showViewAll={hasNextPage}
+                showAllText={isFetchingNextPage ? "Chargement..." : "Voir plus"}
+                onViewAll={() => fetchNextPage()}
             />
         </View>
         <TransactionDetailModal
             visible={currentModal?.transaction ? true : false}
             onClose={() => setCurrentModal(null)}
             transaction={selectedTransaction}
+        />
+
+        <SmartDatePicker
+            isShown={isShowFromDate}
+            onChange={(date) => handleChangeDate(date, "from")}
+            value={currentFromDate}
+            onCloseModal={() => setIsShowFromDate(false)}
+            typeDate="new"
+        />
+
+        <SmartDatePicker
+            isShown={isShowToDate}
+            onChange={(date) => handleChangeDate(date, "to")}
+            value={currentToDate}
+            onCloseModal={() => setIsShowToDate(false)}
+            typeDate="new"
         />
     </Wrapper>
 }
@@ -84,6 +230,6 @@ const styles = StyleSheet.create({
         alignSelf: "center",
     },
     transactions: {
-        height: height / 1.8
+        height: height / 3.3
     }
 });

@@ -9,7 +9,7 @@ import {pallete} from "@/src/utils/pallete";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
 import React from "react";
 import {useLocalSearchParams, useRouter} from "expo-router";
-import {StyleSheet} from "react-native";
+import {StyleSheet, View} from "react-native";
 import {useWallet} from "@/src/entities/dashboard/hook/useWallet";
 import {useChildren} from "@/src/features/children/hook/useChildren";
 import {ChildrenCarousel} from "@/src/features/children/components/organisms";
@@ -27,12 +27,15 @@ function UnloadChild() {
     const navigation = useRouter();
 
     const {
-        data: walletsData,
+        data: walletsLists,
         refetch: refetchWallets,
     } = useWallet();
-    const {data: children, isLoading: loadingChildren, refetch: refetchChildren} = useChildren();
-    const walletList = walletsData.filter((wallet) => wallet.currency === currency)
-    const childrenList = children.filter((child) => child.id === childId)
+
+    const walletsData =  walletsLists?.data || []
+    const {data: childrenLists, isLoading: loadingChildren, refetch: refetchChildren} = useChildren();
+    const children = childrenLists?.data || [];
+    const walletList = walletsData?.filter((wallet) => wallet.currency === currency)
+    const childrenList = children?.filter((child) => child.id === childId)
 
     const {
         control,
@@ -49,14 +52,13 @@ function UnloadChild() {
     const onSubmit = (datas) => {
         const parentWalletId = walletList[0].id
         const childId = childrenList[0].id
-        const name = childrenList[0].name
-        const currentData = {...datas, currency, parentWalletId, childId, name};
+        const currentData = {...datas, currency, parentWalletId, childId};
 
         navigation.navigate({
             pathname: "/(transactions)/confirmationScreen",
             params: {
                 form: JSON.stringify(currentData),
-                transactionType: typeTransaction.createChild,
+                transactionType: typeTransaction.unloadChild,
                 type: sendMoneyType.c2w,
                 direct: "unloadChild",
             }
@@ -78,9 +80,9 @@ function UnloadChild() {
                     containerStyle={styles.containerLogo}
                 />
             }
-            title="Appro. portemonnaie"
+            title="Appro. parent"
         />
-
+        <SmartKeyboardAvoidView containerStyle={{}}>
         <ChildrenCarousel
             children={childrenList}
             currentIndex={0}
@@ -95,7 +97,7 @@ function UnloadChild() {
             handleMomentumScrollEnd={() => {
             }}
         />
-        <SmartKeyboardAvoidView>
+
             <Controller
                 control={control}
                 name="amount"
@@ -109,22 +111,26 @@ function UnloadChild() {
                         onBlur={onBlur}
                         icon={<Banknote size={20} color={pallete.black}/>}
                         error={errors.amount?.message}
+                        containerStyle={{paddingHorizontal: 20 }}
                         // editable={!register.isPending}
                     />
                 )}
             />
 
 
-            <SmartButton
-                title="Approvisionnez"
-                onPress={handleSubmit(onSubmit)}
-                disabled={!isValid}
-                // icon={
-                //   register.isPending ? (
-                //     <ActivityIndicator size={20} color={pallete.white} />
-                //   ) : null
-                // }
-            />
+           <View style={{paddingHorizontal: 20 }}>
+               <SmartButton
+                   title="Retirez"
+                   onPress={handleSubmit(onSubmit)}
+                   disabled={!isValid}
+
+                   // icon={
+                   //   register.isPending ? (
+                   //     <ActivityIndicator size={20} color={pallete.white} />
+                   //   ) : null
+                   // }
+               />
+           </View>
         </SmartKeyboardAvoidView>
 
     </Wrapper>

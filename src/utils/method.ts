@@ -3,11 +3,18 @@ import images from "@/src/assets/images";
 
 export const {width, height} = Dimensions.get("screen");
 
+export const numberFormat = (value: number, currency?: string) => {
+    return currency ? new Intl.NumberFormat("en-IN", {  style: "currency", currency }).format(
+        value,
+    ) : new Intl.NumberFormat("en-IN").format(value)
+}
+
 export const typeTransaction = {
     createChild: "TRANSFER_IN",
+    unloadChild:"TRANSFER_UNLOAD",
     loadWallet: "DEPOSIT",
     walletToWallet: "TRANSFER_OUT",
-    cashout: "WITHDRAWAL"
+    cashout: "WITHDRAW"
 }
 
 export const queryKey = {

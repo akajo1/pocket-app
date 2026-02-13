@@ -17,12 +17,10 @@ import {AuthNavigationProps, authNavigationType} from "../services/types";
 const RegisterTemplate = ({onChangeScreen}: AuthNavigationProps) => {
     const register = useRegister(onChangeScreen);
     const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
-
     const {
         control,
         handleSubmit,
         formState: {errors, isValid},
-        reset,
     } = useForm({
         resolver: yupResolver(registerSchema),
         mode: "onChange",
@@ -36,8 +34,9 @@ const RegisterTemplate = ({onChangeScreen}: AuthNavigationProps) => {
             " ",
             ""
         )}`;
-        register.mutate({...formData, phone});
+        register.mutate({...formData, phone})
     };
+
     return (
         <Wrapper>
             <Header
@@ -163,8 +162,9 @@ const RegisterTemplate = ({onChangeScreen}: AuthNavigationProps) => {
                         />
                     )}
                 />
+
                 <SmartButton
-                    title="Créer mon compte"
+                    title="S'inscrire"
                     onPress={handleSubmit(onSubmit)}
                     disabled={!isValid || register.isPending}
                     icon={

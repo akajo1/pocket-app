@@ -1,7 +1,7 @@
 import {Wrapper} from "@/src/shared/components";
 import {Header} from "@/src/shared/components/molecules";
-import {IconButton, SmartImage} from "@/src/shared/components/atoms";
-import {ChevronLeft} from "lucide-react-native";
+import {IconButton, SmartImage, SmartText} from "@/src/shared/components/atoms";
+import {ChevronLeft, ChevronLeftIcon, InfoIcon} from "lucide-react-native";
 import images from "@/src/assets/images";
 import React from "react";
 import {ActivityIndicator, ScrollView, StyleSheet, View} from "react-native";
@@ -19,47 +19,51 @@ import {useConfirmationUserInfo} from "@/src/shared/hooks/useConfirmationUserInf
 import {useAuthManager} from "@/src/entities/auth/hook/useAuthManager";
 import useCashout from "@/src/features/sendmoney/hooks/useCashout";
 import useLoadChild from "@/src/features/children/hook/useLoadChild";
+import SmartButton from "@/src/shared/components/atoms/SmartButton";
+import useUnloadChild from "@/src/features/children/hook/useUnloadChild";
 
 
 function ConfirmationScreen() {
-    const {user} = useAuthManager()
     const {form, type, transactionType, direct} = useLocalSearchParams<ParamsType>();
     const parsedForm = JSON.parse(form)
     const createChildMutate = useCreateChild()
     const loadChildMutate = useLoadChild()
+    const unloadChildMutate = useUnloadChild()
     const loadWalletMutate = useLoadWallet()
     const cashoutMutate = useCashout()
     const sendMoneyToWalletMutate = useSendMoneyToWallet()
     const {
-        data: beneficiaryInfo,
-        isLoading: beneficiaryLoading
+        data: beneficiaryInfos,
+        isLoading: beneficiaryLoading,
+        error: beneficiaryError,
     } = useConfirmationUserInfo(transactionType === typeTransaction.walletToWallet ? parsedForm?.phone : "")
+    const beneficiaryInfo = beneficiaryInfos?.data || null
 
     const navigation = useRouter()
-    console.log(parsedForm, direct)
-    const {data: fee, isLoading} = useFee({
+    const {data: feeList, isLoading, isError} = useFee({
         type: transactionType,
         method: type,
         currency: parsedForm?.currency
     })
+    const fee = feeList?.data || null
+
 
 
     const handleConfirmationClick = () => {
         switch (transactionType) {
             case typeTransaction.createChild:
                 if (direct === "loadChild") return loadChildMutate.mutate(parsedForm)
-
-                if (direct === "unloadChild") return
-
                 return createChildMutate.mutate({...parsedForm, age: moment(parsedForm?.age)?.format("YYYY-MM-DD")})
+            case typeTransaction.unloadChild:
+                if (direct === "unloadChild") return unloadChildMutate.mutate(parsedForm)
             case typeTransaction.loadWallet:
                 return loadWalletMutate.mutate(parsedForm)
             case typeTransaction.cashout:
                 return cashoutMutate.mutate(parsedForm)
             case typeTransaction.walletToWallet:
+
                 return sendMoneyToWalletMutate.mutate({
                     ...parsedForm,
-                    userId: user?.id,
                     raison: parsedForm?.raison.value,
                     paymentMethod: type
                 })
@@ -82,6 +86,13 @@ function ConfirmationScreen() {
                     />
                 }
 
+                return <ChildConfirmation
+                    formData={parsedForm}
+                    fee={fee}
+                    isLoading={createChildMutate.isPending || isLoading}
+                    onSubmit={() => handleConfirmationClick()}
+                />
+            case typeTransaction.unloadChild:
                 if (direct === "unloadChild") {
                     return <UnloadChildConfirmation
                         formData={parsedForm}
@@ -90,13 +101,6 @@ function ConfirmationScreen() {
                         onSubmit={() => handleConfirmationClick()}
                     />
                 }
-
-                return <ChildConfirmation
-                    formData={parsedForm}
-                    fee={fee}
-                    isLoading={createChildMutate.isPending || isLoading}
-                    onSubmit={() => handleConfirmationClick()}
-                />
             case typeTransaction.loadWallet:
                 return <LoadConfirmation
                     formData={parsedForm}
@@ -124,16 +128,49 @@ function ConfirmationScreen() {
         }
     };
 
-    if (isLoading || beneficiaryLoading) {
-        return <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
-            <SmartImage
-                source={images.fullLogo}
-                containerStyle={{...styles.containerLogo, width: 200, height: 200}}
-            />
-            <ActivityIndicator size="large"/>
+    const beneficiaryNotFound = (message: string) => {
+
+        return  <View style={{flex:1, justifyContent:"center", alignItems:"center"}}>
+            <View style={{alignItems:"center"}}>
+
+                <InfoIcon  size={42}/>
+                <SmartText style={{textAlign:"center", fontSize: 16}}>
+                    {message}
+                </SmartText>
+                <SmartButton
+                    title="Revenir en arrière"
+                    icon={<ChevronLeftIcon color={pallete.blue} />}
+                    onPress={()=> navigation.back()} style={{marginTop: 20}}
+                    variant="ghost"
+                />
+            </View>
         </View>
     }
 
+    const displayWrapper = () => {
+        return <ScrollView contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
+            {displayTransactionDetails()}
+        </ScrollView>
+    }
+
+
+
+    const renderScreen = () => {
+        if (isLoading || beneficiaryLoading) {
+            return <View style={{flex: 1, alignItems: "center", justifyContent: "center"}}>
+                <SmartImage
+                    source={images.fullLogo}
+                    containerStyle={{...styles.containerLogo, width: 100, height: 100}}
+                />
+                <ActivityIndicator size="large"/>
+            </View>
+        }
+
+        if(parsedForm?.phone && beneficiaryError) return beneficiaryNotFound("Ce bénéficiaire ne dispose pas de compte smartPocket, veuillez utiliser un autre numéro")
+        if(isError) return beneficiaryNotFound("Oops!!, Transaction non trouvé, veuillez réessayer plutard")
+
+        return displayWrapper()
+    }
     return <Wrapper>
         <Header
             left={
@@ -152,9 +189,7 @@ function ConfirmationScreen() {
             }
             title="Confirmez la transaction"
         />
-        <ScrollView contentContainerStyle={styles.contentContainer} showsVerticalScrollIndicator={false}>
-            {displayTransactionDetails()}
-        </ScrollView>
+        {renderScreen()}
     </Wrapper>
 }
 

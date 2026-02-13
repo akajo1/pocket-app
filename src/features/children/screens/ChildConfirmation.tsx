@@ -16,9 +16,9 @@ type Props = {
     onSubmit: () => void
 }
 export default function ChildConfirmation({formData, fee, isLoading, onSubmit}: Props) {
-    const currency = formData.currency === "USD" ? "$" : "Fc";
-    const feeAmount = Number(+formData?.initialAmount * +fee?.percentage).toFixed(2)
-    const total = Number(+formData?.initialAmount + +feeAmount).toFixed(2)
+    const currency = formData.currency
+    const feeAmount = Number(+formData?.initialAmount * +fee?.percentage)
+    const total = Number(+formData?.initialAmount + +feeAmount)
 
     const currencyDisplay = () => {
         return <View style={styles.from}>
@@ -28,7 +28,7 @@ export default function ChildConfirmation({formData, fee, isLoading, onSubmit}: 
                     Depuis le Portemonnaie
                 </SmartText>
             </View>
-            <SmartText style={styles.wallet}>{formData.currency}</SmartText>
+            <SmartText style={styles.wallet}>{currency}</SmartText>
         </View>
     }
 

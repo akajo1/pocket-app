@@ -1,5 +1,5 @@
 import {Wallet} from "@/src/entities/dashboard/services/walletApi";
-import {width} from "@/src/utils/method";
+import {numberFormat, width} from "@/src/utils/method";
 import {pallete} from "@/src/utils/pallete";
 import {LinearGradient} from "expo-linear-gradient";
 import {Eye, EyeOff} from "lucide-react-native";
@@ -56,9 +56,7 @@ export default function WalletCardItem({
 
                 <Text style={styles.balance}>
                     {isBalanceVisible
-                        ? `${data?.currency === "USD" ? "$" : "FC"} ${parseFloat(
-                            data?.available_balance?.toString()
-                        ).toFixed(2)}`
+                        ?  numberFormat(parseFloat(data?.available_balance),data?.currency)
                         : "••••••"}
                 </Text>
             </LinearGradient>

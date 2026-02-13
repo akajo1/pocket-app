@@ -19,6 +19,10 @@ export default function ChildrenLayout() {
                 name="allChildTransactions"
                 options={{ headerShown: false,}}
             />
+            <Stack.Screen
+                name="pinScreen"
+                options={{ headerShown: false,}}
+            />
         </Stack>
     );
 }

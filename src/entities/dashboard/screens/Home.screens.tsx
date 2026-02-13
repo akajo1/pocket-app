@@ -13,33 +13,39 @@ import {useRouter} from "expo-router";
 import AdsCarousel from "../../../shared/components/organims/AdsCarousel.organims";
 import {height, width} from "@/src/utils/method";
 
-const sizeIcon = 28
+const sizeIcon = 32
 const homeMenu = [
     {
         key: "sendMoneyToWallet",
-        icon: <MaterialCommunityIcons name="arrow-top-right" size={sizeIcon} color={pallete.blue}/>,
-        title: "Envoi d'argent",
+        icon: <MaterialCommunityIcons name="arrow-top-right" size={sizeIcon} color={pallete.white}/>,
+        title: "Envoi \nd'argent",
         link: "/sendMoneyToWallet",
     },
     {
         key: "withdrawCash",
-        icon: <MaterialIcons name="call-received" size={sizeIcon} color={pallete.blue}/>,
-        title: "Retrait",
+        icon: <MaterialIcons name="call-received" size={sizeIcon} color={pallete.white}/>,
+        title: "Retrait \nd'argent",
         link: "/withdrawCash",
     },
 
 
     {
         key: "loadWallet",
-        icon: <MaterialCommunityIcons name="credit-card-plus-outline" size={sizeIcon} color={pallete.blue}/>,
-        title: "Appro. Smart",
+        icon: <MaterialCommunityIcons name="credit-card-plus-outline" size={sizeIcon} color={pallete.white}/>,
+        title: "Approv. \nSmart",
         link: "/loadWallet",
     },
     {
         key: "topup",
-        icon: <MaterialCommunityIcons name="cellphone-dock" size={sizeIcon} color={pallete.blue}/>,
-        title: "Achat crédit",
+        icon: <MaterialCommunityIcons name="cellphone-dock" size={sizeIcon} color={pallete.white}/>,
+        title: "Recharge \ncrédit",
         link: "/",
+    },
+    {
+        key: "child",
+        icon: <MaterialCommunityIcons name="account-child" size={sizeIcon} color={pallete.white}/>,
+        title: "Création \nDépendant",
+        link: "/(children)/createChildren",
     },
 
 ]
@@ -65,91 +71,33 @@ const Home = () => {
                 title="Acceuil"
             />
             <AdsCarousel ads={[1, 2, 3, 4]}/>
-            <View showsVerticalScrollIndicator={false} style={{
-                flexWrap: "wrap",
-                flexDirection: "row",
-                gap: 15,
-                justifyContent: "center"
-            }}>
-                {
-                    homeMenu.map((item, index) => <TouchableOpacity key={index} style={{
-                        width: width / 5.2,
-                        height: width / 5.2,
-                        backgroundColor: pallete.white,
-                        borderRadius: 10,
-                        alignItems: "center",
-                        justifyContent: "center",
-                        paddingVertical: 10,
-                        padding: 10
-                    }} onPress={() => navigation.navigate(item.link)}>
-                        <View style={{marginBottom: 10}}>
-                            {item.icon}
-                        </View>
-                        <SmartText style={{marginTop: 5, height: 20, fontSize: 10}}>
-                            {item.title}
-                        </SmartText>
-                    </TouchableOpacity>)
-                }
-            </View>
+            <View
 
-            <View style={{flex: 1, paddingHorizontal: 20}}>
-
-
-                <View style={{marginVertical: 15}}>
-                    <SmartText style={{fontSize: 20, fontWeight: "600"}}>
-                        Nos Marchands
-                    </SmartText>
+                style={styles.menuContainer}>
+                <SmartText style={styles.menuTitle}>Nos Services</SmartText>
+                <View style={styles.menuStyle}>
+                    {
+                        homeMenu.map((item, index) => <TouchableOpacity key={index}
+                                                                        style={styles.menuItemStyle}
+                                                                        onPress={() => navigation.navigate(item.link)}>
+                            <View style={styles.iconStyle}>
+                                {item.icon}
+                            </View>
+                            <SmartText style={styles.textIcon}>
+                                {item.title}
+                            </SmartText>
+                        </TouchableOpacity>)
+                    }
                 </View>
 
-                <FlatList
-                    data={homeMenu}
-                    showsVerticalScrollIndicator={false}
-                    contentContainerStyle={{
-                        gap: 10,
-                        flexDirection: "row",
-                        flexWrap: "wrap"
-                    }}
-                    renderItem={({item}) => <TouchableOpacity>
-
-
-                        <View style={{
-                            width: width / 3.6,
-                            height: height / 6.4,
-                            backgroundColor: pallete.white,
-                            borderRadius: 10,
-                            padding: 10,
-
-                            position: "relative"
-                        }}>
-
-                            <SmartText style={{fontSize: 16, fontWeight: "600", marginBottom: 10}}>
-                                Jewels School
-                            </SmartText>
-                            <SmartText style={{fontSize: 8}}>
-                                Localisation
-                            </SmartText>
-                            <SmartText style={{fontSize: 10, fontWeight: "600"}}>
-                                Kinshasa
-                            </SmartText>
-
-                            <View style={{
-                                width: 30,
-                                height: 30,
-                                borderRadius: 15,
-                                backgroundColor: pallete.blue,
-                                marginBottom: 20,
-                                position: "absolute",
-                                right: 5,
-                                bottom: -10,
-                                justifyContent: "center",
-                                alignItems: "center"
-                            }}>
-                                <FontAwesome6 name="arrow-right-long" size={14} color={pallete.white}/>
-                            </View>
-                        </View>
-                    </TouchableOpacity>}
-                />
             </View>
+            <View
+                style={[styles.menuContainer, {marginTop: 10, paddingBottom: 30}]}>
+                <SmartText style={styles.menuTitle}>Nos Marchands</SmartText>
+
+                <SmartText style={{paddingHorizontal:30, marginTop: 10}}>Fonctionnalité non disponible pour le moment</SmartText>
+            </View>
+
 
         </Wrapper>
     );
@@ -163,4 +111,42 @@ const styles = StyleSheet.create({
         height: 40,
         alignSelf: "center",
     },
+    menuContainer: {
+        backgroundColor: pallete.white,
+        marginHorizontal: "auto",
+        width: "90%",
+        borderRadius: 20,
+    },
+    menuTitle: {
+        fontSize: 18,
+        fontWeight: "900",
+        color: pallete.black,
+        paddingTop: 20,
+        paddingHorizontal: 30
+    },
+    menuStyle: {
+        flexWrap: "wrap",
+        flexDirection: "row",
+        gap: 15,
+        padding: 20
+    },
+    menuItemStyle: {
+        width: width / 4.2,
+        backgroundColor: pallete.gray,
+        borderRadius: 10,
+        paddingVertical: 10,
+        padding: 10
+    },
+    iconStyle: {
+        marginBottom: 10,
+        borderColor: pallete.red,
+        borderWidth: 2,
+        width: 50,
+        height: 50,
+        borderRadius: 10,
+        justifyContent: "center",
+        alignItems: "center",
+        backgroundColor: pallete.red
+    },
+    textIcon: { fontSize: 12, textAlign:"right", fontWeight:"600", textTransform:"capitalize"}
 });

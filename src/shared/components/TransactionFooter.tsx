@@ -1,6 +1,6 @@
 import {ActivityIndicator, StyleSheet, View} from "react-native";
 import {SmartText} from "@/src/shared/components/atoms";
-import {height, width} from "@/src/utils/method";
+import {height, numberFormat, width} from "@/src/utils/method";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
 import {pallete} from "@/src/utils/pallete";
 import React from "react";
@@ -25,13 +25,13 @@ export default function TransactionFooter({transactionType, currency, feeAmount,
         <View style={[styles.container, styles.transaction]}>
             <SmartText style={styles.subTitle}>Frais de transaction</SmartText>
             <SmartText style={styles.text}>
-                {feeAmount}   {currency}
+                {numberFormat(feeAmount, currency)}
             </SmartText>
         </View>
         <View style={[styles.container, styles.transaction,{marginTop:10}]}>
             <SmartText style={styles.subTitle}>Total à payer</SmartText>
             <SmartText style={styles.text}>
-                {totalAmount} {currency}
+                {numberFormat(totalAmount, currency)}
             </SmartText>
         </View>
 

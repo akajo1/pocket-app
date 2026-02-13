@@ -4,6 +4,7 @@ import moment from "moment";
 import React from "react";
 import {StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {Badge} from "../atoms";
+import {numberFormat} from "@/src/utils/method";
 
 interface Transaction {
     id: number;
@@ -103,7 +104,7 @@ export default function TransactionItem({
 
             <View style={{justifyContent: "center"}}>
                 <Text style={[styles.amount, {color: getAmountColor()}]}>
-                    {`${getAmountPrefix()} ${parseFloat(amount?.toString())?.toFixed(2)} ${transaction.wallet_currency === "USD" ? "$" : "Fc"}`}
+                    {`${getAmountPrefix()} ${numberFormat(parseFloat(amount?.toString()),transaction.wallet_currency )}`}
                 </Text>
                 <Text style={[styles.time, {alignSelf: "flex-end", marginRight: 0}]}>
                     {displayPay()}

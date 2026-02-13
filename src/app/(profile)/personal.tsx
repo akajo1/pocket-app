@@ -12,7 +12,9 @@ import {useAuthManager} from "@/src/entities/auth/hook/useAuthManager";
 export default function PersonalInfoScreen() {
     const navigation = useRouter()
     const [isEditing, setIsEditing] = useState(false);
-    const {fetchUser: userInfo} = useAuthManager()
+    const {fetchUser: users} = useAuthManager()
+    const userInfo = users?.data || null
+
 
     const handleSave = () => {
         setIsEditing(false);

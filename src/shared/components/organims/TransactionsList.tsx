@@ -23,22 +23,16 @@ interface Transaction {
 }
 
 interface TransactionsListProps {
-    title: string;
+    title?: string;
     transactions: Transaction[];
     onTransactionPress?: (transaction: Transaction) => void;
     onViewAll?: () => void;
     showViewAll?: boolean;
     isLoading?: boolean;
+    showAllText?: string;
 }
 
-export default function TransactionsList({
-                                             title,
-                                             transactions,
-                                             onTransactionPress,
-                                             onViewAll,
-                                             showViewAll = true,
-                                             isLoading
-                                         }: TransactionsListProps) {
+export default function TransactionsList({title="", transactions, onTransactionPress, onViewAll, showViewAll = true, isLoading, showAllText=""}: TransactionsListProps) {
 
     if (isLoading) return <>
         <SkeletonLoading background={pallete.gray} highlight={pallete.white}>
@@ -115,7 +109,7 @@ export default function TransactionsList({
 
                     {showViewAll && onViewAll && (
                         <TouchableOpacity style={styles.viewAllButton} onPress={onViewAll}>
-                            <Text style={styles.viewAllText}>Voir tout</Text>
+                            <Text style={styles.viewAllText}>{showAllText || "Voir tout"} </Text>
                         </TouchableOpacity>
                     )}
                 </>

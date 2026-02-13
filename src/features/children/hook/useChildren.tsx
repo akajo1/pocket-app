@@ -8,7 +8,7 @@ export const useChildren = () => {
     return useQuery<any, Error, Children[]>({
         queryKey: [queryKey.children],
         queryFn: childrenApi.fetchChildren,
-        enabled: !!user,
-        staleTime: 1000 * 60 * 1,
+        enabled: !!user?.user,
+      //  staleTime: 1000 * 60 * 1,
     });
 };

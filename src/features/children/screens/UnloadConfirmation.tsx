@@ -14,9 +14,9 @@ type Props = {
     onSubmit: () => void
 }
 export default function UnloadChildConfirmation({formData, fee, isLoading, onSubmit}: Props) {
-    const currency = formData.currency === "USD" ? "$" : "Fc";
-    const feeAmount = Number(+formData?.amount * +fee?.percentage).toFixed(2)
-    const total = Number(+formData?.amount + +feeAmount).toFixed(2)
+    const currency = formData.currency;
+    const feeAmount = Number(+formData?.amount * +fee?.percentage)
+    const total = Number(+formData?.amount - +feeAmount)
 
     return <>
         <CurrencyDisplay
@@ -28,7 +28,7 @@ export default function UnloadChildConfirmation({formData, fee, isLoading, onSub
         <CurrencyDisplay
             icon={<WalletIcon size={20} color={pallete.dollars}/>}
             subTitle={"A mon Portemonaie"}
-            title={formData?.currency}
+            title={currency}
         />
 
 

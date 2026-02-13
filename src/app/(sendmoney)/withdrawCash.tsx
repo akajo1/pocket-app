@@ -37,10 +37,10 @@ type FormTypeData = {
 export default function WithdrawCash() {
     const navigation = useRouter();
     const {
-        data: walletsData,
-        isLoading: walletsLoading,
+        data: walletsLists,
         refetch: refetchWallets,
     } = useWallet();
+    const walletsData = walletsLists?.data || []
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
     const [selectedRaison, setSelectedRaison] = useState<DataType>({} as DataType);

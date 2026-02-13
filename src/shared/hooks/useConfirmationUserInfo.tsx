@@ -8,5 +8,6 @@ export const useConfirmationUserInfo = (phone: string) => {
     return useQuery<any, Error, helperResponse>({
         queryKey: [queryKey.user, "info", phone],
         queryFn: () => authApi.fetchByPhone(phone),
+        enabled: !!phone
     });
 };

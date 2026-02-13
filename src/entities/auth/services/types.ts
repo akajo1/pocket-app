@@ -81,6 +81,9 @@ export const authNavigationType = {
 };
 export interface AuthNavigationProps {
   onChangeScreen: (
-    screen: (typeof authNavigationType)[keyof typeof authNavigationType]
+    screen: (typeof authNavigationType)[keyof typeof authNavigationType],
+    payload?: {
+      [key: string]: any;
+    }
   ) => void;
 }

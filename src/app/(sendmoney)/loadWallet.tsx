@@ -38,10 +38,12 @@ type FormTypeData = {
 export default function LoadToWallet(){
     const navigation = useRouter();
     const {
-        data: walletsData,
+        data: walletsLists,
         isLoading: walletsLoading,
         refetch: refetchWallets,
     } = useWallet();
+    const walletsData = walletsLists?.data || []
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const [selectedCountry, setSelectedCountry] = useState<ICountry | null>(null);
     const [currentBrand, setCurrentBrand] = useState(null);

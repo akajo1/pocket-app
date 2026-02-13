@@ -14,9 +14,10 @@ export interface feeResponse {
 const feeInstance = new ApiClient<any, feeResponse>("/fees");
 export type feeRequest = {
     type: string,
+    method: string,
     currency: string,
 }
 const feeApi = {
-    fetchfee: async (params: feeRequest) => await feeInstance.fetch(params, `/rules`),
+    fetchfee: async (params: feeRequest) => await  feeInstance.fetch(params, `/rules`)
 };
 export default feeApi;

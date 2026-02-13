@@ -6,3 +6,4 @@ export {default as ChildTab} from "./ChildTab"
 export {default as SelectBoxModal}  from "./modal/SelectBoxModal"
 export {default as BrandList} from "./BrandList.organims"
 export {default as AdsCarousel} from "./AdsCarousel.organims"
+export  {default as NFCDevices} from './NFCDevices.organisms'

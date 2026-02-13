@@ -1,4 +1,4 @@
-import {height, ParamsType, width} from "@/src/utils/method";
+import {height, numberFormat, ParamsType, width} from "@/src/utils/method";
 import {feeResponse} from "@/src/shared/services/feeApi";
 import {StyleSheet, View} from "react-native";
 import {WalletIcon} from "lucide-react-native";
@@ -15,9 +15,9 @@ type Props = {
     onSubmit: () => void
 }
 export default function LoadChildConfirmation({formData, fee, isLoading, onSubmit}: Props) {
-    const currency = formData.currency === "USD" ? "$" : "Fc";
-    const feeAmount = Number(+formData?.amount * +fee?.percentage).toFixed(2)
-    const total = Number(+formData?.amount + +feeAmount).toFixed(2)
+    const currency = formData.currency ;
+    const feeAmount = Number(+formData?.amount * +fee?.percentage)
+    const total = Number(+formData?.amount + +feeAmount)
 
     const currencyDisplay = () => {
         return <View style={styles.from}>
@@ -27,7 +27,7 @@ export default function LoadChildConfirmation({formData, fee, isLoading, onSubmi
                     Depuis le Portemonnaie
                 </SmartText>
             </View>
-            <SmartText style={styles.wallet}>{formData.currency}</SmartText>
+            <SmartText style={styles.wallet}>{currency}</SmartText>
         </View>
     }
 

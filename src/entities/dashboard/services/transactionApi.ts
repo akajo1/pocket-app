@@ -24,7 +24,8 @@ const transactionApi = {
     fetchTransactions: async (params: transactionsParams) => {
         const walletId = params.walletId;
         delete params?.walletId;
-        return await transactionInstance.fetch(params, `/${walletId}/transactions`)
+       const response =  await transactionInstance.fetch(params, `/${walletId}/transactions`)
+        return response
     },
     fetchChildTransactions: async (params: transactionsParams) => {
         const childId = params.childId;

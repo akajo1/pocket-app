@@ -1,4 +1,4 @@
-import React, {createContext, useContext, useState} from "react";
+import React, {createContext, useCallback, useContext, useState} from "react";
 
 type alertTypeProp = "success" | "error" | "warning" | "info";
 
@@ -28,9 +28,18 @@ export default function AlertProvider({children}: {
         },
         btnText: "ok",
     });
+    const onSetAlertMessage: any = (body: any) => {
+        let message: string= ""
+        if(Array.isArray(body.message)) {
+            message = body.message.map(message => message.message).join(",\n ");
+        }else message= body.message;
+
+        body.message = message;
+        setAlertMessage(body)
+    }
 
     return (
-        <AlertContext.Provider value={{alertMessage, setAlertMessage}}>
+        <AlertContext.Provider value={{alertMessage, setAlertMessage : onSetAlertMessage}}>
             {children}
         </AlertContext.Provider>
     );

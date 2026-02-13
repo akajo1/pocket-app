@@ -27,13 +27,17 @@ interface DataType {
 export default function SendMoneyToWallet() {
     const {user} = useAuthManager()
     const navigation = useRouter();
-    const {data} = useWallet();
+    const {
+        data: walletsLists,
+    } = useWallet();
+    const data = walletsLists?.data || []
     const message = useAlert();
     const [currentIndex, setCurrentIndex] = useState(0);
-    const {data: raisonList, isLoading: raisonLoading} = useRaison({
+    const {data: raisonLists, isLoading: raisonLoading} = useRaison({
         typeReason: "TRANSFER",
         onlyActives: 1
     })
+    const raisonList= raisonLists?.data || [];
 
     const dropDownData = raisonList?.length ? raisonList.map(item => ({
         label: item.label,
@@ -85,7 +89,7 @@ export default function SendMoneyToWallet() {
             ""
         )}`;
 
-        if (user?.phone === phone) {
+        if (user?.user?.phone === phone) {
             message?.setAlertMessage({
                 visible: true,
                 message: "Vous ne pouvez pas vous envoyer a vous-meme!",

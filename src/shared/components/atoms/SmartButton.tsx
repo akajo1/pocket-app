@@ -18,6 +18,7 @@ interface ButtonProps {
   style?: ViewStyle;
   textStyle?: TextStyle;
   icon?: React.ReactNode;
+  iconPosition?: "left" | "right";
 }
 
 export default function SmartButton({
@@ -26,6 +27,7 @@ export default function SmartButton({
   variant = "primary",
   size = "medium",
   disabled = false,
+                                      iconPosition = "left",
   style,
   textStyle,
   icon,
@@ -89,10 +91,11 @@ export default function SmartButton({
       disabled={disabled}
     >
       <View style={styles.content}>
-        {icon}
+        { iconPosition === "left" && icon}
         <Text style={[getTextStyle(), icon && styles.textWithIcon]}>
           {title}
         </Text>
+        { iconPosition === "right" && icon}
       </View>
     </TouchableOpacity>
   );

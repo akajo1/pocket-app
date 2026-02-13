@@ -6,9 +6,9 @@ import useUserStore from "@/src/entities/auth/store/userStore";
 
 export const useFee = (data: feeRequest) => {
     const {user} = useUserStore();
-    return useQuery<feeRequest, Error, feeResponse>({
-        queryKey: [queryKey.fee_type],
-        queryFn: () => feeApi.fetchfee(data),
+    return useQuery<any, Error, feeResponse>({
+        queryKey: [queryKey.fee_type, "detail", data.method],
+        queryFn: () =>  feeApi.fetchfee(data),
         enabled: !!user,
     });
 };

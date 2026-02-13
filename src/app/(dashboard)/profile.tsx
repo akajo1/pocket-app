@@ -12,7 +12,7 @@ import {useAuthManager} from "@/src/entities/auth/hook/useAuthManager";
 
 
 export default function Profile() {
-    const {logout, fetchUser: user} = useAuthManager()
+    const {logout, fetchUser: userData} = useAuthManager()
     const navigation = useRouter()
     const menuItems = [
         {
@@ -57,7 +57,7 @@ export default function Profile() {
             ],
         },
     ];
-
+    const user=  userData?.data || []
     const handleMenuPress = (item: any) => {
         if (item.route) {
             router.push(item.route);

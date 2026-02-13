@@ -17,14 +17,12 @@ axiosInstance.interceptors.request.use(
         return config;
     },
     (error) => {
-        console.log("--request-error", error);
         return Promise.reject(error);
     }
 );
 
 axiosInstance.interceptors.response.use(
     (response) => {
-
         return response?.data || null;
     },
     async (error) => {
@@ -32,7 +30,6 @@ axiosInstance.interceptors.response.use(
         if (error.response?.status === 401) {
             useUserStore.getState().clearUser();
         }
-
         return Promise.reject(error?.response?.data);
     }
 );
@@ -58,16 +55,16 @@ class ApiClient<T, D> {
             const response = await axiosInstance.get<D[] | D>(this.endpoint + route, {
                 params,
             });
-            return response.data;
+
+            return response;
         } catch (error) {
-            console.log("--error", error);
             throw error;
         }
     };
     post = async (data: T, route: string = ""): Promise<D> => {
         try {
-            const response = await axiosInstance.post<D>(this.endpoint + route, data);
-            return response.data;
+           return await axiosInstance.post<D>(this.endpoint + route, data);
+
         } catch (error) {
             throw error;
         }
@@ -77,6 +74,17 @@ class ApiClient<T, D> {
         try {
             const response = await axiosInstance.put<D>(
                 this.endpoint + route + `/${id}`,
+                data
+            );
+            return response.data;
+        } catch (error) {
+            throw error;
+        }
+    };
+    updateOne =  async (id: string, data: T, route: string = ""): Promise<D> => {
+        try {
+            const response = await axiosInstance.patch<D>(
+                this.endpoint  + `/${id}`+ route,
                 data
             );
             return response.data;
