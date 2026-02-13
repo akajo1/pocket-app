@@ -132,7 +132,6 @@ const styles = StyleSheet.create({
     },
     menuItemStyle: {
         width: width / 4.2,
-        height: width / 4.2,
         backgroundColor: pallete.gray,
         borderRadius: 10,
         paddingVertical: 10,

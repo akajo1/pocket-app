@@ -90,6 +90,39 @@ export default function ReceiptScreen() {
 
     ]
 
+    const UnLoadChildReceipt = [
+        {
+            label: "Réference",
+            value: parsedForm?.reference,
+        },
+        {
+            label: "Type de transaction",
+            value: "deapprov. dépendant"
+        },
+        {
+            label: "Depuis le dépendant.",
+            value: parsedForm?.beneficiaryData?.name
+        },
+        {
+            label: "Au portemonnaie",
+            value: currency || "USD"
+        },
+
+        {
+            label: "Montant",
+            value: `${numberFormat(parseFloat(parsedForm?.amount), currency)}`
+        },
+        {
+            label: "Frais de transaction",
+            value: `${numberFormat(parseFloat(parsedForm?.fee), currency)}`
+        },
+        {
+            label: "Total payé",
+            value: `${numberFormat(parseFloat(parsedForm?.totalDebit), currency)}`
+        },
+
+    ]
+
     const LoadWalletReceipt = [
         {
             label: "Réference",
@@ -193,6 +226,7 @@ export default function ReceiptScreen() {
     const handleBack = () => {
         switch (transactionType) {
             case  typeTransaction.createChild:
+            case typeTransaction.unloadChild:
                 return navigation.dismissTo("/(dashboard)/children")
             case typeTransaction.loadWallet:
                 return navigation.dismissTo("/")
@@ -207,6 +241,8 @@ export default function ReceiptScreen() {
                     return LoadChildReceipt
 
                 return CreateChildReceipt
+            case typeTransaction.unloadChild:
+                return UnLoadChildReceipt
             case typeTransaction.loadWallet:
                 return LoadWalletReceipt
             case typeTransaction.walletToWallet:

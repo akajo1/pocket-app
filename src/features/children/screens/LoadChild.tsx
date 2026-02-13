@@ -9,7 +9,7 @@ import {pallete} from "@/src/utils/pallete";
 import SmartButton from "@/src/shared/components/atoms/SmartButton";
 import React from "react";
 import {useLocalSearchParams, useRouter} from "expo-router";
-import {StyleSheet} from "react-native";
+import {StyleSheet, View} from "react-native";
 import {useWallet} from "@/src/entities/dashboard/hook/useWallet";
 import {useChildren} from "@/src/features/children/hook/useChildren";
 import {ChildrenCarousel} from "@/src/features/children/components/organisms";
@@ -84,7 +84,7 @@ function LoadChild() {
             }
             title="Appro. dépendant"
         />
-
+        <SmartKeyboardAvoidView containerStyle={{}}>
         <WalletCarousel
             title="Depuis le portemonnaie"
             wallets={walletList || []}
@@ -99,7 +99,7 @@ function LoadChild() {
             handleMomentumScrollEnd={() => {
             }}
         />
-        <SmartKeyboardAvoidView>
+
             <Controller
                 control={control}
                 name="amount"
@@ -113,22 +113,25 @@ function LoadChild() {
                         onBlur={onBlur}
                         icon={<Banknote size={20} color={pallete.black}/>}
                         error={errors.amount?.message}
+                        containerStyle={{paddingHorizontal: 20}}
                         // editable={!register.isPending}
                     />
                 )}
             />
 
 
-            <SmartButton
-                title="Approvisionnez"
-                onPress={handleSubmit(onSubmit)}
-                disabled={!isValid}
-                // icon={
-                //   register.isPending ? (
-                //     <ActivityIndicator size={20} color={pallete.white} />
-                //   ) : null
-                // }
-            />
+           <View  style={{paddingHorizontal: 20}}>
+               <SmartButton
+                   title="Approvisionnez"
+                   onPress={handleSubmit(onSubmit)}
+                   disabled={!isValid}
+                   // icon={
+                   //   register.isPending ? (
+                   //     <ActivityIndicator size={20} color={pallete.white} />
+                   //   ) : null
+                   // }
+               />
+           </View>
         </SmartKeyboardAvoidView>
 
     </Wrapper>

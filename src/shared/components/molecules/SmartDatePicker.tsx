@@ -17,7 +17,7 @@ type Props = {
 };
 
 const SmartDatePicker = ({ isShown, onChange, value, onCloseModal, typeDate ="create" }: Props) => {
-  const defaultStyles = useDefaultStyles();
+  const defaultStyles = useDefaultStyles("light");
 
   return (
     <Modal
@@ -45,7 +45,10 @@ const SmartDatePicker = ({ isShown, onChange, value, onCloseModal, typeDate ="cr
               onChange={({ date }) => {
                 onChange(date);
               }}
-              styles={defaultStyles}
+              styles={{
+                ...defaultStyles,
+
+              }}
               style={styles.datePicker}
           />:  <DateTimePicker
               mode="single"
